@@ -5,11 +5,16 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.subsystems.drive.TeleopDrive;
+import frc.subsystems.drive.motorfactory.MotorFactory;
+import frc.subsystems.drive.motorfactory.MotorFactoryHybrid;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -19,24 +24,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot
 {
-    private static final String DEFAULT_AUTO = "Default";
-    private static final String CUSTOM_AUTO = "My Auto";
-    private String autoSelected;
-    private final SendableChooser<String> chooser = new SendableChooser<>();
-    
-    
+    MotorFactory hybridFactory = new MotorFactoryHybrid();
+    private final MotorController leftMain = hybridFactory.create(14, 13, 15);
+    private final MotorController rightMain = hybridFactory.create(2, 1, 3);
+    private final DifferentialDrive drive = new DifferentialDrive(leftMain, rightMain);
+
+    private final Joystick joystick = new Joystick(0);
+    private final TeleopDrive teleop = new TeleopDrive(drive, joystick);
+
     /**
      * This method is run when the robot is first started up and should be used for any
      * initialization code.
      */
     @Override
-    public void robotInit()
-    {
-        chooser.setDefaultOption("Default Auto", DEFAULT_AUTO);
-        chooser.addOption("My Auto", CUSTOM_AUTO);
-        SmartDashboard.putData("Auto choices", chooser);
+    public void robotInit() {
+        drive.setSafetyEnabled(false);
     }
-    
     
     /**
      * This method is called every robot packet, no matter the mode. Use this for items like
@@ -48,69 +51,17 @@ public class Robot extends TimedRobot
     @Override
     public void robotPeriodic() {}
     
-    
-    /**
-     * This autonomous (along with the chooser code above) shows how to select between different
-     * autonomous modes using the dashboard. The sendable chooser code works with the Java
-     * SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser code and
-     * uncomment the getString line to get the auto name from the text box below the Gyro
-     *
-     * <p>You can add additional auto modes by adding additional comparisons to the switch structure
-     * below with additional strings. If using the SendableChooser make sure to add them to the
-     * chooser code above as well.
-     */
-    @Override
-    public void autonomousInit()
-    {
-        autoSelected = chooser.getSelected();
-        // autoSelected = SmartDashboard.getString("Auto Selector", DEFAULT_AUTO);
-        System.out.println("Auto selected: " + autoSelected);
-    }
-    
-    
-    /** This method is called periodically during autonomous. */
-    @Override
-    public void autonomousPeriodic()
-    {
-        switch (autoSelected)
-        {
-            case CUSTOM_AUTO:
-                // Put custom auto code here
-                break;
-            case DEFAULT_AUTO:
-            default:
-                // Put default auto code here
-                break;
-        }
-    }
-    
-    
     /** This method is called once when teleop is enabled. */
     @Override
-    public void teleopInit() {}
+    public void teleopInit() {
+        teleop.cancel();
+        teleop.schedule();
+    }
     
     
     /** This method is called periodically during operator control. */
     @Override
-    public void teleopPeriodic() {}
-    
-    
-    /** This method is called once when the robot is disabled. */
-    @Override
-    public void disabledInit() {}
-    
-    
-    /** This method is called periodically when disabled. */
-    @Override
-    public void disabledPeriodic() {}
-    
-    
-    /** This method is called once when test mode is enabled. */
-    @Override
-    public void testInit() {}
-    
-    
-    /** This method is called periodically during test mode. */
-    @Override
-    public void testPeriodic() {}
+    public void teleopPeriodic() {
+        CommandScheduler.getInstance().run();
+    }
 }
