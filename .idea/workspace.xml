@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="71423678-b89e-443e-8c6f-5fcf071e7e55" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+    <list default="true" id="71423678-b89e-443e-8c6f-5fcf071e7e55" name="Changes" comment="programmed init methods and controller vars">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/westcoast/src/main/java/frc/robot/Robot.java" beforeDir="false" afterPath="$PROJECT_DIR$/westcoast/src/main/java/frc/robot/Robot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/westcoast/src/main/java/frc/subsystems/drive/TeleopDrive.java" beforeDir="false" afterPath="$PROJECT_DIR$/westcoast/src/main/java/frc/subsystems/drive/TeleopDrive.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/westcoast/src/main/java/frc/subsystems/drive/motorfactory/MotorFactoryHybrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/westcoast/src/main/java/frc/subsystems/drive/motorfactory/MotorFactoryHybrid.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +111,14 @@
       <option name="presentableId" value="Default" />
       <updated>1642455748902</updated>
     </task>
+    <task id="LOCAL-00001" summary="programmed init methods and controller vars">
+      <created>1642462803999</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1642462803999</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -125,5 +132,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="programmed init methods and controller vars" />
+    <option name="LAST_COMMIT_MESSAGE" value="programmed init methods and controller vars" />
   </component>
 </project>

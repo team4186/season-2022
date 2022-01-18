@@ -9,10 +9,7 @@ public class TeleopDrive extends CommandBase {
     private final Joystick joy;
     private double direction;
 
-    public TeleopDrive (
-            DifferentialDrive drive,
-            Joystick joy
-    ) {
+    public TeleopDrive (DifferentialDrive drive, Joystick joy) {
         this.drive = drive;
         this.joy = joy;
     }

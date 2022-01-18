@@ -11,6 +11,8 @@ public class MotorFactoryHybrid implements MotorFactory {
         WPI_VictorSPX motorLeft = new WPI_VictorSPX(left);
         WPI_VictorSPX motorRight = new WPI_VictorSPX(right);
 
+        motorRight.setInverted(true);
+
         motorLeft.follow(motorMain);
         motorRight.follow(motorMain);
 
@@ -22,5 +24,4 @@ public class MotorFactoryHybrid implements MotorFactory {
 
         return motorMain;
     }
-
 }
