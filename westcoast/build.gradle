@@ -1,3 +1,4 @@
+import edu.wpi.first.gradlerio.GradleRIOPlugin
 import edu.wpi.first.gradlerio.deploy.roborio.RoboRIO
 
 plugins {
@@ -44,11 +45,10 @@ deploy {
 def deployArtifact = deploy.targets.roborio.artifacts.frcJava
 
 // Set to true to use debug for JNI.
-wpi.java.debugJni = false
+wpi.java.debugJni.set(false)
 
 // Set this to true to enable desktop support.
 def includeDesktopSupport = false
-
 
 compileKotlin {
     kotlinOptions {
@@ -86,7 +86,7 @@ dependencies {
 }
 
 // Simulation configuration (e.g. environment variables).
-wpi.sim.addGui().defaultEnabled = true
+wpi.sim.addGui().defaultEnabled.set(true)
 wpi.sim.addDriverstation()
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
@@ -94,7 +94,7 @@ wpi.sim.addDriverstation()
 // knows where to look for our Robot Class.
 jar {
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
+    manifest GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 

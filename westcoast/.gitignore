@@ -154,6 +154,7 @@ fabric.properties
 # See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
 
 .idea/*
+.idea
 
 # Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
 
@@ -213,7 +214,8 @@ replay_pid*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -327,4 +329,3 @@ bin/
 *-window.json
 
 # End entries from WPI Lib team
-
