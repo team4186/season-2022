@@ -50,10 +50,10 @@ public class TeleopDrive extends CommandBase {
         final double zRotation;
         if (shouldAttenuate) {
             forward = attenuated(this.forward * joystick.getY());
-            zRotation = attenuated(-this.forward * joystick.getX());
+            zRotation = attenuated(-joystick.getX());
         } else {
             forward = full(this.forward * joystick.getY());
-            zRotation = full(-this.forward * joystick.getX());
+            zRotation = full(-joystick.getX());
         }
         drive.arcade(forward, zRotation, false);
     }
