@@ -15,7 +15,6 @@ public class GyroDrive extends PIDCommand {
     private final DriveTrainSubsystem drive;
 
     public GyroDrive(
-            final double forward,
             @NotNull PIDController controller,
             @NotNull Joystick joystick,
             @NotNull DriveTrainSubsystem drive
@@ -23,9 +22,9 @@ public class GyroDrive extends PIDCommand {
         super(
                 controller,
                 () -> PidUtils.clean(drive.gyro.getRate(), 6.0, 0.3),
-                () -> JoystickUtils.clean((forward * joystick.getX()), 0.05) * 4.6,
+                () -> JoystickUtils.clean(joystick.getX(), 0.05) * 4.6,
                 (value) -> drive.arcade(
-                        attenuate(forward * joystick.getY()),
+                        attenuate(joystick.getY()),
                         PidUtils.clean(-value, 0.8, 0.05),
                         false
                 ),

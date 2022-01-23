@@ -9,26 +9,28 @@ import org.jetbrains.annotations.NotNull;
 import static java.lang.Math.copySign;
 
 public class TeleopDrive extends CommandBase {
-
-    private final double forward;
     @NotNull
     private final Joystick joystick;
     @NotNull
     private final Button attenuate;
     @NotNull
+    private final Button invert;
+    @NotNull
     private final DriveTrainSubsystem drive;
+
+    private double forward = 1;
 
     private boolean shouldAttenuate;
 
     public TeleopDrive(
-            double forward,
             @NotNull Joystick joystick,
             @NotNull Button attenuate,
+            @NotNull Button invert,
             @NotNull DriveTrainSubsystem drive
     ) {
-        this.forward = forward;
         this.joystick = joystick;
         this.attenuate = attenuate;
+        this.invert = invert;
         this.drive = drive;
 
         addRequirements(drive);
@@ -39,6 +41,7 @@ public class TeleopDrive extends CommandBase {
         attenuate
                 .whenPressed(() -> shouldAttenuate = true)
                 .whenReleased(() -> shouldAttenuate = false);
+        invert.whenPressed(() -> forward *= -1);
     }
 
     @Override

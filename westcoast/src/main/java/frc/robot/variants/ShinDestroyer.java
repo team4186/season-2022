@@ -28,7 +28,6 @@ public interface ShinDestroyer {
         return Definition.definition(
                 "Shin Destroyer",
                 new Input(
-                        1.0,
                         new Joystick(0)
                 ),
                 new Motors(

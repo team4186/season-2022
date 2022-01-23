@@ -23,9 +23,9 @@ public interface Commands {
         static TeleopDrive raw(@NotNull Definition definition) {
             Input input = definition.input;
             return new TeleopDrive(
-                    input.forward,
                     input.joystick,
                     input.attenuate,
+                    input.invert,
                     definition.subsystems.driveTrain
             );
         }
@@ -34,7 +34,6 @@ public interface Commands {
         static GyroDrive assisted(@NotNull Definition definition) {
             Input input = definition.input;
             return new GyroDrive(
-                    input.forward,
                     definition.controllers.gyroDrive(),
                     input.joystick,
                     definition.subsystems.driveTrain
