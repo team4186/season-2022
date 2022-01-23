@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.commands.drive.GyroDrive;
-import frc.commands.drive.LeaveLine;
+import frc.commands.drive.DistanceTravel;
 import frc.commands.drive.PerfectTurn;
 import frc.commands.drive.TeleopDrive;
 import frc.commands.magazine.*;
@@ -44,10 +44,10 @@ public interface Commands {
 
     interface DriveCommands {
         @NotNull
-        static LeaveLine leaveLine(@NotNull Definition definition, double distance) {
+        static DistanceTravel leaveLine(@NotNull Definition definition, double distance) {
             final Controllers controllers = definition.controllers;
             final Parameters parameters = definition.parameters;
-            return new LeaveLine(
+            return new DistanceTravel(
                     distance,
                     parameters.leaveLineDistanceMultiplier,
                     controllers.leaveLine(),

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static edu.wpi.first.math.MathUtil.clamp;
 
-public class LeaveLine extends CommandBase {
+public class DistanceTravel extends CommandBase {
     private final double distance;
     private final double distanceMultiplier;
     @NotNull
@@ -20,9 +20,9 @@ public class LeaveLine extends CommandBase {
 
     private int wait = 0;
 
-    public LeaveLine(
+    public DistanceTravel(
             double distance,
-            @NotNull DoubleParameter<LeaveLine> distanceMultiplier,
+            @NotNull DoubleParameter<DistanceTravel> distanceMultiplier,
             @NotNull ProfiledPIDController left,
             @NotNull ProfiledPIDController right,
             @NotNull DriveTrainSubsystem drive
