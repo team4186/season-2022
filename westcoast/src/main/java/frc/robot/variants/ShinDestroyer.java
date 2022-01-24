@@ -44,7 +44,7 @@ public interface ShinDestroyer {
                                 true
                         ),
                         new MagazineMotors(
-                                new WPI_VictorSPX(7),
+                                new WPI_VictorSPX(12),
                                 new VictorSP(10),
                                 new VictorSP(12)
                         ),
