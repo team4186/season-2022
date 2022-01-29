@@ -47,9 +47,6 @@ def deployArtifact = deploy.targets.roborio.artifacts.frcJava
 // Set to true to use debug for JNI.
 wpi.java.debugJni.set(false)
 
-// Set this to true to enable desktop support.
-def includeDesktopSupport = false
-
 compileKotlin {
     kotlinOptions {
         jvmTarget = javaVersion.toString()
@@ -98,7 +95,40 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
+tasks.withType(edu.wpi.first.gradlerio.wpi.dependencies.tools.ToolInstallTask) {
+    toolsFolder = new File(homeFolder(), "tools")
+}
+
+task launchShuffleboard(type: JavaExec) {
+    group = "tools"
+    def toolsFolder = new File(homeFolder(), "tools")
+    def toolJar = new File(toolsFolder, "ShuffleBoard.jar")
+    classpath = files(toolJar)
+}
+
+task launchSmartdash(type: JavaExec) {
+    group = "tools"
+    def toolsFolder = new File(homeFolder(), "tools")
+    def toolJar = new File(toolsFolder, "SmartDashboard.jar")
+    classpath = files(toolJar)
+}
+
 // Configure jar and deploy tasks
 deployArtifact.jarTask = jar
 wpi.java.configureExecutableTasks(jar)
 wpi.java.configureTestTasks(test)
+
+static File homeFolder() {
+    String userFolder
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        userFolder = System.getenv("USERPROFILE")
+        if (userFolder == null) {
+            userFolder = "C:\\Users\\Public"
+        }
+    } else {
+        userFolder = System.getProperty("user.home")
+    }
+
+    def homeRoot = new File(userFolder, "wpilib")
+    return new File(homeRoot, "2022")
+}
