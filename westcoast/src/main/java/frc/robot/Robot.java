@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.commands.Autonomous;
-import frc.commands.Commands;
+import frc.commands.drive.EncoderDrive;
 import frc.robot.definition.Definition;
 import org.jetbrains.annotations.NotNull;
 
@@ -62,10 +62,15 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        Commands
-                .TeleopCommands
-                .raw(definition)
-                .schedule();
+//        Commands
+//                .TeleopCommands
+//                .raw(definition)
+//                .schedule();
+
+        new EncoderDrive(
+                definition.subsystems.driveTrain,
+                definition.input.joystick
+        ).schedule();
     }
 
     @Override
