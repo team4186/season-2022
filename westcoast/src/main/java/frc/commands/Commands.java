@@ -3,10 +3,7 @@ package frc.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.commands.drive.GyroDrive;
-import frc.commands.drive.DistanceTravel;
-import frc.commands.drive.PerfectTurn;
-import frc.commands.drive.TeleopDrive;
+import frc.commands.drive.*;
 import frc.commands.magazine.*;
 import frc.commands.targeting.AlignToTarget;
 import frc.commands.targeting.FindTarget;
@@ -31,11 +28,21 @@ public interface Commands {
         }
 
         @NotNull
-        static GyroDrive assisted(@NotNull Definition definition) {
+        static GyroDrive gyroAssisted(@NotNull Definition definition) {
             Input input = definition.input;
             return new GyroDrive(
                     definition.controllers.gyroDrive(),
                     input.joystick,
+                    definition.subsystems.driveTrain
+            );
+        }
+
+        @NotNull
+        static EncoderDrive encodedAssisted(@NotNull Definition definition) {
+            Input input = definition.input;
+            return new EncoderDrive(
+                    input.joystick,
+                    input.invert,
                     definition.subsystems.driveTrain
             );
         }
