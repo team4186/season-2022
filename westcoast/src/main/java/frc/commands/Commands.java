@@ -43,6 +43,7 @@ public interface Commands {
             return new EncoderDrive(
                     input.joystick,
                     input.invert,
+                    input.turnInPlace,
                     definition.subsystems.driveTrain
             );
         }

@@ -35,13 +35,13 @@ public interface ShinDestroyer {
                                 new WPI_TalonSRX(14),
                                 new WPI_VictorSPX(13),
                                 new WPI_VictorSPX(15),
-                                false
+                                true
                         ),
                         driveCTRMotors(
                                 new WPI_TalonSRX(2),
                                 new WPI_VictorSPX(1),
                                 new WPI_VictorSPX(3),
-                                true
+                                false
                         ),
                         new MagazineMotors(
                                 new WPI_VictorSPX(12),

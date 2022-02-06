@@ -20,8 +20,12 @@ public final class EncoderDrive extends CommandBase {
     private final PIDController left;
     @NotNull
     private final PIDController right;
+    @NotNull
+    private final Button turnInPlace;
 
-    private static final double maxSpeed = 1024; // encoders report ~1550-1600 pulses
+    private static final double maxSpeed = 7 * 256; // encoders report ~1550-1600 pulses
+
+    private double shouldInvert = 1.0;
 
     private final double[] leftData = {0.0, 0.0};
     private final double[] rightData = {0.0, 0.0};
@@ -29,13 +33,15 @@ public final class EncoderDrive extends CommandBase {
     public EncoderDrive(
             @NotNull Joystick joystick,
             @NotNull Button invert,
+            @NotNull Button turnInPlace,
             @NotNull DriveTrainSubsystem drive
     ) {
         this.joystick = joystick;
         this.invert = invert;
+        this.turnInPlace = turnInPlace;
         this.drive = drive;
 
-        double P = 0.0024;
+        double P = 0.002;
         double I = 0.0;
         double D = 0.0;
 
@@ -61,6 +67,8 @@ public final class EncoderDrive extends CommandBase {
 
         right.reset();
         left.reset();
+
+        invert.whenPressed(() -> shouldInvert *= -1);
     }
 
     @Override
@@ -79,8 +87,7 @@ public final class EncoderDrive extends CommandBase {
 
         // region Input
 
-        double shouldInvert = invert.get() ? -1.0 : 1.0;
-        double forward = MathUtil.clamp(shouldInvert * joystick.getY(), -1.0, 1.0);
+        double forward = MathUtil.clamp(shouldInvert * -joystick.getY(), -1.0, 1.0);
         double turn = MathUtil.clamp(joystick.getX(), -1.0, 1.0);
 
         // endregion
@@ -88,15 +95,18 @@ public final class EncoderDrive extends CommandBase {
 
         // region Input -> Output
 
+        turn = Math.copySign(turn * turn, turn);
+
         double leftSpeed;
         double rightSpeed;
 
-        if (forward > -0.05 && forward < 0.05) {
-            leftSpeed = forward + turn;
-            rightSpeed = forward - turn;
+        if (turnInPlace.get()) {
+            forward = Math.copySign(forward * forward, forward);
+            leftSpeed = forward + turn * 0.5;
+            rightSpeed = forward - turn * 0.5;
         } else {
-            leftSpeed = forward + Math.abs(forward) * turn;
-            rightSpeed = forward - Math.abs(forward) * turn;
+            leftSpeed = forward + forward * turn;
+            rightSpeed = forward - (forward * turn);
         }
 
         // Normalize wheel speeds
@@ -122,7 +132,7 @@ public final class EncoderDrive extends CommandBase {
 
         // region Output
 
-        drive.setMotorOutput(-leftOut, -rightOut);
+        drive.setMotorOutput(leftOut, rightOut);
 
         // endregion
 
