@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.subsystems.DriveTrainSubsystem;
 import org.jetbrains.annotations.NotNull;
 
+import static java.lang.Math.*;
+
 public final class EncoderDrive extends CommandBase {
     @NotNull
     private final DriveTrainSubsystem drive;
@@ -23,7 +25,9 @@ public final class EncoderDrive extends CommandBase {
     @NotNull
     private final Button turnInPlace;
 
-    private static final double maxSpeed = 7 * 256; // encoders report ~1550-1600 pulses
+    private static final double maxSpeed = 7.0 * 256.0; // encoders report ~1550-1600 pulses
+    private static final double deadzone = 0.015;
+    private static final double deadzoneComplement = 1.0 / (1.0 - deadzone);
 
     private double shouldInvert = 1.0;
 
@@ -41,7 +45,7 @@ public final class EncoderDrive extends CommandBase {
         this.turnInPlace = turnInPlace;
         this.drive = drive;
 
-        double P = 0.002;
+        double P = 0.0018;
         double I = 0.0;
         double D = 0.0;
 
@@ -87,21 +91,24 @@ public final class EncoderDrive extends CommandBase {
 
         // region Input
 
-        double forward = MathUtil.clamp(shouldInvert * -joystick.getY(), -1.0, 1.0);
-        double turn = MathUtil.clamp(joystick.getX(), -1.0, 1.0);
+        final double rawY = MathUtil.clamp(shouldInvert * -joystick.getY(), -1.0, 1.0);
+        final double rawX = MathUtil.clamp(joystick.getX(), -1.0, 1.0);
+
+        double forward = copySign(max(0, (abs(rawY) - deadzone) * deadzoneComplement), rawY);
+        double turn = copySign(max(0, (abs(rawX) - deadzone) * deadzoneComplement), rawX);
 
         // endregion
 
 
         // region Input -> Output
 
-        turn = Math.copySign(turn * turn, turn);
+        turn = copySign(turn * turn, rawX);
 
         double leftSpeed;
         double rightSpeed;
 
         if (turnInPlace.get()) {
-            forward = Math.copySign(forward * forward, forward);
+            forward = copySign(forward * forward, rawY);
             leftSpeed = forward + turn * 0.5;
             rightSpeed = forward - turn * 0.5;
         } else {
@@ -110,7 +117,7 @@ public final class EncoderDrive extends CommandBase {
         }
 
         // Normalize wheel speeds
-        double maxMagnitude = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+        double maxMagnitude = max(abs(leftSpeed), abs(rightSpeed));
         if (maxMagnitude > 1.0) {
             leftSpeed /= maxMagnitude;
             rightSpeed /= maxMagnitude;
