@@ -26,7 +26,7 @@ public final class EncoderDrive extends CommandBase {
     private final Button turnInPlace;
 
     private static final double maxSpeed = 7.0 * 256.0; // encoders report ~1550-1600 pulses
-    private static final double deadzone = 0.015;
+    private static final double deadzone = 0.02;
     private static final double deadzoneComplement = 1.0 / (1.0 - deadzone);
 
     private double shouldInvert = 1.0;
