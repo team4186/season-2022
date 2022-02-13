@@ -1,6 +1,8 @@
 package frc.robot.definition;
 
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
@@ -85,19 +87,50 @@ public class Motors {
             @NotNull WPI_VictorSPX follower1,
             boolean invert
     ) {
+        // region Follower
+        // See https://docs.ctre-phoenix.com/en/stable/ch13_MC.html#follower
+
         follower0.follow(lead);
-        follower0.setInverted(invert);
+        follower0.setInverted(InvertType.FollowMaster);
 
         follower1.follow(lead);
-        follower1.setInverted(invert);
+        follower1.setInverted(InvertType.FollowMaster);
 
-        lead.configContinuousCurrentLimit(18);
-        lead.configPeakCurrentLimit(20);
-        lead.configPeakCurrentDuration(45);
-        lead.enableCurrentLimit(true);
+        // endregion
+
+        // region Lead
+        // See https://docs.ctre-phoenix.com/en/stable/ch13_MC.html#current-limit
+
+        lead.configSupplyCurrentLimit(
+                new SupplyCurrentLimitConfiguration(
+                        true,
+                        18,
+                        20,
+                        0.05
+                )
+        );
 
         lead.setInverted(invert);
+
+        // See https://docs.ctre-phoenix.com/en/stable/ch13_MC.html#neutral-mode
         lead.setNeutralMode(NeutralMode.Brake);
+
+        // endregion
+
+        // region Voltage Saturation
+        // NOTE needs tests! If something is not working comment the next lines
+        // See https://docs.ctre-phoenix.com/en/stable/ch13_MC.html#voltage-compensation
+
+        lead.configVoltageCompSaturation(10);
+        lead.enableVoltageCompensation(true);
+
+        follower0.configVoltageCompSaturation(10);
+        follower0.enableVoltageCompensation(true);
+
+        follower1.configVoltageCompSaturation(10);
+        follower1.enableVoltageCompensation(true);
+
+        // endregion
 
         return new DriveMotors(lead, follower0, follower1);
     }

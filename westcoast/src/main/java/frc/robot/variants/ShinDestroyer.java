@@ -71,6 +71,7 @@ public interface ShinDestroyer {
                         parameter(1.04)
                 ),
                 new Controllers() {
+                    @NotNull
                     @Override
                     public PIDController gyroDrive() {
                         final PIDController controller = new PIDController(0.4, 0.12, 0.01);
@@ -79,6 +80,7 @@ public interface ShinDestroyer {
                         return controller;
                     }
 
+                    @NotNull
                     @Override
                     public ProfiledPIDController leaveLine() {
                         final ProfiledPIDController controller = new ProfiledPIDController(
@@ -93,6 +95,7 @@ public interface ShinDestroyer {
                         return controller;
                     }
 
+                    @NotNull
                     @Override
                     public ProfiledPIDController perfectTurn() {
                         final ProfiledPIDController controller = new ProfiledPIDController(
@@ -107,6 +110,7 @@ public interface ShinDestroyer {
                         return controller;
                     }
 
+                    @NotNull
                     @Override
                     public PIDController alignToTarget() {
                         final PIDController controller = new PIDController(0.7, 0.1, 0.07);
@@ -115,6 +119,7 @@ public interface ShinDestroyer {
                         return controller;
                     }
 
+                    @NotNull
                     @Override
                     public PIDController stayOnTarget() {
                         final PIDController controller = new PIDController(0.1, 0.0, 0.0);
