@@ -104,9 +104,9 @@ public class Motors {
         lead.configSupplyCurrentLimit(
                 new SupplyCurrentLimitConfiguration(
                         true,
-                        18,
+                        10,
                         20,
-                        0.05
+                        0.02
                 )
         );
 
@@ -118,16 +118,15 @@ public class Motors {
         // endregion
 
         // region Voltage Saturation
-        // NOTE needs tests! If something is not working comment the next lines
         // See https://docs.ctre-phoenix.com/en/stable/ch13_MC.html#voltage-compensation
 
-        lead.configVoltageCompSaturation(10);
+        lead.configVoltageCompSaturation(11);
         lead.enableVoltageCompensation(true);
 
-        follower0.configVoltageCompSaturation(10);
+        follower0.configVoltageCompSaturation(11);
         follower0.enableVoltageCompensation(true);
 
-        follower1.configVoltageCompSaturation(10);
+        follower1.configVoltageCompSaturation(11);
         follower1.enableVoltageCompensation(true);
 
         // endregion

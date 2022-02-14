@@ -95,22 +95,22 @@ public final class EncoderDrive extends CommandBase {
         final double rawX = MathUtil.clamp(joystick.getX(), -1.0, 1.0);
 
         double forward = copySign(max(0, (abs(rawY) - deadzone) * deadzoneComplement), rawY);
-        double turn = copySign(max(0, (abs(rawX) - deadzone) * deadzoneComplement), rawX);
+        double turn = copySign(max(0, (abs(rawX) - deadzone) * deadzoneComplement), rawX) * 0.5;
 
         // endregion
 
 
         // region Input -> Output
 
-        turn = copySign(turn * turn, rawX);
 
         double leftSpeed;
         double rightSpeed;
 
         if (turnInPlace.get()) {
             forward = copySign(forward * forward, rawY);
-            leftSpeed = forward + turn * 0.5;
-            rightSpeed = forward - turn * 0.5;
+            turn = copySign(turn * turn, rawX);
+            leftSpeed = forward + turn;
+            rightSpeed = forward - turn;
         } else {
             leftSpeed = forward + forward * turn;
             rightSpeed = forward - (forward * turn);

@@ -8,7 +8,7 @@ Rapid React!
 
 - [ ] Check FRC Programming manual [link](https://docs.wpilib.org/en/stable/docs/zero-to-robot/introduction.html)
 - [ ] Download WPI/NI Game Tools [link](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/frc-game-tools.html)
-- [ ] Update Rio Software [link](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/imaging-your-roborio.html0)
+- [ ] Update Rio Software [link](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-3/imaging-your-roborio.html)
 - [ ] Update CTRE Firmware [link](https://docs.ctre-phoenix.com/en/stable/ch03_PrimerPhoenixSoft.html)
   - [ ] Talons 
   - [ ] Victors
