@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         Commands
                 .TeleopCommands
-                .encodedAssisted(definition)
+                .raw(definition)
                 .schedule();
     }
 
