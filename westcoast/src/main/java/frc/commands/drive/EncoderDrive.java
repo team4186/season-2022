@@ -45,7 +45,7 @@ public final class EncoderDrive extends CommandBase {
         this.turnInPlace = turnInPlace;
         this.drive = drive;
 
-        double P = 0.0018;
+        double P = 0.0005;
         double I = 0.0;
         double D = 0.0;
 
