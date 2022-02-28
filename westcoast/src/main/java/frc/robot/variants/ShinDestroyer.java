@@ -56,8 +56,8 @@ public interface ShinDestroyer {
                 new Sensors(
                         new DriveSensors(
                                 new AHRS(SPI.Port.kMXP),
-                                encoder(9, 8),
-                                encoder(6, 7),
+                                encoder(8, 9),
+                                encoder(7, 6),
                                 new LimelightRunner()
                         ),
                         new MagazineSensors(
