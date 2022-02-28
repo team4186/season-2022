@@ -70,6 +70,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
+        if (definition.input.intake.get()) {
+            definition.motors.shooter.main.set(0.1);
+        } else {
+            definition.motors.shooter.main.stopMotor();
+        }
     }
 
     @Override

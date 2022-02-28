@@ -15,7 +15,6 @@ public final class Shoot extends CommandBase {
 
     @Override
     public void initialize() {
-        magazine.shooterTune();
     }
 
     @Override

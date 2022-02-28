@@ -16,13 +16,11 @@ public final class ShooterAccelerator extends CommandBase {
 
     @Override
     public void initialize() {
-        magazine.shooterTune();
     }
 
     @Override
     public void execute() {
-        magazine.runShooter(0.78);
-        magazine.publishCurrentLevels();
+//        magazine.runShooter(0.78);
     }
 
     @Override

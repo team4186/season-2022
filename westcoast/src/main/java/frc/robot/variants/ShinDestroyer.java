@@ -3,6 +3,8 @@ package frc.robot.variants;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -49,8 +51,8 @@ public interface ShinDestroyer {
                                 new VictorSP(12)
                         ),
                         new ShooterMotors(
-                                new WPI_TalonSRX(8),
-                                new WPI_TalonSRX(9)
+                                new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless),
+                                new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless)
                         )
                 ),
                 new Sensors(

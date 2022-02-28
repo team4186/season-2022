@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,11 +71,14 @@ public class Motors {
 
     public static final class ShooterMotors {
         @NotNull
-        public final WPI_TalonSRX main;
+        public final CANSparkMax main;
         @NotNull
-        public final WPI_TalonSRX secondary;
+        public final CANSparkMax secondary;
 
-        public ShooterMotors(@NotNull WPI_TalonSRX main, @NotNull WPI_TalonSRX secondary) {
+        public ShooterMotors(
+                @NotNull CANSparkMax main,
+                @NotNull CANSparkMax secondary
+        ) {
             this.main = main;
             this.secondary = secondary;
         }

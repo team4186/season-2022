@@ -18,9 +18,9 @@ public class MagazineSubsystem extends SubsystemBase {
     @NotNull
     private final MotorController magazineMotor;
     @NotNull
-    private final WPI_TalonSRX leftShooter;
+    private final MotorController leftShooter;
     @NotNull
-    private final WPI_TalonSRX rightShooter;
+    private final MotorController rightShooter;
     @NotNull
     private final DigitalInput headSensor;
     @NotNull
@@ -36,8 +36,8 @@ public class MagazineSubsystem extends SubsystemBase {
             @NotNull MotorController intakeMotor,
             @NotNull MotorController indexMotor,
             @NotNull MotorController magazineMotor,
-            @NotNull WPI_TalonSRX leftShooter,
-            @NotNull WPI_TalonSRX rightShooter,
+            @NotNull MotorController leftShooter,
+            @NotNull MotorController rightShooter,
             @NotNull DigitalInput headSensor,
             @NotNull DigitalInput abSensor,
             @NotNull DigitalInput tailSensor
@@ -98,53 +98,6 @@ public class MagazineSubsystem extends SubsystemBase {
     public void runShooter(double value) {
         leftShooter.set(value);
         rightShooter.set(value);
-    }
-
-    public void shooterTune() {
-        setShooter(leftShooter, false);
-        setShooter(rightShooter, true);
-    }
-
-    private void setShooter(WPI_TalonSRX shooter, boolean inverted) {
-        shooter.configNominalOutputForward(0.0);
-        shooter.configNominalOutputReverse(0.0);
-        shooter.configPeakOutputForward(100.0);
-        shooter.configPeakOutputReverse(-100.0);
-        shooter.setNeutralMode(NeutralMode.Coast);
-        shooter.config_kP(0, 0.1);
-        shooter.config_kI(0, 0.4);
-        shooter.config_kD(0, 0.0);
-        shooter.setInverted(inverted);
-    }
-
-    public void runShooterCC(double value) {
-        amps = value * 9;
-        leftShooter.set(ControlMode.Current, amps);
-        rightShooter.set(ControlMode.Current, amps);
-    }
-
-    public void publishCurrentLevels() {
-        SmartDashboard.putNumber("Left Current", leftShooter.getSupplyCurrent());
-        SmartDashboard.putNumber("Right Current", rightShooter.getSupplyCurrent());
-    }
-
-    private void runShooterPercent(double value) {
-        percent = value;
-        leftShooter.set(ControlMode.PercentOutput, value);
-        rightShooter.set(ControlMode.PercentOutput, value);
-    }
-
-    public void publishMotorOutputPercent() {
-        SmartDashboard.putNumber("Left Current", leftShooter.getMotorOutputPercent());
-        SmartDashboard.putNumber("Right Current", rightShooter.getMotorOutputPercent());
-    }
-
-    public boolean shooterEndCC() {
-        return leftShooter.getSupplyCurrent() == amps && rightShooter.getSupplyCurrent() == amps;
-    }
-
-    public boolean shooterEndPercent() {
-        return leftShooter.getMotorOutputPercent() == percent && rightShooter.getMotorOutputPercent() == percent;
     }
 
     public void stopMotors() {
