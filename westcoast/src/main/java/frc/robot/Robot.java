@@ -1,5 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,6 +13,7 @@ import frc.commands.Autonomous;
 import frc.commands.Commands;
 import frc.robot.definition.Definition;
 import org.jetbrains.annotations.NotNull;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 import static frc.commands.Commands.DriveCommands.alignToTarget;
 import static frc.commands.Commands.DriveCommands.findTarget;
@@ -20,6 +24,10 @@ public class Robot extends TimedRobot {
     private final Definition definition;
     @NotNull
     private final SendableChooser<Command> autonomousChooser = new SendableChooser<>();
+
+    // private Compressor pcmCompressor;
+    private DoubleSolenoid pcmSolenoid;
+
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -62,10 +70,15 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        /*
         Commands
                 .TeleopCommands
                 .encodedAssisted(definition)
                 .schedule();
+        */
+
+        // pcmCompressor = new Compressor(0, PneumaticsModuleType.CTREPCM); // compressor's not used yet
+        pcmSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
     }
 
     @Override
@@ -75,6 +88,14 @@ public class Robot extends TimedRobot {
         } else {
             definition.motors.shooter.main.stopMotor();
         }
+
+        pcmSolenoid.set(kReverse);
+
+        if (definition.input.intake.get()) {
+            pcmSolenoid.toggle();
+        }
+
+        pcmSolenoid.set(kOff);
     }
 
     @Override
