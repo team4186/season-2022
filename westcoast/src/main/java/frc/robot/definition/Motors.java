@@ -15,6 +15,8 @@ public class Motors {
     @NotNull
     public final DriveMotors driveRight;
     @NotNull
+    public final IntakeMotors intake;
+    @NotNull
     public final MagazineMotors magazine;
     @NotNull
     public final ShooterMotors shooter;
@@ -22,11 +24,12 @@ public class Motors {
     public Motors(
             @NotNull DriveMotors driveLeft,
             @NotNull DriveMotors driveRight,
-            @NotNull MagazineMotors magazine,
+            @NotNull IntakeMotors intake, @NotNull MagazineMotors magazine,
             @NotNull ShooterMotors shooter
     ) {
         this.driveLeft = driveLeft;
         this.driveRight = driveRight;
+        this.intake = intake;
         this.magazine = magazine;
         this.shooter = shooter;
     }
@@ -50,20 +53,25 @@ public class Motors {
         }
     }
 
-    public static final class MagazineMotors {
+    public static final class IntakeMotors {
         @NotNull
-        public final MotorController intake;
+        public final MotorController main;
+
+        public IntakeMotors(@NotNull MotorController main) {
+            this.main = main;
+        }
+    }
+
+    public static final class MagazineMotors {
         @NotNull
         public final MotorController index;
         @NotNull
         public final MotorController magazine;
 
         public MagazineMotors(
-                @NotNull MotorController intake,
                 @NotNull MotorController index,
                 @NotNull MotorController magazine
         ) {
-            this.intake = intake;
             this.index = index;
             this.magazine = magazine;
         }

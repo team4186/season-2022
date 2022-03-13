@@ -8,12 +8,10 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
 import frc.robot.definition.*;
+import frc.robot.definition.Motors.IntakeMotors;
 import frc.robot.definition.Motors.MagazineMotors;
 import frc.robot.definition.Motors.ShooterMotors;
 import frc.robot.definition.Sensors.DriveSensors;
@@ -45,15 +43,21 @@ public interface ShinDestroyer {
                                 new WPI_VictorSPX(7),
                                 false
                         ),
+                        new IntakeMotors(
+                                new WPI_VictorSPX(13)
+                        ),
                         new MagazineMotors(
-                                new WPI_VictorSPX(12),
                                 new VictorSP(10),
-                                new VictorSP(12)
+                                new VictorSP(11)
                         ),
                         new ShooterMotors(
                                 new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless),
                                 new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless)
                         )
+                ),
+                new Pneumatics(
+                        new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1),
+                        new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3)
                 ),
                 new Sensors(
                         new DriveSensors(

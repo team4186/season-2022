@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.commands.drive.*;
+import frc.commands.intake.IntakeCollect;
+import frc.commands.intake.IntakeDeploy;
+import frc.commands.intake.IntakeRetrieve;
 import frc.commands.magazine.*;
 import frc.commands.targeting.AlignToTarget;
 import frc.commands.targeting.FindTarget;
@@ -12,6 +15,7 @@ import frc.robot.definition.Controllers;
 import frc.robot.definition.Definition;
 import frc.robot.definition.Input;
 import frc.robot.definition.Parameters;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public interface Commands {
@@ -97,6 +101,23 @@ public interface Commands {
             return new FindTarget(
                     definition.subsystems.driveTrain
             );
+        }
+    }
+
+    interface IntakeCommands {
+        @NotNull
+        static IntakeCollect collect(@NotNull Definition definition) {
+            return new IntakeCollect(definition.subsystems.intake);
+        }
+
+        @NotNull
+        static IntakeDeploy deploy(@NotNull Definition definition) {
+            return new IntakeDeploy(definition.subsystems.intake);
+        }
+
+        @NotNull
+        static IntakeRetrieve retrieve(@NotNull Definition definition) {
+            return new IntakeRetrieve(definition.subsystems.intake);
         }
     }
 

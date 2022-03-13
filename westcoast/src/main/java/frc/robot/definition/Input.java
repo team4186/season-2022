@@ -10,9 +10,9 @@ public final class Input {
     @NotNull
     public final Joystick joystick;
     @NotNull
-    public final Button intake;
+    public final Button collect;
     @NotNull
-    public final Button cancelIntake;
+    public final Button deployIntake;
     @NotNull
     public final Button reverseIntake;
     @NotNull
@@ -28,8 +28,8 @@ public final class Input {
 
     public Input(
             @NotNull Joystick joystick,
-            @NotNull Button intake,
-            @NotNull Button cancelIntake,
+            @NotNull Button collect,
+            @NotNull Button deployIntake,
             @NotNull Button reverseIntake,
             @NotNull Button shoot,
             @NotNull Button ejectAll,
@@ -38,8 +38,8 @@ public final class Input {
             @NotNull Button turnInPlace
     ) {
         this.joystick = joystick;
-        this.intake = intake;
-        this.cancelIntake = cancelIntake;
+        this.collect = collect;
+        this.deployIntake = deployIntake;
         this.reverseIntake = reverseIntake;
         this.shoot = shoot;
         this.ejectAll = ejectAll;
