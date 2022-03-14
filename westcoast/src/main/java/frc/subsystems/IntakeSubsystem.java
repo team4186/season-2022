@@ -10,34 +10,32 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.kReverse;
 
 public class IntakeSubsystem extends SubsystemBase {
     @NotNull
-    private final DoubleSolenoid left;
-    @NotNull
-    private final DoubleSolenoid right;
+    private final DoubleSolenoid deploy;
     @NotNull
     private final MotorController intakeMotor;
 
     public IntakeSubsystem(
-            @NotNull DoubleSolenoid left,
-            @NotNull DoubleSolenoid right,
+            @NotNull DoubleSolenoid deploy,
             @NotNull MotorController intakeMotor
     ) {
-        this.left = left;
-        this.right = right;
+        this.deploy = deploy;
         this.intakeMotor = intakeMotor;
     }
 
     public void deploy() {
-        left.set(kForward);
-        right.set(kForward);
+        deploy.set(kForward);
     }
 
     public void retrieve() {
-        left.set(kReverse);
-        right.set(kReverse);
+        deploy.set(kReverse);
     }
 
     public void start() {
         intakeMotor.set(0.5);
+    }
+
+    public void reverse() {
+        intakeMotor.set(-0.5);
     }
 
     public void stop() {

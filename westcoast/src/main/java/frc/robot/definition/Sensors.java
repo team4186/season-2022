@@ -1,5 +1,6 @@
 package frc.robot.definition;
 
+import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
@@ -42,20 +43,20 @@ public class Sensors {
 
     public static final class MagazineSensors {
         @NotNull
-        public final DigitalInput head;
+        public final DigitalInput index;
         @NotNull
-        public final DigitalInput magazine;
+        public final DigitalInput feeder;
         @NotNull
-        public final DigitalInput tail;
+        public final ColorSensorV3 colorSensor;
 
         public MagazineSensors(
-                @NotNull DigitalInput head,
-                @NotNull DigitalInput magazine,
-                @NotNull DigitalInput tail
+                @NotNull DigitalInput index,
+                @NotNull DigitalInput feeder,
+                @NotNull ColorSensorV3 colorSensor
         ) {
-            this.head = head;
-            this.magazine = magazine;
-            this.tail = tail;
+            this.index = index;
+            this.feeder = feeder;
+            this.colorSensor = colorSensor;
         }
     }
 }

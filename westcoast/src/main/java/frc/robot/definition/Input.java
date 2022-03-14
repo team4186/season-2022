@@ -14,11 +14,9 @@ public final class Input {
     @NotNull
     public final Button deployIntake;
     @NotNull
-    public final Button reverseIntake;
+    public final Button retrieveIntake;
     @NotNull
     public final Button shoot;
-    @NotNull
-    public final Button ejectAll;
     @NotNull
     public final Button attenuate;
     @NotNull
@@ -30,9 +28,8 @@ public final class Input {
             @NotNull Joystick joystick,
             @NotNull Button collect,
             @NotNull Button deployIntake,
-            @NotNull Button reverseIntake,
+            @NotNull Button retrieveIntake,
             @NotNull Button shoot,
-            @NotNull Button ejectAll,
             @NotNull Button attenuate,
             @NotNull Button invert,
             @NotNull Button turnInPlace
@@ -40,9 +37,8 @@ public final class Input {
         this.joystick = joystick;
         this.collect = collect;
         this.deployIntake = deployIntake;
-        this.reverseIntake = reverseIntake;
+        this.retrieveIntake = retrieveIntake;
         this.shoot = shoot;
-        this.ejectAll = ejectAll;
         this.attenuate = attenuate;
         this.invert = invert;
         this.turnInPlace = turnInPlace;
@@ -56,7 +52,6 @@ public final class Input {
                 new JoystickButton(joystick, SaitekX52.Buttons.FIRE_A + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.FIRE_C + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.FIRE_D + 1),
-                new JoystickButton(joystick, SaitekX52.Buttons.FIRE_C + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_1 + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.PINKIE + 1)
         );

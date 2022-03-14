@@ -3,16 +3,16 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.commands.Autonomous;
 import frc.commands.Commands;
 import frc.robot.definition.Definition;
+import frc.subsystems.MagazineSubsystem;
 import org.jetbrains.annotations.NotNull;
 
-import static frc.commands.Commands.DriveCommands.alignToTarget;
-import static frc.commands.Commands.DriveCommands.findTarget;
+import static frc.commands.Commands.IntakeCommands.*;
+import static frc.commands.Commands.ShooterCommands.shoot;
 
 public class Robot extends TimedRobot {
 
@@ -20,6 +20,8 @@ public class Robot extends TimedRobot {
     private final Definition definition;
     @NotNull
     private final SendableChooser<Command> autonomousChooser = new SendableChooser<>();
+    @NotNull
+    private final SendableChooser<Color> colorChooser = new SendableChooser<>();
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -28,19 +30,12 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         definition.subsystems.driveTrain.initialize();
-
-        autonomousChooser.setDefaultOption("Target", Autonomous.target(definition, -3.0));
-        autonomousChooser.addOption("Center", Autonomous.center(definition, -3.0, -30.0));
-        autonomousChooser.addOption("LoadingBay", Autonomous.loadingBay(definition, -3.0, -40.0));
-        autonomousChooser.addOption(
-                "SpinFast",
-                new SequentialCommandGroup(
-                        findTarget(definition),
-                        alignToTarget(definition)
-                )
-        );
-        autonomousChooser.addOption("Flex on Mr. Felipe", Autonomous.flex(definition));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
+
+
+        colorChooser.addOption("Blue", MagazineSubsystem.BlueTarget);
+        colorChooser.setDefaultOption("Red", MagazineSubsystem.RedTarget);
+        SmartDashboard.putData("Cargo Color", colorChooser);
     }
 
     @Override
@@ -50,9 +45,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        autonomousChooser
-                .getSelected()
-                .schedule();
+        Command autonomous = autonomousChooser.getSelected();
+        if (autonomous != null) {
+            autonomous.schedule();
+        }
     }
 
     @Override
@@ -70,13 +66,27 @@ public class Robot extends TimedRobot {
         definition
                 .input
                 .deployIntake
-                .whenPressed(Commands.IntakeCommands.deploy(definition))
-                .whenReleased(Commands.IntakeCommands.retrieve(definition));
+                .whenPressed(deploy(definition));
+
+        definition
+                .input
+                .retrieveIntake
+                .whenPressed(retrieve(definition));
+
+        Color color = colorChooser.getSelected();
+
+        if (color == null) {
+            color = MagazineSubsystem.RedTarget;
+        }
 
         definition
                 .input
                 .collect
-                .whileHeld(Commands.IntakeCommands.collect(definition));
+                .whileHeld(collect(definition, color));
+
+
+        definition.input.shoot.whenPressed(shoot(definition));
+
     }
 
     @Override

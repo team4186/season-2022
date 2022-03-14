@@ -3,6 +3,7 @@ package frc.robot.definition;
 import frc.subsystems.DriveTrainSubsystem;
 import frc.subsystems.IntakeSubsystem;
 import frc.subsystems.MagazineSubsystem;
+import frc.subsystems.ShooterSubsystem;
 import org.jetbrains.annotations.NotNull;
 
 public class Definition {
@@ -80,19 +81,19 @@ public class Definition {
                         sensors.drive.vision
                 ),
                 new IntakeSubsystem(
-                        pneumatics.intakeDeployLeft,
-                        pneumatics.intakeDeployRight,
+                        pneumatics.intakeDeploy,
                         motors.intake.main
                 ),
+                new ShooterSubsystem(
+                        motors.shooter.lead
+                ),
                 new MagazineSubsystem(
-                        motors.intake.main,
                         motors.magazine.index,
-                        motors.magazine.magazine,
-                        motors.shooter.main,
-                        motors.shooter.secondary,
-                        sensors.magazine.head,
-                        sensors.magazine.magazine,
-                        sensors.magazine.tail
+                        motors.magazine.feeder,
+                        motors.magazine.reject,
+                        sensors.magazine.index,
+                        sensors.magazine.feeder,
+                        sensors.magazine.colorSensor
                 )
         );
     }

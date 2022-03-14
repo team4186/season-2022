@@ -1,13 +1,11 @@
 package frc.commands;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.commands.drive.*;
 import frc.commands.intake.IntakeCollect;
 import frc.commands.intake.IntakeDeploy;
 import frc.commands.intake.IntakeRetrieve;
-import frc.commands.magazine.*;
+import frc.commands.magazine.Shoot;
 import frc.commands.targeting.AlignToTarget;
 import frc.commands.targeting.FindTarget;
 import frc.commands.targeting.StayOnTarget;
@@ -15,7 +13,6 @@ import frc.robot.definition.Controllers;
 import frc.robot.definition.Definition;
 import frc.robot.definition.Input;
 import frc.robot.definition.Parameters;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 public interface Commands {
@@ -106,8 +103,11 @@ public interface Commands {
 
     interface IntakeCommands {
         @NotNull
-        static IntakeCollect collect(@NotNull Definition definition) {
-            return new IntakeCollect(definition.subsystems.intake);
+        static IntakeCollect collect(@NotNull Definition definition, @NotNull Color color) {
+            return new IntakeCollect(
+                    definition.subsystems.intake,
+                    definition.subsystems.magazine,
+                    color);
         }
 
         @NotNull
@@ -122,64 +122,14 @@ public interface Commands {
     }
 
     interface MagazineCommands {
-        @NotNull
-        static IndexLogic index(@NotNull Definition definition) {
-            return new IndexLogic(definition.subsystems.magazine);
-        }
-
-        @NotNull
-        static IntakeLogic intake(@NotNull Definition definition) {
-            return new IntakeLogic(definition.subsystems.magazine);
-        }
-
-        @NotNull
-        static IntakeOut intakeOut(@NotNull Definition definition) {
-            return new IntakeOut(definition.subsystems.magazine);
-        }
-
-        @NotNull
-        static EverythingOut everythingOut(@NotNull Definition definition) {
-            return new EverythingOut(definition.subsystems.magazine);
-        }
     }
 
     interface ShooterCommands {
         @NotNull
         static Shoot shoot(@NotNull Definition definition) {
-            return new Shoot(definition.subsystems.magazine);
-        }
-
-        @NotNull
-        static ShooterAccelerator shooterAccelerator(@NotNull Definition definition) {
-            return new ShooterAccelerator(definition.subsystems.magazine);
+            return new Shoot(definition.subsystems.shooter, definition.subsystems.magazine);
         }
     }
 
-    interface Compound {
-        @NotNull
-        static Command shoot(@NotNull Definition definition) {
-            return new SequentialCommandGroup(
-                    DriveCommands.alignToTarget(definition),
-                    SequentialCommandGroup.race(
-                            ShooterCommands.shooterAccelerator(definition),
-                            new WaitCommand(1.5)
-                    ),
-                    SequentialCommandGroup.race(
-                            ShooterCommands.shoot(definition),
-                            DriveCommands.stayOnTarget(definition),
-                            new WaitCommand(4.0)
-                    )
-            );
-        }
-
-        @NotNull
-        static Command intakeAndIndex(@NotNull Definition definition) {
-            return new SequentialCommandGroup(
-                    MagazineCommands.intake(definition),
-                    new WaitCommand(0.2),
-                    MagazineCommands.index(definition)
-            );
-        }
-    }
 }
 

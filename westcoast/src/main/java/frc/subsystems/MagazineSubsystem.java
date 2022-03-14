@@ -1,123 +1,104 @@
 package frc.subsystems;
 
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.jetbrains.annotations.NotNull;
 
 
 public class MagazineSubsystem extends SubsystemBase {
+
+    public static final Color BlueTarget = new Color(0.143, 0.427, 0.429);
+    public static final Color RedTarget = new Color(0.561, 0.232, 0.114);
     @NotNull
-    private final MotorController intakeMotor;
+    private static final ColorMatch colorMatcher = new ColorMatch();
+
+    static {
+        colorMatcher.addColorMatch(BlueTarget);
+        colorMatcher.addColorMatch(RedTarget);
+    }
+
     @NotNull
     private final MotorController indexMotor;
     @NotNull
-    private final MotorController magazineMotor;
+    private final MotorController feederMotor;
     @NotNull
-    private final MotorController leftShooter;
+    private final MotorController rejectMotor;
     @NotNull
-    private final MotorController rightShooter;
+    private final DigitalInput indexSensor;
     @NotNull
-    private final DigitalInput headSensor;
+    private final DigitalInput feederSensor;
     @NotNull
-    private final DigitalInput abSensor;
-    @NotNull
-    private final DigitalInput tailSensor;
-
-    private double amps = 0.0;
-    private double percent = 0.0;
-    private double indexCount = 0.0;
+    private final ColorSensorV3 colorSensor;
 
     public MagazineSubsystem(
-            @NotNull MotorController intakeMotor,
             @NotNull MotorController indexMotor,
-            @NotNull MotorController magazineMotor,
-            @NotNull MotorController leftShooter,
-            @NotNull MotorController rightShooter,
-            @NotNull DigitalInput headSensor,
-            @NotNull DigitalInput abSensor,
-            @NotNull DigitalInput tailSensor
+            @NotNull MotorController feederMotor,
+            @NotNull MotorController rejectMotor,
+            @NotNull DigitalInput indexSensor,
+            @NotNull DigitalInput feederSensor,
+            @NotNull ColorSensorV3 colorSensor
     ) {
-        this.intakeMotor = intakeMotor;
         this.indexMotor = indexMotor;
-        this.magazineMotor = magazineMotor;
-        this.leftShooter = leftShooter;
-        this.rightShooter = rightShooter;
-        this.headSensor = headSensor;
-        this.abSensor = abSensor;
-        this.tailSensor = tailSensor;
+        this.feederMotor = feederMotor;
+        this.rejectMotor = rejectMotor;
+        this.indexSensor = indexSensor;
+        this.feederSensor = feederSensor;
+        this.colorSensor = colorSensor;
     }
 
-    public double getIndexCount() {
-        return indexCount;
+    public boolean hasIndexSensorBreak() {
+        return indexSensor.get();
     }
 
-    private boolean headSensorValue() {
-        return !headSensor.get();
+    public boolean hasFeederSensorBreak() {
+        return feederSensor.get();
     }
 
-    private boolean abdomenSensorValue() {
-        return !abSensor.get();
+    public boolean isMatchingColor(Color color) {
+        Color pickedColor = colorSensor.getColor();
+        SmartDashboard.putString("Intake Color", String.format(
+                "Color(%2f, %2f, %2f)",
+                pickedColor.red,
+                pickedColor.green,
+                pickedColor.blue
+        ));
+        return colorMatcher
+                .matchClosestColor(pickedColor)
+                .color == color;
     }
 
-    private boolean tailSensorValue() {
-        return !tailSensor.get();
+    public void startIndexMotor() {
+        indexMotor.set(0.5);
     }
 
-    @Override
-    public void periodic() {
-        SmartDashboard.putNumber("Sensor", getSensorSwitch());
-    }
-
-    public void runIntakeMotor(double value) {
-        intakeMotor.set(value);
-    }
-
-    public void runIndexMotor(double value) {
-        indexMotor.set(value);
-    }
-
-    public void runSyncIntdex(double value) {
-        intakeMotor.set(value);
-        indexMotor.set(value);
-    }
-
-    public void runMagMotor(double value) {
-        magazineMotor.set(-value);
-    }
-
-    public void runSyncMagIndex(double value) {
-        indexMotor.set(value);
-        magazineMotor.set(-value);
-    }
-
-    public void runShooter(double value) {
-        leftShooter.set(value);
-        rightShooter.set(value);
-    }
-
-    public void stopMotors() {
-        intakeMotor.stopMotor();
+    public void stopIndexMotor() {
         indexMotor.stopMotor();
-        magazineMotor.stopMotor();
-        leftShooter.stopMotor();
-        rightShooter.stopMotor();
     }
 
-    public int getSensorSwitch() {
-        int head = headSensorValue() ? 0x1 : 0;
-        int abdomen = abdomenSensorValue() ? 0x2 : 0;
-        int tail = tailSensorValue() ? 0x4 : 0;
-        return head | abdomen | tail;
+    public void startFeederMotor() {
+        feederMotor.set(0.5);
     }
 
-    public double incrementIndexCount() {
-        indexCount += 1.0;
-        return indexCount;
+    public void stopFeederMotor() {
+        feederMotor.stopMotor();
     }
 
-    public void resetIndexCount() {
-        indexCount = 0.0;
+    public void startRejectMotor() {
+        rejectMotor.set(0.5);
+    }
+
+    public void stopRejectMotor() {
+        rejectMotor.stopMotor();
+    }
+
+    public void stopAll() {
+        feederMotor.stopMotor();
+        indexMotor.stopMotor();
+        rejectMotor.stopMotor();
     }
 }

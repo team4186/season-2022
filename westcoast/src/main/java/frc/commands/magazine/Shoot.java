@@ -2,15 +2,22 @@ package frc.commands.magazine;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.subsystems.MagazineSubsystem;
+import frc.subsystems.ShooterSubsystem;
 import org.jetbrains.annotations.NotNull;
 
 public final class Shoot extends CommandBase {
     @NotNull
+    private final ShooterSubsystem shooter;
+    @NotNull
     private final MagazineSubsystem magazine;
 
-    public Shoot(@NotNull MagazineSubsystem magazine) {
+    public Shoot(
+            @NotNull ShooterSubsystem shooter,
+            @NotNull MagazineSubsystem magazine
+    ) {
+        this.shooter = shooter;
         this.magazine = magazine;
-        addRequirements(magazine);
+        addRequirements(shooter, magazine);
     }
 
     @Override
@@ -19,14 +26,13 @@ public final class Shoot extends CommandBase {
 
     @Override
     public void execute() {
-        magazine.runShooter(0.78);
-        magazine.runMagMotor(0.3);
-        magazine.runIndexMotor(0.25);
+        shooter.setSpeed(0.5);
+        magazine.startFeederMotor();
     }
 
     @Override
     public void end(boolean interrupted) {
-        magazine.stopMotors();
-        magazine.resetIndexCount();
+        shooter.stop();
+        magazine.stopAll();
     }
 }

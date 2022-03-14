@@ -5,15 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class Pneumatics {
     @NotNull
-    public final DoubleSolenoid intakeDeployLeft;
-    @NotNull
-    public final DoubleSolenoid intakeDeployRight;
+    public final DoubleSolenoid intakeDeploy;
 
     public Pneumatics(
-            @NotNull DoubleSolenoid intakeDeployLeft,
-            @NotNull DoubleSolenoid intakeDeployRight
+            @NotNull DoubleSolenoid intakeDeploy
     ) {
-        this.intakeDeployLeft = intakeDeployLeft;
-        this.intakeDeployRight = intakeDeployRight;
+        this.intakeDeploy = intakeDeploy;
     }
 }

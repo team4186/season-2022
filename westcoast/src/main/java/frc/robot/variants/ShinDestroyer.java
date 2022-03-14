@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -48,7 +49,8 @@ public interface ShinDestroyer {
                         ),
                         new MagazineMotors(
                                 new VictorSP(10),
-                                new VictorSP(11)
+                                new VictorSP(11),
+                                new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless)
                         ),
                         new ShooterMotors(
                                 new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless),
@@ -56,8 +58,7 @@ public interface ShinDestroyer {
                         )
                 ),
                 new Pneumatics(
-                        new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1),
-                        new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3)
+                        new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1)
                 ),
                 new Sensors(
                         new DriveSensors(
@@ -69,7 +70,7 @@ public interface ShinDestroyer {
                         new MagazineSensors(
                                 new DigitalInput(0),
                                 new DigitalInput(1),
-                                new DigitalInput(2)
+                                new ColorSensorV3(I2C.Port.kOnboard)
                         )
                 ),
                 new Parameters(

@@ -66,29 +66,31 @@ public class Motors {
         @NotNull
         public final MotorController index;
         @NotNull
-        public final MotorController magazine;
+        public final MotorController feeder;
+        @NotNull
+        public final MotorController reject;
 
         public MagazineMotors(
                 @NotNull MotorController index,
-                @NotNull MotorController magazine
+                @NotNull MotorController feeder,
+                @NotNull MotorController reject
         ) {
             this.index = index;
-            this.magazine = magazine;
+            this.feeder = feeder;
+            this.reject = reject;
         }
     }
 
     public static final class ShooterMotors {
         @NotNull
-        public final CANSparkMax main;
-        @NotNull
-        public final CANSparkMax secondary;
+        public final CANSparkMax lead;
 
         public ShooterMotors(
-                @NotNull CANSparkMax main,
-                @NotNull CANSparkMax secondary
+                @NotNull CANSparkMax lead,
+                @NotNull CANSparkMax follower
         ) {
-            this.main = main;
-            this.secondary = secondary;
+            this.lead = lead;
+            follower.follow(lead, true);
         }
     }
 
