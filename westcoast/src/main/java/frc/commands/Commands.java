@@ -107,7 +107,11 @@ public interface Commands {
             return new IntakeCollect(
                     definition.subsystems.intake,
                     definition.subsystems.magazine,
-                    color);
+                    color,
+                    50,
+                    50,
+                    false
+            );
         }
 
         @NotNull

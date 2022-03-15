@@ -6,9 +6,10 @@ import frc.subsystems.IntakeSubsystem;
 import frc.subsystems.MagazineSubsystem;
 import org.jetbrains.annotations.NotNull;
 
-public class IntakeCollect extends CommandBase {
+public final class IntakeCollect extends CommandBase {
 
-    private static final int STATE_WAIT = 0;
+    private static final int STATE_END = -1;
+    private static final int STATE_FULL = 0;
     private static final int STATE_COLLECT = 1;
     private static final int STATE_REJECT = 2;
     private static final int STATE_ACCEPT_TO_FEEDER = 3;
@@ -21,54 +22,65 @@ public class IntakeCollect extends CommandBase {
     @NotNull
     private final Color color;
 
-    private int state = STATE_WAIT;
+    private final int rejectTickCount;
+    private final int reverseIntakeTickCount;
+    private final boolean finishWhenFull;
+
+    private int state = STATE_COLLECT;
 
     public IntakeCollect(
             @NotNull IntakeSubsystem intake,
             @NotNull MagazineSubsystem magazine,
-            @NotNull Color color
+            @NotNull Color color,
+            int rejectTickCount,
+            int reverseIntakeTickCount,
+            boolean finishWhenFull
     ) {
         this.intake = intake;
         this.magazine = magazine;
         this.color = color;
+        this.rejectTickCount = rejectTickCount;
+        this.reverseIntakeTickCount = reverseIntakeTickCount;
+        this.finishWhenFull = finishWhenFull;
         addRequirements(intake, magazine);
     }
 
     @Override
     public void initialize() {
-        if (magazine.hasFeederSensorBreak() && magazine.hasIndexSensorBreak()) {
-            state = STATE_WAIT;
-        } else {
-            state = STATE_COLLECT;
-        }
+        state = STATE_COLLECT;
     }
 
     @Override
     public void execute() {
         switch (state) {
-            case STATE_WAIT:
-                stateWait();
+            case STATE_FULL:
+                full();
                 break;
             case STATE_COLLECT:
+                rejectRunningTime = 0;
+                reverseIntakeRunningTime = 0;
                 collect();
                 break;
             case STATE_REJECT:
-                rejectRunningTime = 0;
                 reject();
                 break;
             case STATE_ACCEPT_TO_FEEDER:
                 acceptToFeeder();
                 break;
             case STATE_ACCEPT_TO_INDEX:
-                reverseIntakeRunningTime = 0;
                 acceptToIndex();
                 break;
         }
     }
 
-    private void stateWait() {
+    private void full() {
         magazine.stopAll();
         intake.stop();
+        if (finishWhenFull) {
+            state = STATE_END;
+        } else if (!magazine.hasIndexSensorBreak() || !magazine.hasFeederSensorBreak()) {
+            state = STATE_COLLECT;
+        }
     }
 
     private void collect() {
@@ -93,7 +105,7 @@ public class IntakeCollect extends CommandBase {
     private int rejectRunningTime = 0;
 
     private void reject() {
-        if (rejectRunningTime < 50) {
+        if (rejectRunningTime < rejectTickCount) {
             rejectRunningTime++;
             magazine.startIndexMotor();
             magazine.startRejectMotor();
@@ -109,8 +121,8 @@ public class IntakeCollect extends CommandBase {
             magazine.startIndexMotor();
             magazine.startFeederMotor();
         } else {
-            magazine.startIndexMotor();
-            magazine.startFeederMotor();
+            magazine.stopIndexMotor();
+            magazine.stopFeederMotor();
             state = STATE_COLLECT;
         }
     }
@@ -118,18 +130,23 @@ public class IntakeCollect extends CommandBase {
     private int reverseIntakeRunningTime = 0;
 
     private void acceptToIndex() {
-        if (reverseIntakeRunningTime < 50) {
+        if (reverseIntakeRunningTime < reverseIntakeTickCount) {
             reverseIntakeRunningTime++;
             intake.reverse();
         } else {
             intake.stop();
-            state = STATE_WAIT;
+            state = STATE_FULL;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
         intake.stop();
-        magazine.stopFeederMotor();
+        magazine.stopAll();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return state == STATE_END;
     }
 }
