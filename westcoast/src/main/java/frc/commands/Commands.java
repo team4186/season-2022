@@ -129,6 +129,7 @@ public interface Commands {
             );
         }
 
+        @NotNull
         static Command eject(@NotNull Definition definition) {
             IntakeSubsystem intake = definition.subsystems.intake;
             return new StartEndCommand(
@@ -156,6 +157,7 @@ public interface Commands {
     }
 
     interface MagazineCommands {
+        @NotNull
         static Command collectToFeeder(@NotNull Definition definition) {
             MagazineSubsystem magazine = definition.subsystems.magazine;
             return new StartEndCommand(
@@ -171,6 +173,7 @@ public interface Commands {
             ).until(magazine::hasFeederSensorBreak);
         }
 
+        @NotNull
         static Command collectToIndex(@NotNull Definition definition) {
             MagazineSubsystem magazine = definition.subsystems.magazine;
             return new StartEndCommand(
@@ -180,6 +183,7 @@ public interface Commands {
             ).until(magazine::hasIndexSensorBreak);
         }
 
+        @NotNull
         static Command ejectFeeder(@NotNull Definition definition) {
             MagazineSubsystem magazine = definition.subsystems.magazine;
             return new StartEndCommand(
@@ -195,6 +199,7 @@ public interface Commands {
             );
         }
 
+        @NotNull
         static Command ejectIndex(@NotNull Definition definition) {
             MagazineSubsystem magazine = definition.subsystems.magazine;
             return new StartEndCommand(
@@ -210,6 +215,7 @@ public interface Commands {
             );
         }
 
+        @NotNull
         static Command ejectAll(@NotNull Definition definition) {
             return ejectFeeder(definition)
                     .withTimeout(1.0)
@@ -231,20 +237,23 @@ public interface Commands {
 
         @NotNull
         static Command ignoreSensors(@NotNull Definition definition) {
+            IntakeSubsystem intake = definition.subsystems.intake;
             ShooterSubsystem shooter = definition.subsystems.shooter;
             MagazineSubsystem magazine = definition.subsystems.magazine;
             return new StartEndCommand(
                     () -> {
                         shooter.setSpeed(2500.0);
+                        intake.start();
                         magazine.startIndexMotor();
                         magazine.startFeederMotor();
                     },
                     () -> {
                         shooter.stop();
+                        intake.stop();
                         magazine.stopIndexMotor();
                         magazine.stopFeederMotor();
                     },
-                    magazine, shooter
+                    intake, magazine, shooter
             );
         }
     }
