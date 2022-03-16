@@ -1,10 +1,11 @@
 package frc.commands;
 
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.commands.drive.*;
 import frc.commands.intake.IntakeCollect;
-import frc.commands.intake.IntakeDeploy;
-import frc.commands.intake.IntakeRetrieve;
 import frc.commands.magazine.Shoot;
 import frc.commands.targeting.AlignToTarget;
 import frc.commands.targeting.FindTarget;
@@ -13,6 +14,9 @@ import frc.robot.definition.Controllers;
 import frc.robot.definition.Definition;
 import frc.robot.definition.Input;
 import frc.robot.definition.Parameters;
+import frc.subsystems.IntakeSubsystem;
+import frc.subsystems.MagazineSubsystem;
+import frc.subsystems.ShooterSubsystem;
 import org.jetbrains.annotations.NotNull;
 
 public interface Commands {
@@ -115,25 +119,133 @@ public interface Commands {
         }
 
         @NotNull
-        static IntakeDeploy deploy(@NotNull Definition definition) {
-            return new IntakeDeploy(definition.subsystems.intake);
+        static Command collect(@NotNull Definition definition) {
+            IntakeSubsystem intake = definition.subsystems.intake;
+            return new StartEndCommand(
+                    intake::start,
+                    intake::stop,
+                    intake
+            );
+        }
+
+        static Command eject(@NotNull Definition definition) {
+            IntakeSubsystem intake = definition.subsystems.intake;
+            return new StartEndCommand(
+                    intake::reverse,
+                    intake::stop,
+                    intake
+            );
         }
 
         @NotNull
-        static IntakeRetrieve retrieve(@NotNull Definition definition) {
-            return new IntakeRetrieve(definition.subsystems.intake);
+        static Command deploy(@NotNull Definition definition) {
+            return new InstantCommand(
+                    definition.subsystems.intake::deploy,
+                    definition.subsystems.intake
+            );
+        }
+
+        @NotNull
+        static Command retrieve(@NotNull Definition definition) {
+            return new InstantCommand(
+                    definition.subsystems.intake::retrieve,
+                    definition.subsystems.intake
+            );
         }
     }
 
     interface MagazineCommands {
+        static Command collectToFeeder(@NotNull Definition definition) {
+            MagazineSubsystem magazine = definition.subsystems.magazine;
+            return new StartEndCommand(
+                    () -> {
+                        magazine.startFeederMotor();
+                        magazine.startIndexMotor();
+                    },
+                    () -> {
+                        magazine.stopFeederMotor();
+                        magazine.stopIndexMotor();
+                    },
+                    magazine
+            ).until(magazine::hasFeederSensorBreak);
+        }
+
+        static Command collectToIndex(@NotNull Definition definition) {
+            MagazineSubsystem magazine = definition.subsystems.magazine;
+            return new StartEndCommand(
+                    magazine::startIndexMotor,
+                    magazine::stopIndexMotor,
+                    magazine
+            ).until(magazine::hasIndexSensorBreak);
+        }
+
+        static Command ejectFeeder(@NotNull Definition definition) {
+            MagazineSubsystem magazine = definition.subsystems.magazine;
+            return new StartEndCommand(
+                    () -> {
+                        magazine.reverseFeederMotor();
+                        magazine.startRejectMotor();
+                    },
+                    () -> {
+                        magazine.stopFeederMotor();
+                        magazine.stopRejectMotor();
+                    },
+                    magazine
+            );
+        }
+
+        static Command ejectIndex(@NotNull Definition definition) {
+            MagazineSubsystem magazine = definition.subsystems.magazine;
+            return new StartEndCommand(
+                    () -> {
+                        magazine.startIndexMotor();
+                        magazine.startRejectMotor();
+                    },
+                    () -> {
+                        magazine.stopIndexMotor();
+                        magazine.stopRejectMotor();
+                    },
+                    magazine
+            );
+        }
+
+        static Command ejectAll(@NotNull Definition definition) {
+            return ejectFeeder(definition)
+                    .withTimeout(1.0)
+                    .andThen(ejectIndex(definition).withTimeout(1.0))
+                    .alongWith(IntakeCommands.eject(definition).withTimeout(1.0));
+        }
     }
 
     interface ShooterCommands {
         @NotNull
         static Shoot shoot(@NotNull Definition definition) {
-            return new Shoot(definition.subsystems.shooter, definition.subsystems.magazine);
+            return new Shoot(
+                    definition.subsystems.shooter,
+                    definition.subsystems.magazine,
+                    50,
+                    2500
+            );
+        }
+
+        @NotNull
+        static Command ignoreSensors(@NotNull Definition definition) {
+            ShooterSubsystem shooter = definition.subsystems.shooter;
+            MagazineSubsystem magazine = definition.subsystems.magazine;
+            return new StartEndCommand(
+                    () -> {
+                        shooter.setSpeed(2500.0);
+                        magazine.startIndexMotor();
+                        magazine.startFeederMotor();
+                    },
+                    () -> {
+                        shooter.stop();
+                        magazine.stopIndexMotor();
+                        magazine.stopFeederMotor();
+                    },
+                    magazine, shooter
+            );
         }
     }
-
 }
 

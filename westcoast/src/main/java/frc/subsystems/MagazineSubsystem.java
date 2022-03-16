@@ -84,6 +84,10 @@ public class MagazineSubsystem extends SubsystemBase {
         feederMotor.set(0.5);
     }
 
+    public void reverseFeederMotor() {
+        feederMotor.set(-0.5);
+    }
+
     public void stopFeederMotor() {
         feederMotor.stopMotor();
     }
