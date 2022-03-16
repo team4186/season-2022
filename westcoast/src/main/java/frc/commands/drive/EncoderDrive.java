@@ -24,6 +24,7 @@ public final class EncoderDrive extends CommandBase {
     private final PIDController right;
     @NotNull
     private final Button turnInPlace;
+    private final boolean sendDebugData;
 
     private static final double maxSpeed = 7.0 * 256.0; // encoders report ~1550-1600 pulses
     private static final double deadzone = 0.02;
@@ -38,12 +39,14 @@ public final class EncoderDrive extends CommandBase {
             @NotNull Joystick joystick,
             @NotNull Button invert,
             @NotNull Button turnInPlace,
-            @NotNull DriveTrainSubsystem drive
+            @NotNull DriveTrainSubsystem drive,
+            boolean sendDebugData
     ) {
         this.joystick = joystick;
         this.invert = invert;
         this.turnInPlace = turnInPlace;
         this.drive = drive;
+        this.sendDebugData = sendDebugData;
 
         double P = 0.0005;
         double I = 0.0;
@@ -146,21 +149,22 @@ public final class EncoderDrive extends CommandBase {
 
         // region Debug
 
-        leftData[0] = drive.leftEncoder.getRate();
-        leftData[1] = leftSetpoint;
-        rightData[0] = drive.rightEncoder.getRate();
-        rightData[1] = rightSetpoint;
+        if (sendDebugData) {
+            leftData[0] = drive.leftEncoder.getRate();
+            leftData[1] = leftSetpoint;
+            rightData[0] = drive.rightEncoder.getRate();
+            rightData[1] = rightSetpoint;
 
-        SmartDashboard.putBoolean("Revert", shouldInvert > 0.0);
-        SmartDashboard.putNumber("Forward", shouldInvert * forward);
-        SmartDashboard.putNumber("Turn", turn);
+            SmartDashboard.putBoolean("Revert", shouldInvert > 0.0);
+            SmartDashboard.putNumber("Forward", shouldInvert * forward);
+            SmartDashboard.putNumber("Turn", turn);
 
-        SmartDashboard.putNumberArray("lE Rate", leftData);
-        SmartDashboard.putNumber("lOutput", leftOut);
+            SmartDashboard.putNumberArray("lE Rate", leftData);
+            SmartDashboard.putNumber("lOutput", leftOut);
 
-        SmartDashboard.putNumberArray("rE Rate", rightData);
-        SmartDashboard.putNumber("rOutput", rightOut);
-
+            SmartDashboard.putNumberArray("rE Rate", rightData);
+            SmartDashboard.putNumber("rOutput", rightOut);
+        }
         // endregion
     }
 
