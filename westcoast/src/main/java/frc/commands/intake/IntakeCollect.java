@@ -8,12 +8,14 @@ import org.jetbrains.annotations.NotNull;
 
 public final class IntakeCollect extends CommandBase {
 
-    private static final int STATE_END = -1;
-    private static final int STATE_FULL = 0;
-    private static final int STATE_COLLECT = 1;
-    private static final int STATE_REJECT = 2;
-    private static final int STATE_ACCEPT_TO_FEEDER = 3;
-    private static final int STATE_ACCEPT_TO_INDEX = 4;
+    private enum State {
+        End,
+        Full,
+        Collecting,
+        Rejecting,
+        AcceptingToFeeder,
+        AcceptingToIndex,
+    }
 
     @NotNull
     private final IntakeSubsystem intake;
@@ -26,7 +28,7 @@ public final class IntakeCollect extends CommandBase {
     private final int reverseIntakeTickCount;
     private final boolean finishWhenFull;
 
-    private int state = STATE_COLLECT;
+    private State state = State.Collecting;
 
     public IntakeCollect(
             @NotNull IntakeSubsystem intake,
@@ -47,27 +49,27 @@ public final class IntakeCollect extends CommandBase {
 
     @Override
     public void initialize() {
-        state = STATE_COLLECT;
+        state = State.Collecting;
     }
 
     @Override
     public void execute() {
         switch (state) {
-            case STATE_FULL:
+            case Full:
                 full();
                 break;
-            case STATE_COLLECT:
+            case Collecting:
                 rejectRunningTime = 0;
                 reverseIntakeRunningTime = 0;
                 collect();
                 break;
-            case STATE_REJECT:
+            case Rejecting:
                 reject();
                 break;
-            case STATE_ACCEPT_TO_FEEDER:
+            case AcceptingToFeeder:
                 acceptToFeeder();
                 break;
-            case STATE_ACCEPT_TO_INDEX:
+            case AcceptingToIndex:
                 acceptToIndex();
                 break;
         }
@@ -77,9 +79,9 @@ public final class IntakeCollect extends CommandBase {
         magazine.stopAll();
         intake.stop();
         if (finishWhenFull) {
-            state = STATE_END;
+            state = State.End;
         } else if (!magazine.hasIndexSensorBreak() || !magazine.hasFeederSensorBreak()) {
-            state = STATE_COLLECT;
+            state = State.Collecting;
         }
     }
 
@@ -92,12 +94,12 @@ public final class IntakeCollect extends CommandBase {
             magazine.stopIndexMotor();
             if (magazine.isMatchingColor(color)) {
                 if (!magazine.hasFeederSensorBreak()) {
-                    state = STATE_ACCEPT_TO_FEEDER;
+                    state = State.AcceptingToFeeder;
                 } else {
-                    state = STATE_ACCEPT_TO_INDEX;
+                    state = State.AcceptingToIndex;
                 }
             } else {
-                state = STATE_REJECT;
+                state = State.Rejecting;
             }
         }
     }
@@ -112,7 +114,7 @@ public final class IntakeCollect extends CommandBase {
         } else {
             magazine.stopIndexMotor();
             magazine.stopRejectMotor();
-            state = STATE_COLLECT;
+            state = State.Collecting;
         }
     }
 
@@ -123,7 +125,7 @@ public final class IntakeCollect extends CommandBase {
         } else {
             magazine.stopIndexMotor();
             magazine.stopFeederMotor();
-            state = STATE_COLLECT;
+            state = State.Collecting;
         }
     }
 
@@ -135,7 +137,7 @@ public final class IntakeCollect extends CommandBase {
             intake.reverse();
         } else {
             intake.stop();
-            state = STATE_FULL;
+            state = State.Full;
         }
     }
 
@@ -147,6 +149,6 @@ public final class IntakeCollect extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return state == STATE_END;
+        return state == State.End;
     }
 }
