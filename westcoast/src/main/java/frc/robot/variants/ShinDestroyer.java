@@ -2,7 +2,6 @@ package frc.robot.variants;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ColorSensorV3;
@@ -10,7 +9,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.motorcontrol.VictorSP;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.definition.*;
 import frc.robot.definition.Motors.IntakeMotors;
 import frc.robot.definition.Motors.MagazineMotors;
@@ -62,7 +61,7 @@ public interface ShinDestroyer {
                 ),
                 new Sensors(
                         new DriveSensors(
-                                new AHRS(SPI.Port.kMXP),
+                                dummyGyro(),
                                 encoder(8, 9),
                                 encoder(7, 6),
                                 new LimelightRunner()
@@ -136,6 +135,36 @@ public interface ShinDestroyer {
                     }
                 }
         );
+    }
+
+    @NotNull
+    private static Gyro dummyGyro() {
+        return new Gyro() {
+            @Override
+            public void calibrate() {
+
+            }
+
+            @Override
+            public void reset() {
+
+            }
+
+            @Override
+            public double getAngle() {
+                return 0;
+            }
+
+            @Override
+            public double getRate() {
+                return 0;
+            }
+
+            @Override
+            public void close() {
+
+            }
+        };
     }
 
     private static Encoder encoder(int channelA, int channelB) {
