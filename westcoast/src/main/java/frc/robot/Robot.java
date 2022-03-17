@@ -12,6 +12,7 @@ import frc.subsystems.MagazineSubsystem;
 import org.jetbrains.annotations.NotNull;
 
 import static frc.commands.Commands.IntakeCommands.*;
+import static frc.commands.Commands.ShooterCommands.ignoreSensors;
 import static frc.commands.Commands.ShooterCommands.shoot;
 
 public class Robot extends TimedRobot {
@@ -58,40 +59,69 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        Commands
-                .TeleopCommands
-                .encodedAssisted(definition)
-                .schedule();
-
-        definition
-                .input
-                .deployIntake
-                .whenPressed(deploy(definition));
-
-        definition
-                .input
-                .retrieveIntake
-                .whenPressed(retrieve(definition));
-
-        Color color = colorChooser.getSelected();
-
-        if (color == null) {
-            color = MagazineSubsystem.RedTarget;
-        }
-
-        definition
-                .input
-                .collect
-                .whileHeld(collect(definition, color));
-
-
-        definition.input.shoot.whenPressed(shoot(definition));
+//        Commands
+//                .TeleopCommands
+//                .encodedAssisted(definition)
+//                .schedule();
+//
+//        definition
+//                .input
+//                .deployIntake
+//                .whenPressed(deploy(definition));
+//
+//        definition
+//                .input
+//                .retrieveIntake
+//                .whenPressed(retrieve(definition));
+//
+//        Color color = colorChooser.getSelected();
+//
+//        if (color == null) {
+//            color = MagazineSubsystem.RedTarget;
+//        }
+//
+//        definition
+//                .input
+//                .collect
+//                .whileHeld(collect(definition, color));
+//
+//
+//        definition.input.shoot.whenPressed(ignoreSensors(definition));
 
     }
 
     @Override
     public void teleopPeriodic() {
 
+        SmartDashboard.putBoolean("Color", definition.subsystems.magazine.isMatchingColor(MagazineSubsystem.RedTarget));
+//        if(definition.input.collect.get()) {
+//            definition.motors.intake.main.set(0.5);
+//        }
+//        else {
+//            definition.motors.intake.main.stopMotor();
+//        }
+//        if(definition.input.deployIntake.get()) {
+//            definition.motors.magazine.feeder.set(-0.5);
+//        } else {
+//            definition.motors.magazine.feeder.stopMotor();
+//        }
+//        if(definition.input.retrieveIntake.get()) {
+//            definition.motors.magazine.index.set(-0.5);
+//        }else {
+//            definition.motors.magazine.index.stopMotor();
+//        }
+//        if(definition.input.turnInPlace.get()) {
+//            definition.motors.magazine.reject.set(0.5);
+//        }
+//        else {
+//            definition.motors.magazine.reject.stopMotor();
+//        }
+//        if(definition.input.shoot.get()) {
+//            definition.motors.shooter.lead.set(0.5);
+//        }
+//        else {
+//            definition.motors.shooter.lead.stopMotor();
+//        }
     }
 
     @Override

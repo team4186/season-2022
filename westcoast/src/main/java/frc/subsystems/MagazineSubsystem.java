@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 
 public class MagazineSubsystem extends SubsystemBase {
-
     public static final Color BlueTarget = new Color(0.143, 0.427, 0.429);
     public static final Color RedTarget = new Color(0.561, 0.232, 0.114);
     @NotNull
@@ -81,11 +80,11 @@ public class MagazineSubsystem extends SubsystemBase {
     }
 
     public void startFeederMotor() {
-        feederMotor.set(0.5);
+        feederMotor.set(-0.5);
     }
 
     public void reverseFeederMotor() {
-        feederMotor.set(-0.5);
+        feederMotor.set(0.5);
     }
 
     public void stopFeederMotor() {

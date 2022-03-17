@@ -45,12 +45,12 @@ public interface ShinDestroyer {
                                 false
                         ),
                         new IntakeMotors(
-                                new WPI_VictorSPX(13)
+                                new CANSparkMax(13, CANSparkMaxLowLevel.MotorType.kBrushless)
                         ),
                         new MagazineMotors(
-                                new VictorSP(10),
-                                new VictorSP(11),
-                                new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless)
+                                new CANSparkMax(10, CANSparkMaxLowLevel.MotorType.kBrushless),
+                                new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless),
+                                new CANSparkMax(11, CANSparkMaxLowLevel.MotorType.kBrushless)
                         ),
                         new ShooterMotors(
                                 new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless),
