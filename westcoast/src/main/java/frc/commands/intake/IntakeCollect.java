@@ -107,7 +107,7 @@ public final class IntakeCollect extends CommandBase {
     private int rejectRunningTime = 0;
 
     private void reject() {
-        if (rejectRunningTime < rejectTickCount) {
+        if (magazine.hasRejectSensorBreak() || rejectRunningTime < rejectTickCount) {
             rejectRunningTime++;
             magazine.startIndexMotor();
             magazine.startRejectMotor();
@@ -122,9 +122,11 @@ public final class IntakeCollect extends CommandBase {
         if (!magazine.hasFeederSensorBreak()) {
             magazine.startIndexMotor();
             magazine.startFeederMotor();
+            magazine.reverseRejectMotor();
         } else {
             magazine.stopIndexMotor();
             magazine.stopFeederMotor();
+            magazine.stopRejectMotor();
             state = State.Collecting;
         }
     }

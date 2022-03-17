@@ -16,10 +16,12 @@ class IntakeCollectTest : StringSpec({
 
         var feederFull = false
         var indexFull = false
+        var rejectTrigger = false
         var colorMatched = false
 
         every { magazine.hasFeederSensorBreak() } answers { feederFull }
         every { magazine.hasIndexSensorBreak() } answers { indexFull }
+        every { magazine.hasRejectSensorBreak() } answers { rejectTrigger }
         every { magazine.isMatchingColor(wantedColor) } answers { colorMatched }
 
         excludeRecords { @Suppress("UnusedEquals") intake.equals(magazine) }
@@ -63,6 +65,7 @@ class IntakeCollectTest : StringSpec({
         // reject ball
         command.execute()
         indexFull = false
+        rejectTrigger = false
         command.execute()
 
         // accept ball
@@ -95,11 +98,13 @@ class IntakeCollectTest : StringSpec({
             magazine.hasFeederSensorBreak()
             magazine.startIndexMotor()
             magazine.startFeederMotor()
+            magazine.reverseRejectMotor()
 
             // execute arrive at feeder
             magazine.hasFeederSensorBreak()
             magazine.stopIndexMotor()
             magazine.stopFeederMotor()
+            magazine.stopRejectMotor()
 
             // execute restart collection
             magazine.hasIndexSensorBreak()
@@ -113,8 +118,10 @@ class IntakeCollectTest : StringSpec({
             magazine.isMatchingColor(wantedColor)
 
             // execute reject ball
+            magazine.hasRejectSensorBreak()
             magazine.startIndexMotor()
             magazine.startRejectMotor()
+            magazine.hasRejectSensorBreak()
             magazine.stopIndexMotor()
             magazine.stopRejectMotor()
 

@@ -69,6 +69,7 @@ public interface ShinDestroyer {
                         new MagazineSensors(
                                 new DigitalInput(0),
                                 new DigitalInput(1),
+                                new DigitalInput(2),
                                 new ColorSensorV3(I2C.Port.kOnboard)
                         )
                 ),

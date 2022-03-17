@@ -93,6 +93,7 @@ public class Definition {
                         motors.magazine.reject,
                         sensors.magazine.index,
                         sensors.magazine.feeder,
+                        sensors.magazine.reject,
                         sensors.magazine.colorSensor
                 )
         );

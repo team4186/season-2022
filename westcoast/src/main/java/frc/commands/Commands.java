@@ -1,8 +1,10 @@
 package frc.commands;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.commands.drive.*;
 import frc.commands.intake.IntakeCollect;
@@ -18,6 +20,8 @@ import frc.subsystems.IntakeSubsystem;
 import frc.subsystems.MagazineSubsystem;
 import frc.subsystems.ShooterSubsystem;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.DoubleSupplier;
 
 public interface Commands {
     interface TeleopCommands {
@@ -163,10 +167,12 @@ public interface Commands {
             return new StartEndCommand(
                     () -> {
                         magazine.startFeederMotor();
+                        magazine.reverseRejectMotor();
                         magazine.startIndexMotor();
                     },
                     () -> {
                         magazine.stopFeederMotor();
+                        magazine.stopRejectMotor();
                         magazine.stopIndexMotor();
                     },
                     magazine
@@ -181,6 +187,22 @@ public interface Commands {
                     magazine::stopIndexMotor,
                     magazine
             ).until(magazine::hasIndexSensorBreak);
+        }
+
+        @NotNull
+        static Command collectToReject(@NotNull Definition definition) {
+            MagazineSubsystem magazine = definition.subsystems.magazine;
+            return new StartEndCommand(
+                    () -> {
+                        magazine.startRejectMotor();
+                        magazine.startIndexMotor();
+                    },
+                    () -> {
+                        magazine.stopRejectMotor();
+                        magazine.stopIndexMotor();
+                    },
+                    magazine
+            ).until(magazine::hasRejectSensorBreak);
         }
 
         @NotNull
@@ -226,34 +248,66 @@ public interface Commands {
 
     interface ShooterCommands {
         @NotNull
-        static Shoot shoot(@NotNull Definition definition) {
+        static Shoot shoot(@NotNull Definition definition, @NotNull DoubleSupplier velocity) {
             return new Shoot(
                     definition.subsystems.shooter,
                     definition.subsystems.magazine,
-                    50,
-                    2500
+                    velocity,
+                    50
+            );
+        }
+
+    }
+
+    interface TestCommands {
+        @NotNull
+        static Command runMotor(@NotNull MotorController controller, @NotNull DoubleSupplier velocity) {
+            return new StartEndCommand(
+                    () -> controller.set(velocity.getAsDouble()),
+                    controller::stopMotor
             );
         }
 
         @NotNull
-        static Command ignoreSensors(@NotNull Definition definition) {
+        static Command shooterFlow(@NotNull Definition definition, @NotNull DoubleSupplier velocity) {
             IntakeSubsystem intake = definition.subsystems.intake;
             ShooterSubsystem shooter = definition.subsystems.shooter;
             MagazineSubsystem magazine = definition.subsystems.magazine;
             return new StartEndCommand(
                     () -> {
-                        shooter.setSpeed(2500.0);
+                        shooter.setSpeed(velocity.getAsDouble());
                         intake.start();
                         magazine.startIndexMotor();
                         magazine.startFeederMotor();
+                        magazine.reverseRejectMotor();
                     },
                     () -> {
                         shooter.stop();
                         intake.stop();
                         magazine.stopIndexMotor();
                         magazine.stopFeederMotor();
+                        magazine.stopRejectMotor();
                     },
                     intake, magazine, shooter
+            );
+        }
+
+        @NotNull
+        static Command rejectFlow(@NotNull Definition definition) {
+            IntakeSubsystem intake = definition.subsystems.intake;
+            MagazineSubsystem magazine = definition.subsystems.magazine;
+            return new StartEndCommand(
+                    () -> {
+                        intake.start();
+                        magazine.startIndexMotor();
+                        magazine.startRejectMotor();
+                    },
+                    () -> {
+                        intake.stop();
+                        magazine.stopIndexMotor();
+                        magazine.stopRejectMotor();
+                    },
+                    intake, magazine
             );
         }
     }

@@ -47,15 +47,19 @@ public class Sensors {
         @NotNull
         public final DigitalInput feeder;
         @NotNull
+        public final DigitalInput reject;
+        @NotNull
         public final ColorSensorV3 colorSensor;
 
         public MagazineSensors(
                 @NotNull DigitalInput index,
                 @NotNull DigitalInput feeder,
+                @NotNull DigitalInput reject,
                 @NotNull ColorSensorV3 colorSensor
         ) {
             this.index = index;
             this.feeder = feeder;
+            this.reject = reject;
             this.colorSensor = colorSensor;
         }
     }

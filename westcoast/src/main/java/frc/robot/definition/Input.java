@@ -24,6 +24,19 @@ public final class Input {
     @NotNull
     public final Button turnInPlace;
 
+    // Debug buttons
+    @NotNull
+    public final Button runIntakeMotor;
+    @NotNull
+    public final Button runIndexMotor;
+    @NotNull
+    public final Button runFeederMotor;
+    @NotNull
+    public final Button runRejectMotor;
+    @NotNull
+    public final Button runShooterMotor;
+
+
     public Input(
             @NotNull Joystick joystick,
             @NotNull Button collect,
@@ -32,7 +45,12 @@ public final class Input {
             @NotNull Button shoot,
             @NotNull Button attenuate,
             @NotNull Button invert,
-            @NotNull Button turnInPlace
+            @NotNull Button turnInPlace,
+            @NotNull Button runIntakeMotor,
+            @NotNull Button runIndexMotor,
+            @NotNull Button runFeederMotor,
+            @NotNull Button runRejectMotor,
+            @NotNull Button runShooterMotor
     ) {
         this.joystick = joystick;
         this.collect = collect;
@@ -42,6 +60,12 @@ public final class Input {
         this.attenuate = attenuate;
         this.invert = invert;
         this.turnInPlace = turnInPlace;
+
+        this.runIntakeMotor = runIntakeMotor;
+        this.runIndexMotor = runIndexMotor;
+        this.runFeederMotor = runFeederMotor;
+        this.runRejectMotor = runRejectMotor;
+        this.runShooterMotor = runShooterMotor;
     }
 
     public Input(@NotNull Joystick joystick) {
@@ -53,7 +77,13 @@ public final class Input {
                 new JoystickButton(joystick, SaitekX52.Buttons.FIRE_C + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.FIRE_D + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_1 + 1),
-                new JoystickButton(joystick, SaitekX52.Buttons.PINKIE + 1)
+                new JoystickButton(joystick, SaitekX52.Buttons.PINKIE + 1),
+
+                new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_2 + 1),
+                new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_3 + 1),
+                new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_4 + 1),
+                new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_5 + 1),
+                new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_6 + 1)
         );
     }
 }

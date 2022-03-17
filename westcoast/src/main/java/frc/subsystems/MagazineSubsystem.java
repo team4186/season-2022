@@ -32,6 +32,8 @@ public class MagazineSubsystem extends SubsystemBase {
     @NotNull
     private final DigitalInput feederSensor;
     @NotNull
+    private final DigitalInput rejectSensor;
+    @NotNull
     private final ColorSensorV3 colorSensor;
 
     public MagazineSubsystem(
@@ -40,6 +42,7 @@ public class MagazineSubsystem extends SubsystemBase {
             @NotNull MotorController rejectMotor,
             @NotNull DigitalInput indexSensor,
             @NotNull DigitalInput feederSensor,
+            @NotNull DigitalInput rejectSensor,
             @NotNull ColorSensorV3 colorSensor
     ) {
         this.indexMotor = indexMotor;
@@ -47,6 +50,7 @@ public class MagazineSubsystem extends SubsystemBase {
         this.rejectMotor = rejectMotor;
         this.indexSensor = indexSensor;
         this.feederSensor = feederSensor;
+        this.rejectSensor = rejectSensor;
         this.colorSensor = colorSensor;
     }
 
@@ -58,14 +62,18 @@ public class MagazineSubsystem extends SubsystemBase {
         return feederSensor.get();
     }
 
+    public boolean hasRejectSensorBreak() {
+        return rejectSensor.get();
+    }
+
     public boolean isMatchingColor(Color color) {
         Color pickedColor = colorSensor.getColor();
-        SmartDashboard.putString("Intake Color", String.format(
-                "Color(%2f, %2f, %2f)",
-                pickedColor.red,
-                pickedColor.green,
-                pickedColor.blue
-        ));
+//        SmartDashboard.putString("Intake Color", String.format(
+//                "Color(%2f, %2f, %2f)",
+//                pickedColor.red,
+//                pickedColor.green,
+//                pickedColor.blue
+//        ));
         return colorMatcher
                 .matchClosestColor(pickedColor)
                 .color == color;
@@ -92,6 +100,10 @@ public class MagazineSubsystem extends SubsystemBase {
     }
 
     public void startRejectMotor() {
+        rejectMotor.set(-0.5);
+    }
+
+    public void reverseRejectMotor() {
         rejectMotor.set(0.5);
     }
 
