@@ -1,5 +1,6 @@
 package frc.commands.intake;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.subsystems.IntakeSubsystem;
@@ -7,6 +8,10 @@ import frc.subsystems.MagazineSubsystem;
 import org.jetbrains.annotations.NotNull;
 
 public final class IntakeCollect extends CommandBase {
+
+    public interface ColorSupplier {
+        Color getColor();
+    }
 
     private enum State {
         End,
@@ -22,7 +27,7 @@ public final class IntakeCollect extends CommandBase {
     @NotNull
     private final MagazineSubsystem magazine;
     @NotNull
-    private final Color color;
+    private final ColorSupplier color;
 
     private final int rejectTickCount;
     private final int reverseIntakeTickCount;
@@ -33,7 +38,7 @@ public final class IntakeCollect extends CommandBase {
     public IntakeCollect(
             @NotNull IntakeSubsystem intake,
             @NotNull MagazineSubsystem magazine,
-            @NotNull Color color,
+            @NotNull ColorSupplier color,
             int rejectTickCount,
             int reverseIntakeTickCount,
             boolean finishWhenFull
@@ -54,6 +59,7 @@ public final class IntakeCollect extends CommandBase {
 
     @Override
     public void execute() {
+        SmartDashboard.putString("State", state.toString());
         switch (state) {
             case Full:
                 full();
@@ -92,7 +98,7 @@ public final class IntakeCollect extends CommandBase {
         } else {
             intake.stop();
             magazine.stopIndexMotor();
-            if (magazine.isMatchingColor(color)) {
+            if (magazine.isMatchingColor(color.getColor())) {
                 if (!magazine.hasFeederSensorBreak()) {
                     state = State.AcceptingToFeeder;
                 } else {

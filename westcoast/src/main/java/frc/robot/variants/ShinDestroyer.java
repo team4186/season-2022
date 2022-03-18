@@ -67,9 +67,9 @@ public interface ShinDestroyer {
                                 new LimelightRunner()
                         ),
                         new MagazineSensors(
-                                new DigitalInput(0),
-                                new DigitalInput(1),
                                 new DigitalInput(2),
+                                new DigitalInput(1),
+                                new DigitalInput(0),
                                 new ColorSensorV3(I2C.Port.kOnboard)
                         )
                 ),

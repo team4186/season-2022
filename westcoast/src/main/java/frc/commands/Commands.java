@@ -112,14 +112,14 @@ public interface Commands {
 
     interface IntakeCommands {
         @NotNull
-        static IntakeCollect collect(@NotNull Definition definition, @NotNull Color color) {
+        static IntakeCollect collect(@NotNull Definition definition, @NotNull IntakeCollect.ColorSupplier color) {
             return new IntakeCollect(
                     definition.subsystems.intake,
                     definition.subsystems.magazine,
                     color,
                     50,
                     50,
-                    false
+                    true
             );
         }
 

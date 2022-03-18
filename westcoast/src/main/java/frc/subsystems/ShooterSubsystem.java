@@ -1,6 +1,7 @@
 package frc.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +19,7 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void setSpeed(double speed) {
+        SmartDashboard.putNumber("Shooter Speed (target)", speed);
         // TODO 5676 is the spec for NEO motors we should use the embedded PID Controller to ensure
         // the speed control
         shooterMotor.set(speed / 5676.0);

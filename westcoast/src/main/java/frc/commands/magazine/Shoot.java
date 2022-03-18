@@ -1,5 +1,6 @@
 package frc.commands.magazine;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.subsystems.MagazineSubsystem;
 import frc.subsystems.ShooterSubsystem;
@@ -20,7 +21,8 @@ public final class Shoot extends CommandBase {
     private final ShooterSubsystem shooter;
     @NotNull
     private final MagazineSubsystem magazine;
-    @NotNull private final DoubleSupplier targetVelocity;
+    @NotNull
+    private final DoubleSupplier targetVelocity;
 
     private final int maxReloadTicks;
 
@@ -48,6 +50,7 @@ public final class Shoot extends CommandBase {
 
     @Override
     public void execute() {
+        SmartDashboard.putNumber("Throttle", targetVelocity.getAsDouble());
         switch (state) {
             case End:
                 shooter.stop();
@@ -90,6 +93,7 @@ public final class Shoot extends CommandBase {
     }
 
     private void accelerating() {
+        SmartDashboard.putNumber("Shooter Speed", shooter.getSpeed());
         if (!magazine.hasFeederSensorBreak()) {
             state = State.Reloading;
         } else if (shooter.getSpeed() >= targetVelocity.getAsDouble()) {

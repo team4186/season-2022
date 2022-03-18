@@ -55,15 +55,15 @@ public class MagazineSubsystem extends SubsystemBase {
     }
 
     public boolean hasIndexSensorBreak() {
-        return indexSensor.get();
+        return !indexSensor.get();
     }
 
     public boolean hasFeederSensorBreak() {
-        return feederSensor.get();
+        return !feederSensor.get();
     }
 
     public boolean hasRejectSensorBreak() {
-        return rejectSensor.get();
+        return !rejectSensor.get();
     }
 
     public boolean isMatchingColor(Color color) {
@@ -80,7 +80,7 @@ public class MagazineSubsystem extends SubsystemBase {
     }
 
     public void startIndexMotor() {
-        indexMotor.set(0.5);
+        indexMotor.set(0.8);
     }
 
     public void stopIndexMotor() {
@@ -92,7 +92,7 @@ public class MagazineSubsystem extends SubsystemBase {
     }
 
     public void reverseFeederMotor() {
-        feederMotor.set(0.5);
+        feederMotor.set(0.8);
     }
 
     public void stopFeederMotor() {
@@ -100,11 +100,11 @@ public class MagazineSubsystem extends SubsystemBase {
     }
 
     public void startRejectMotor() {
-        rejectMotor.set(-0.5);
+        rejectMotor.set(0.8);
     }
 
     public void reverseRejectMotor() {
-        rejectMotor.set(0.5);
+        rejectMotor.set(-0.8);
     }
 
     public void stopRejectMotor() {

@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,7 +30,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        definition.subsystems.driveTrain.initialize();
+       definition.subsystems.driveTrain.initialize();
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
 
 
@@ -73,68 +74,36 @@ public class Robot extends TimedRobot {
                 .retrieveIntake
                 .whenPressed(retrieve(definition));
 
-        Color color = colorChooser.getSelected();
-
-        if (color == null) {
-            color = MagazineSubsystem.RedTarget;
-        }
-
         definition
                 .input
                 .collect
-                .whileHeld(collect(definition, color));
+                .whileActiveOnce(collect(
+                        definition,
+                        () -> {
+                            Color color = colorChooser.getSelected();
+
+                            if (color == null) {
+                                color = MagazineSubsystem.RedTarget;
+                            }
+                            return color;
+                        }
+                ));
 
         definition
                 .input
                 .shoot
-                .whenPressed(shoot(
+                .whileActiveOnce(shoot(
                         definition,
-                        () -> (definition.input.joystick.getThrottle() + 1.0) * 0.5 * 5676.0
-                ));
-
-        definition
-                .input
-                .runIntakeMotor
-                .whileActiveOnce(Commands.TestCommands.runMotor(
-                        definition.motors.intake.main,
-                        definition.input.joystick::getThrottle
-                ));
-
-        definition
-                .input
-                .runIndexMotor
-                .whileActiveOnce(Commands.TestCommands.runMotor(
-                        definition.motors.magazine.index,
-                        definition.input.joystick::getThrottle
-                ));
-
-        definition
-                .input
-                .runFeederMotor
-                .whileActiveOnce(Commands.TestCommands.runMotor(
-                        definition.motors.magazine.feeder,
-                        definition.input.joystick::getThrottle
-                ));
-
-        definition
-                .input
-                .runRejectMotor
-                .whileActiveOnce(Commands.TestCommands.runMotor(
-                        definition.motors.magazine.reject,
-                        definition.input.joystick::getThrottle
-                ));
-
-        definition
-                .input
-                .runShooterMotor
-                .whileActiveOnce(Commands.TestCommands.runMotor(
-                        definition.motors.shooter.lead,
-                        definition.input.joystick::getThrottle
+                        () -> (definition.input.joystick.getZ() + 1.0) * 0.5 * 5676.0
                 ));
     }
 
     @Override
     public void teleopPeriodic() {
+//        SmartDashboard.putBoolean("Feeder", definition.sensors.magazine.feeder.get());
+//        SmartDashboard.putBoolean("Index", definition.sensors.magazine.index.get());
+//        SmartDashboard.putBoolean("Reject", definition.sensors.magazine.reject.get());
+//        SmartDashboard.putBoolean("Color Match", definition.subsystems.magazine.isMatchingColor(colorChooser.getSelected()));
     }
 
     @Override
