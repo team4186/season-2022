@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.commands.Autonomous;
 import frc.commands.Commands;
 import frc.robot.definition.Definition;
 import frc.subsystems.MagazineSubsystem;
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
        definition.subsystems.driveTrain.initialize();
+       autonomousChooser.addOption("LeaveTarmac", Autonomous.move(320, definition));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
 
 
@@ -43,6 +45,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.get());
+        SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.get());
     }
 
     @Override
@@ -64,6 +68,8 @@ public class Robot extends TimedRobot {
                 .TeleopCommands
                 .encodedAssisted(definition)
                 .schedule();
+
+        Commands.IntakeCommands.deploy(definition).schedule();
 
         definition
                 .input
@@ -105,12 +111,16 @@ public class Robot extends TimedRobot {
 //        SmartDashboard.putBoolean("Index", definition.sensors.magazine.index.get());
 //        SmartDashboard.putBoolean("Reject", definition.sensors.magazine.reject.get());
 //        SmartDashboard.putBoolean("Color Match", definition.subsystems.magazine.isMatchingColor(colorChooser.getSelected()));
-        SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.get());
-        SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.get());
     }
 
     @Override
     public void teleopExit() {
         CommandScheduler.getInstance().cancelAll();
+    }
+
+    @Override
+    public void testInit() {
+        definition.subsystems.driveTrain.rightEncoder.reset();
+        definition.subsystems.driveTrain.leftEncoder.reset();
     }
 }
