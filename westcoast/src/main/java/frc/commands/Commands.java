@@ -253,7 +253,8 @@ public interface Commands {
                     definition.subsystems.shooter,
                     definition.subsystems.magazine,
                     velocity,
-                    50
+                    50,
+                    25
             );
         }
 

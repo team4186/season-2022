@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.commands.Commands;
 import frc.robot.definition.Definition;
 import frc.subsystems.MagazineSubsystem;
+import frc.subsystems.ShooterSubsystem;
 import org.jetbrains.annotations.NotNull;
 
 import static frc.commands.Commands.IntakeCommands.*;
@@ -94,7 +95,7 @@ public class Robot extends TimedRobot {
                 .shoot
                 .whileActiveOnce(shoot(
                         definition,
-                        () -> (definition.input.joystick.getZ() + 1.0) * 0.5 * 5676.0
+                        () -> (definition.input.joystick.getZ() - 1.0) * -0.5 * ShooterSubsystem.MAX_SPEED
                 ));
     }
 
@@ -104,6 +105,8 @@ public class Robot extends TimedRobot {
 //        SmartDashboard.putBoolean("Index", definition.sensors.magazine.index.get());
 //        SmartDashboard.putBoolean("Reject", definition.sensors.magazine.reject.get());
 //        SmartDashboard.putBoolean("Color Match", definition.subsystems.magazine.isMatchingColor(colorChooser.getSelected()));
+        SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.get());
+        SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.get());
     }
 
     @Override

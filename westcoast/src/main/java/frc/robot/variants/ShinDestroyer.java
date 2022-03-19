@@ -57,7 +57,7 @@ public interface ShinDestroyer {
                         )
                 ),
                 new Pneumatics(
-                        new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1)
+                        new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 1)
                 ),
                 new Sensors(
                         new DriveSensors(

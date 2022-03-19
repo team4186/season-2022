@@ -25,6 +25,7 @@ public final class Shoot extends CommandBase {
     private final DoubleSupplier targetVelocity;
 
     private final int maxReloadTicks;
+    private final int maxShooterDelay;
 
     private State state = State.Reloading;
 
@@ -32,12 +33,14 @@ public final class Shoot extends CommandBase {
             @NotNull ShooterSubsystem shooter,
             @NotNull MagazineSubsystem magazine,
             @NotNull DoubleSupplier targetVelocity,
-            int maxReloadTicks
+            int maxReloadTicks,
+            int maxShooterDelay
     ) {
         this.shooter = shooter;
         this.magazine = magazine;
         this.targetVelocity = targetVelocity;
         this.maxReloadTicks = maxReloadTicks;
+        this.maxShooterDelay = maxShooterDelay;
 
         addRequirements(shooter, magazine);
     }
@@ -56,6 +59,7 @@ public final class Shoot extends CommandBase {
                 shooter.stop();
                 break;
             case Reloading:
+                shooterDelay = 0;
                 reloading();
                 // Early evaluation just in case the magazine is empty right at the first frame
                 if (state != State.End) {
@@ -63,6 +67,7 @@ public final class Shoot extends CommandBase {
                 }
                 break;
             case Accelerating:
+                shooterDelay = 0;
                 accelerating();
                 shooter.setSpeed(targetVelocity.getAsDouble());
                 break;
@@ -101,14 +106,18 @@ public final class Shoot extends CommandBase {
         }
     }
 
+    private int shooterDelay = 0;
+
     private void shooting() {
         if (!magazine.hasFeederSensorBreak()) {
             state = State.Reloading;
         } else if (shooter.getSpeed() < targetVelocity.getAsDouble()) {
             state = State.Accelerating;
-        } else {
+        } else if (shooterDelay >= maxShooterDelay) {
             magazine.startIndexMotor();
             magazine.startFeederMotor();
+        } else {
+            shooterDelay++;
         }
     }
 
