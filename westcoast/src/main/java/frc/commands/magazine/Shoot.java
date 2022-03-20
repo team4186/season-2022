@@ -51,9 +51,14 @@ public final class Shoot extends CommandBase {
         reloadTimeout = maxReloadTicks;
     }
 
+    double maxSpeed = 0;
+
     @Override
     public void execute() {
         SmartDashboard.putNumber("Shooter Speed", shooter.getSpeed());
+        if (maxSpeed < shooter.getSpeed()) maxSpeed = shooter.getSpeed();
+        SmartDashboard.putNumber("Max Shooter Speed", maxSpeed);
+
         switch (state) {
             case End:
                 shooter.stop();
@@ -82,12 +87,15 @@ public final class Shoot extends CommandBase {
 
     private void reloading() {
         if (magazine.hasFeederSensorBreak()) {
+            magazine.stopIndexMotor();
+            magazine.stopRejectMotor();
+            magazine.stopFeederMotor();
             state = State.Accelerating;
             reloadTimeout = 0;
         } else if (magazine.hasIndexSensorBreak()) {
-//            magazine.startIndexMotor();
-//            magazine.reverseRejectMotor();
-//            magazine.startFeederMotor();
+            magazine.startFeederMotor();
+            magazine.startIndexMotor();
+            magazine.reverseRejectMotor();
             reloadTimeout = 0;
         } else if (reloadTimeout++ >= maxReloadTicks) {
             magazine.stopIndexMotor();
@@ -113,9 +121,9 @@ public final class Shoot extends CommandBase {
         } else if (shooter.getSpeed() < targetVelocity.getAsDouble()) {
             state = State.Accelerating;
         } else if (shooterDelay >= maxShooterDelay) {
-//            magazine.startIndexMotor();
-            //            magazine.reverseRejectMotor();
-//            magazine.startFeederMotor();
+            magazine.startIndexMotor();
+            magazine.reverseRejectMotor();
+            magazine.startFeederMotor();
         } else {
             shooterDelay++;
         }

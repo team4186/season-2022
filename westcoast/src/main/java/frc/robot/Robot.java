@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     @NotNull
     private final SendableChooser<Color> colorChooser = new SendableChooser<>();
 
-    private final boolean sendDebug = true;
+    private final boolean sendDebug = false;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -105,7 +105,7 @@ public class Robot extends TimedRobot {
                 .shoot
                 .whileActiveOnce(shoot(
                         definition,
-                        () -> 3093.0
+                        () -> 3100.0
                 ));
 
         definition

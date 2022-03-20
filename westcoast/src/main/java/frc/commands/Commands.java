@@ -241,7 +241,7 @@ public interface Commands {
                     definition.subsystems.magazine,
                     velocity,
                     50,
-                    25
+                    15
             );
         }
 

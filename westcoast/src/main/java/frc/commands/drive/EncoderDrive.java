@@ -61,10 +61,6 @@ public final class EncoderDrive extends CommandBase {
         right.disableContinuousInput();
 
         addRequirements(drive);
-
-        SmartDashboard.putNumber("P", P);
-        SmartDashboard.putNumber("I", I);
-        SmartDashboard.putNumber("D", D);
     }
 
     @Override
@@ -80,18 +76,6 @@ public final class EncoderDrive extends CommandBase {
 
     @Override
     public void execute() {
-        // region Tuning
-
-        double P = SmartDashboard.getNumber("P", left.getP());
-        double I = SmartDashboard.getNumber("I", left.getI());
-        double D = SmartDashboard.getNumber("D", left.getD());
-
-        left.setPID(P, I, D);
-        right.setPID(P, I, D);
-
-        // endregion
-
-
         // region Input
 
         final double rawY = MathUtil.clamp(shouldInvert * -joystick.getY(), -1.0, 1.0);
