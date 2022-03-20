@@ -1,6 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,16 +25,18 @@ public class Robot extends TimedRobot {
     @NotNull
     private final SendableChooser<Color> colorChooser = new SendableChooser<>();
 
+    private final boolean sendDebug = true;
+
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
     }
 
     @Override
     public void robotInit() {
-       definition.subsystems.driveTrain.initialize();
-       autonomousChooser.addOption("LeaveTarmac", Autonomous.move(320, definition));
+        definition.subsystems.driveTrain.initialize();
+        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(320, definition));
+        autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
-
 
         colorChooser.addOption("Blue", MagazineSubsystem.BlueTarget);
         colorChooser.setDefaultOption("Red", MagazineSubsystem.RedTarget);
@@ -45,8 +46,10 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.get());
-        SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.get());
+        if (sendDebug) {
+            SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.get());
+            SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.get());
+        }
     }
 
     @Override
@@ -69,7 +72,7 @@ public class Robot extends TimedRobot {
                 .encodedAssisted(definition)
                 .schedule();
 
-        Commands.IntakeCommands.deploy(definition).schedule();
+        //Commands.IntakeCommands.retrieve(definition).schedule();
 
         definition
                 .input
@@ -101,16 +104,38 @@ public class Robot extends TimedRobot {
                 .shoot
                 .whileActiveOnce(shoot(
                         definition,
-                        () -> (definition.input.joystick.getZ() - 1.0) * -0.5 * ShooterSubsystem.MAX_SPEED
+                        () -> 4000.0
                 ));
+
+        definition
+                .input
+                .runIndexMotor
+                .whileActiveOnce(Commands.TestCommands.runMotor(
+                        definition.motors.shooter.lead,
+                        () -> 3093 / ShooterSubsystem.MAX_SPEED
+                ));
+
+        definition
+                .input
+                .runRejectMotor
+                .whileActiveOnce(
+                        Commands.TestCommands.runMotor(definition.motors.shooter.lead, () -> 1.0)
+                                .withTimeout(0.5)
+                                .andThen(
+                                        Commands.TestCommands.shooterFlow(definition, () -> ShooterSubsystem.MAX_SPEED)
+                                ));
     }
 
     @Override
     public void teleopPeriodic() {
-//        SmartDashboard.putBoolean("Feeder", definition.sensors.magazine.feeder.get());
-//        SmartDashboard.putBoolean("Index", definition.sensors.magazine.index.get());
-//        SmartDashboard.putBoolean("Reject", definition.sensors.magazine.reject.get());
-//        SmartDashboard.putBoolean("Color Match", definition.subsystems.magazine.isMatchingColor(colorChooser.getSelected()));
+        if (sendDebug) {
+            SmartDashboard.putBoolean("Feeder", definition.sensors.magazine.feeder.get());
+            SmartDashboard.putBoolean("Index", definition.sensors.magazine.index.get());
+            SmartDashboard.putBoolean("Reject", definition.sensors.magazine.reject.get());
+            SmartDashboard.putBoolean("Color Match", definition.subsystems.magazine.isMatchingColor(colorChooser.getSelected()));
+            Color color = definition.sensors.magazine.colorSensor.getColor();
+            SmartDashboard.putString("Color", String.format("Color(%f, %f, %f)", color.red, color.green, color.blue));
+        }
     }
 
     @Override

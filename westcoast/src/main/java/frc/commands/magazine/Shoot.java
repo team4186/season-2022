@@ -53,7 +53,6 @@ public final class Shoot extends CommandBase {
 
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Throttle", targetVelocity.getAsDouble());
         switch (state) {
             case End:
                 shooter.stop();
@@ -101,7 +100,7 @@ public final class Shoot extends CommandBase {
         SmartDashboard.putNumber("Shooter Speed", shooter.getSpeed());
         if (!magazine.hasFeederSensorBreak()) {
             state = State.Reloading;
-        } else if (shooter.getSpeed() >= targetVelocity.getAsDouble()) {
+        } else if (shooter.getSpeed() >= (targetVelocity.getAsDouble()-200)) {
             state = State.Shooting;
         }
     }
@@ -111,7 +110,7 @@ public final class Shoot extends CommandBase {
     private void shooting() {
         if (!magazine.hasFeederSensorBreak()) {
             state = State.Reloading;
-        } else if (shooter.getSpeed() < targetVelocity.getAsDouble()) {
+        } else if (shooter.getSpeed() < (targetVelocity.getAsDouble()-200)) {
             state = State.Accelerating;
         } else if (shooterDelay >= maxShooterDelay) {
             magazine.startIndexMotor();
@@ -126,6 +125,7 @@ public final class Shoot extends CommandBase {
         shooter.stop();
         magazine.stopIndexMotor();
         magazine.stopFeederMotor();
+        magazine.stopRejectMotor();
     }
 
     @Override

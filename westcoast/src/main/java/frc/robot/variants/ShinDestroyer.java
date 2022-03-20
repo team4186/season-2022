@@ -74,7 +74,6 @@ public interface ShinDestroyer {
                         )
                 ),
                 new Parameters(
-                        parameter(62.0),
                         parameter(1.04)
                 ),
                 new Controllers() {

@@ -22,6 +22,8 @@ public class ShooterSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Shooter Speed (target)", speed);
         // TODO 5676 is the spec for NEO motors we should use the embedded PID Controller to ensure
         // the speed control
+        // should be controlled with a pid feedforwards
+        // not with just.set because it's not feeding forwards
         shooterMotor.set(speed / MAX_SPEED);
     }
 

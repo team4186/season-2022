@@ -64,7 +64,7 @@ public class TeleopDrive extends CommandBase {
     }
 
     private double full(double value) {
-        return copySign(value * value, value);
+        return copySign(Math.pow(value, 1.3), value);
     }
 
     private double attenuated(double value) {

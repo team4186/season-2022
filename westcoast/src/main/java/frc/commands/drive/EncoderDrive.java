@@ -48,7 +48,7 @@ public final class EncoderDrive extends CommandBase {
         this.drive = drive;
         this.sendDebugData = sendDebugData;
 
-        double P = 0.0005;
+        double P = 0.0018;
         double I = 0.0;
         double D = 0.0;
 
@@ -98,7 +98,7 @@ public final class EncoderDrive extends CommandBase {
         final double rawX = MathUtil.clamp(joystick.getX(), -1.0, 1.0);
 
         double forward = copySign(max(0, (abs(rawY) - deadzone) * deadzoneComplement), rawY);
-        double turn = copySign(max(0, (abs(rawX) - deadzone) * deadzoneComplement), rawX) * 0.75;
+        double turn = copySign(max(0, (abs(rawX) - deadzone) * deadzoneComplement), rawX);
 
         // endregion
 

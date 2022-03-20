@@ -31,6 +31,7 @@ public final class IntakeCollect extends CommandBase {
 
     private final int rejectTickCount;
     private final int reverseIntakeTickCount;
+    private final int maxColorCheckDelay = 50;
     private final boolean finishWhenFull;
 
     private State state = State.Collecting;
@@ -65,7 +66,7 @@ public final class IntakeCollect extends CommandBase {
                 full();
                 break;
             case Collecting:
-                rejectRunningTime = 0;
+                reachReject = false;
                 reverseIntakeRunningTime = 0;
                 collect();
                 break;
@@ -111,9 +112,18 @@ public final class IntakeCollect extends CommandBase {
     }
 
     private int rejectRunningTime = 0;
+    private boolean reachReject = false;
 
     private void reject() {
-        if (magazine.hasRejectSensorBreak() || rejectRunningTime < rejectTickCount) {
+        if (magazine.hasRejectSensorBreak()) {
+            reachReject = true;
+            rejectRunningTime = 0;
+        }
+
+        if (!reachReject) {
+            magazine.startIndexMotor();
+            magazine.startRejectMotor();
+        } else if (rejectRunningTime < rejectTickCount) {
             rejectRunningTime++;
             magazine.startIndexMotor();
             magazine.startRejectMotor();

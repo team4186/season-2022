@@ -61,19 +61,6 @@ public interface Commands {
 
     interface DriveCommands {
         @NotNull
-        static DistanceTravel leaveLine(@NotNull Definition definition, double distance) {
-            final Controllers controllers = definition.controllers;
-            final Parameters parameters = definition.parameters;
-            return new DistanceTravel(
-                    distance,
-                    parameters.leaveLineDistanceMultiplier,
-                    controllers.leaveLine(),
-                    controllers.leaveLine(),
-                    definition.subsystems.driveTrain
-            );
-        }
-
-        @NotNull
         static PerfectTurn perfectTurn(@NotNull Definition definition, double angle) {
             final Controllers controllers = definition.controllers;
             final Parameters parameters = definition.parameters;

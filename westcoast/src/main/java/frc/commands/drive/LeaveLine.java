@@ -1,15 +1,13 @@
 package frc.commands.drive;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.definition.Ownership.DoubleParameter;
 import frc.subsystems.DriveTrainSubsystem;
 import org.jetbrains.annotations.NotNull;
 
 import static edu.wpi.first.math.MathUtil.clamp;
 
-public class AutonomousLeaveLine extends CommandBase {
+public class LeaveLine extends CommandBase {
     private final double encoderTicks;
     @NotNull
     private final ProfiledPIDController left;
@@ -20,7 +18,7 @@ public class AutonomousLeaveLine extends CommandBase {
 
     private int wait = 0;
 
-    public AutonomousLeaveLine(
+    public LeaveLine(
             double encoderTicks,
             @NotNull ProfiledPIDController left,
             @NotNull ProfiledPIDController right,
