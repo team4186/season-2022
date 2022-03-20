@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.commands.Autonomous;
 import frc.commands.Commands;
 import frc.robot.definition.Definition;
@@ -104,7 +105,7 @@ public class Robot extends TimedRobot {
                 .shoot
                 .whileActiveOnce(shoot(
                         definition,
-                        () -> 4000.0
+                        () -> 3093.0
                 ));
 
         definition
@@ -115,15 +116,25 @@ public class Robot extends TimedRobot {
                         () -> 3093 / ShooterSubsystem.MAX_SPEED
                 ));
 
+//        definition
+//                .input
+//                .runRejectMotor
+//                .whileActiveOnce(
+//                        Commands.TestCommands.runMotor(definition.motors.shooter.lead, () -> 1.0)
+//                                .withTimeout(0.5)
+//                                .andThen(
+//                                        Commands.TestCommands.shooterFlow(definition, () -> ShooterSubsystem.MAX_SPEED)
+//                                ));definition
+
         definition
                 .input
                 .runRejectMotor
                 .whileActiveOnce(
-                        Commands.TestCommands.runMotor(definition.motors.shooter.lead, () -> 1.0)
-                                .withTimeout(0.5)
-                                .andThen(
-                                        Commands.TestCommands.shooterFlow(definition, () -> ShooterSubsystem.MAX_SPEED)
-                                ));
+                        new StartEndCommand(
+                                () -> definition.subsystems.shooter.setSpeed(definition.input.joystick.getZ() * ShooterSubsystem.MAX_SPEED),
+                                definition.subsystems.shooter::stop
+                        )
+                );
     }
 
     @Override

@@ -53,6 +53,7 @@ public final class Shoot extends CommandBase {
 
     @Override
     public void execute() {
+        SmartDashboard.putNumber("Shooter Speed", shooter.getSpeed());
         switch (state) {
             case End:
                 shooter.stop();
@@ -84,9 +85,9 @@ public final class Shoot extends CommandBase {
             state = State.Accelerating;
             reloadTimeout = 0;
         } else if (magazine.hasIndexSensorBreak()) {
-            magazine.startIndexMotor();
-            magazine.reverseRejectMotor();
-            magazine.startFeederMotor();
+//            magazine.startIndexMotor();
+//            magazine.reverseRejectMotor();
+//            magazine.startFeederMotor();
             reloadTimeout = 0;
         } else if (reloadTimeout++ >= maxReloadTicks) {
             magazine.stopIndexMotor();
@@ -97,10 +98,9 @@ public final class Shoot extends CommandBase {
     }
 
     private void accelerating() {
-        SmartDashboard.putNumber("Shooter Speed", shooter.getSpeed());
         if (!magazine.hasFeederSensorBreak()) {
             state = State.Reloading;
-        } else if (shooter.getSpeed() >= (targetVelocity.getAsDouble()-200)) {
+        } else if (shooter.getSpeed() >= targetVelocity.getAsDouble()) {
             state = State.Shooting;
         }
     }
@@ -110,11 +110,12 @@ public final class Shoot extends CommandBase {
     private void shooting() {
         if (!magazine.hasFeederSensorBreak()) {
             state = State.Reloading;
-        } else if (shooter.getSpeed() < (targetVelocity.getAsDouble()-200)) {
+        } else if (shooter.getSpeed() < targetVelocity.getAsDouble()) {
             state = State.Accelerating;
         } else if (shooterDelay >= maxShooterDelay) {
-            magazine.startIndexMotor();
-            magazine.startFeederMotor();
+//            magazine.startIndexMotor();
+            //            magazine.reverseRejectMotor();
+//            magazine.startFeederMotor();
         } else {
             shooterDelay++;
         }
