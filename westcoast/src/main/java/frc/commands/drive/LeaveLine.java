@@ -19,12 +19,12 @@ public class LeaveLine extends CommandBase {
     private int wait = 0;
 
     public LeaveLine(
-            double encoderTicks,
+            double distance,
             @NotNull ProfiledPIDController left,
             @NotNull ProfiledPIDController right,
             @NotNull DriveTrainSubsystem drive
     ) {
-        this.encoderTicks = encoderTicks;
+        this.encoderTicks = distance * 64.0;
         this.left = left;
         this.right = right;
         this.drive = drive;
