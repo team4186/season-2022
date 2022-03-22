@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -132,6 +133,16 @@ public interface ShinDestroyer {
                         controller.disableContinuousInput();
                         controller.setTolerance(0.2);
                         return controller;
+                    }
+
+                    @Override
+                    public void shooterConfig(@NotNull SparkMaxPIDController controller) {
+                        controller.setP(0.00015);
+                        controller.setI(0.0);
+                        controller.setIZone(0.0);
+                        controller.setD(0.0007);
+                        controller.setFF(0.0002);
+                        controller.setOutputRange(0.0, 1.0);
                     }
                 }
         );
