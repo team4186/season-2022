@@ -12,10 +12,9 @@ import static frc.commands.Commands.ShooterCommands.shoot;
 
 public final class Autonomous {
     @NotNull
-    public static Command move(double encoderTicks, @NotNull Definition definition) {
-
+    public static Command move(double distance, @NotNull Definition definition) {
         return new LeaveLine(
-                encoderTicks,
+                distance,
                 definition.controllers.leaveLine(),
                 definition.controllers.leaveLine(),
                 definition.subsystems.driveTrain
@@ -23,7 +22,7 @@ public final class Autonomous {
     }
 
     public static Command shootAndLeave(@NotNull Definition definition) {
-        return shoot(definition, ()-> 4000.0)
-                .andThen(move(512.0, definition));
+        return shoot(definition, () -> 3100.0)
+                .andThen(move(8.0, definition));
     }
 }
