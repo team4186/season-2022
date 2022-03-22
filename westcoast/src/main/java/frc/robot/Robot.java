@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         definition.subsystems.driveTrain.initialize();
 
-        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(320, definition));
+        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(5.0, definition));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
     }
