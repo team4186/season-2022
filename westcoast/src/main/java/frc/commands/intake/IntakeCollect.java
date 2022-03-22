@@ -31,7 +31,6 @@ public final class IntakeCollect extends CommandBase {
 
     private final int rejectTickCount;
     private final int reverseIntakeTickCount;
-    private final int maxColorCheckDelay = 50;
     private final boolean finishWhenFull;
 
     private State state = State.Collecting;
@@ -78,6 +77,8 @@ public final class IntakeCollect extends CommandBase {
                 break;
             case AcceptingToIndex:
                 acceptToIndex();
+                break;
+            case End:
                 break;
         }
     }
