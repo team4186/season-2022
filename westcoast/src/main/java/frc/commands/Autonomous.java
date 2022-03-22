@@ -2,9 +2,7 @@ package frc.commands;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.commands.drive.LeaveLine;
-import frc.commands.magazine.Shoot;
 import frc.robot.definition.Definition;
 import org.jetbrains.annotations.NotNull;
 

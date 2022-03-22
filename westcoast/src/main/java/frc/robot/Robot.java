@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,8 +24,7 @@ public class Robot extends TimedRobot {
     private final Definition definition;
     @NotNull
     private final SendableChooser<Command> autonomousChooser = new SendableChooser<>();
-    @NotNull
-    private final SendableChooser<Color> colorChooser = new SendableChooser<>();
+    private Color chosenColor = MagazineSubsystem.RedTarget;
 
     private final boolean sendDebug = false;
 
@@ -35,13 +35,10 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         definition.subsystems.driveTrain.initialize();
+
         autonomousChooser.addOption("LeaveTarmac", Autonomous.move(320, definition));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
-
-        colorChooser.addOption("Blue", MagazineSubsystem.BlueTarget);
-        colorChooser.setDefaultOption("Red", MagazineSubsystem.RedTarget);
-        SmartDashboard.putData("Cargo Color", colorChooser);
     }
 
     @Override
@@ -68,53 +65,22 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        Commands
-                .TeleopCommands
-                .encodedAssisted(definition)
-                .schedule();
+        Commands.TeleopCommands.encodedAssisted(definition).schedule();
 
-        //Commands.IntakeCommands.retrieve(definition).schedule();
+//        Commands.IntakeCommands.deploy(definition).schedule();
 
-        definition
-                .input
-                .deployIntake
-                .whenPressed(deploy(definition));
+        definition.input.deployIntake.whenPressed(deploy(definition));
 
-        definition
-                .input
-                .retrieveIntake
-                .whenPressed(retrieve(definition));
+        definition.input.retrieveIntake.whenPressed(retrieve(definition));
 
-        definition
-                .input
-                .collect
-                .whileActiveOnce(collect(
-                        definition,
-                        () -> {
-                            Color color = colorChooser.getSelected();
+        if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) chosenColor = MagazineSubsystem.BlueTarget;
+        else chosenColor = MagazineSubsystem.RedTarget;
 
-                            if (color == null) {
-                                color = MagazineSubsystem.RedTarget;
-                            }
-                            return color;
-                        }
-                ));
+        definition.input.collect.whileActiveOnce(collect(definition, () -> chosenColor));
 
-        definition
-                .input
-                .shoot
-                .whileActiveOnce(shoot(
-                        definition,
-                        () -> 3100.0
-                ));
+        definition.input.shoot.whileActiveOnce(shoot(definition, () -> 3100.0));
 
-        definition
-                .input
-                .runIndexMotor
-                .whileActiveOnce(Commands.TestCommands.runMotor(
-                        definition.motors.shooter.lead,
-                        () -> 3093 / ShooterSubsystem.MAX_SPEED
-                ));
+        definition.input.runIndexMotor.whileActiveOnce(Commands.TestCommands.runMotor(definition.motors.shooter.lead, () -> 3093 / ShooterSubsystem.MAX_SPEED));
 
 //        definition
 //                .input
@@ -126,15 +92,7 @@ public class Robot extends TimedRobot {
 //                                        Commands.TestCommands.shooterFlow(definition, () -> ShooterSubsystem.MAX_SPEED)
 //                                ));definition
 
-        definition
-                .input
-                .runRejectMotor
-                .whileActiveOnce(
-                        new StartEndCommand(
-                                () -> definition.subsystems.shooter.setSpeed(definition.input.joystick.getZ() * ShooterSubsystem.MAX_SPEED),
-                                definition.subsystems.shooter::stop
-                        )
-                );
+        definition.input.runRejectMotor.whileActiveOnce(new StartEndCommand(() -> definition.subsystems.shooter.setSpeed(definition.input.joystick.getZ() * ShooterSubsystem.MAX_SPEED), definition.subsystems.shooter::stop));
     }
 
     @Override
@@ -143,7 +101,7 @@ public class Robot extends TimedRobot {
             SmartDashboard.putBoolean("Feeder", definition.sensors.magazine.feeder.get());
             SmartDashboard.putBoolean("Index", definition.sensors.magazine.index.get());
             SmartDashboard.putBoolean("Reject", definition.sensors.magazine.reject.get());
-            SmartDashboard.putBoolean("Color Match", definition.subsystems.magazine.isMatchingColor(colorChooser.getSelected()));
+            SmartDashboard.putBoolean("Color Match", definition.subsystems.magazine.isMatchingColor(chosenColor));
             Color color = definition.sensors.magazine.colorSensor.getColor();
             SmartDashboard.putString("Color", String.format("Color(%f, %f, %f)", color.red, color.green, color.blue));
         }

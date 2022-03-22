@@ -2,6 +2,7 @@ package frc.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.definition.Controllers.SparkMaxController;
 import org.jetbrains.annotations.NotNull;

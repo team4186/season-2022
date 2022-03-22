@@ -72,8 +72,8 @@ public final class Input {
         this(
                 joystick,
                 new JoystickButton(joystick, SaitekX52.Buttons.TRIGGER + 1),
-                new JoystickButton(joystick, SaitekX52.Buttons.FIRE_B + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.FIRE_A + 1),
+                new JoystickButton(joystick, SaitekX52.Buttons.FIRE_B + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.FIRE_C + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.PINKIE + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_1 + 1),

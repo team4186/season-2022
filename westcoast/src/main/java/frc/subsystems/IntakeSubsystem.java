@@ -23,11 +23,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void deploy() {
-        deploy.set(kForward);
+        deploy.set(kReverse);
     }
 
     public void retrieve() {
-        deploy.set(kReverse);
+        deploy.set(kForward);
     }
 
     public void start() {
