@@ -59,7 +59,7 @@ public class Definition {
                 motors,
                 pneumatics,
                 sensors,
-                subsystems(motors, pneumatics, sensors),
+                subsystems(motors, pneumatics, sensors, controllers),
                 parameters,
                 controllers
         );
@@ -69,7 +69,8 @@ public class Definition {
     private static Subsystems subsystems(
             @NotNull Motors motors,
             @NotNull Pneumatics pneumatics,
-            @NotNull Sensors sensors
+            @NotNull Sensors sensors,
+            @NotNull Controllers controllers
     ) {
         return new Subsystems(
                 new DriveTrainSubsystem(
@@ -85,7 +86,8 @@ public class Definition {
                         motors.intake.main
                 ),
                 new ShooterSubsystem(
-                        motors.shooter.lead
+                        motors.shooter.lead,
+                        controllers.shooterController()
                 ),
                 new MagazineSubsystem(
                         motors.magazine.index,

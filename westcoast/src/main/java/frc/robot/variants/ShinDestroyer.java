@@ -133,6 +133,13 @@ public interface ShinDestroyer {
                         controller.setTolerance(0.2);
                         return controller;
                     }
+
+                    @NotNull
+                    @Override
+                    public SparkMaxController shooterController() {
+                        return new SparkMaxController(
+                                0.00015, 0.0, 0.0007, 0.0002, 0);
+                    }
                 }
         );
     }
