@@ -2,6 +2,8 @@
 
 Rapid React!
 
+[![CI](https://github.com/team4186/season-2022/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/team4186/season-2022/actions/workflows/main.yml)
+
 ---
 
 # New robot checklist
