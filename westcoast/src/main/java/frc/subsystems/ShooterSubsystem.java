@@ -2,9 +2,8 @@ package frc.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.definition.Controllers.SparkMaxController;
+import frc.robot.definition.Controllers.ControllerConfigurator;
 import org.jetbrains.annotations.NotNull;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -13,10 +12,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooterMotor;
     private final SparkMaxPIDController pidController;
 
-    public ShooterSubsystem(@NotNull CANSparkMax shooterMotor, @NotNull SparkMaxController controller) {
+    public ShooterSubsystem(@NotNull CANSparkMax shooterMotor, @NotNull ControllerConfigurator configurator) {
         this.shooterMotor = shooterMotor;
         pidController = shooterMotor.getPIDController();
-        controller.configureController(pidController);
+        configurator.configure(pidController);
     }
 
     public double getSpeed() {

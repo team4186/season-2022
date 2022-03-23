@@ -136,9 +136,15 @@ public interface ShinDestroyer {
 
                     @NotNull
                     @Override
-                    public SparkMaxController shooterController() {
-                        return new SparkMaxController(
-                                0.00015, 0.0, 0.0007, 0.0002, 0);
+                    public ControllerConfigurator shooterConfig() {
+                        return (controller) -> {
+                            controller.setP(0.00015);
+                            controller.setI(0.0);
+                            controller.setIZone(0.0);
+                            controller.setD(0.0007);
+                            controller.setFF(0.0002);
+                            controller.setOutputRange(0.0, 1.0);
+                        };
                     }
                 }
         );

@@ -87,7 +87,7 @@ public class Definition {
                 ),
                 new ShooterSubsystem(
                         motors.shooter.lead,
-                        controllers.shooterController()
+                        controllers.shooterConfig()
                 ),
                 new MagazineSubsystem(
                         motors.magazine.index,
