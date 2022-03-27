@@ -2,6 +2,7 @@ package frc.commands.drive;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -118,8 +119,10 @@ public final class EncoderDrive extends CommandBase {
         double leftSetpoint = leftSpeed * maxSpeed;
         double rightSetpoint = rightSpeed * maxSpeed;
 
-        double leftOut = left.calculate(drive.leftEncoder.getRate(), leftSetpoint);
-        double rightOut = right.calculate(drive.rightEncoder.getRate(), rightSetpoint);
+//        double leftOut = left.calculate(drive.leftEncoder.getRate(), leftSetpoint);
+//        double rightOut = right.calculate(drive.rightEncoder.getRate(), rightSetpoint);
+        double leftOut = leftSetpoint;
+        double rightOut = rightSetpoint;
 
         //endregion
 

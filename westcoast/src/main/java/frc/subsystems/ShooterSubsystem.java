@@ -14,11 +14,11 @@ public class ShooterSubsystem extends SubsystemBase {
     private final CANSparkMax shooterMotor;
     private final SparkMaxPIDController pidController;
 
-    private final double p = 0.00015;
+    private final double p = 0.000175;
     private final double i = 0;
     private final double d = 0.0007;
     private final double iZone = 0.0;
-    private final double f = 0.0002;
+    private final double f = 0.000215;
     private final double maxOutput = 1;
     private final double minOutput = 0;
 

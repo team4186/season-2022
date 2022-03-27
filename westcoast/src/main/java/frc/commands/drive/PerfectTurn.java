@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 
 import static edu.wpi.first.math.MathUtil.clamp;
 
+// THIS CLASS IS UNTUNED, PLEASE DO NOT USE IT UNTIL TUNED
+
 public class PerfectTurn extends CommandBase {
     private final double angle;
     private final double angleMultiplier;

@@ -90,13 +90,12 @@ public interface ShinDestroyer {
                     @Override
                     public ProfiledPIDController leaveLine() {
                         final ProfiledPIDController controller = new ProfiledPIDController(
-                                0.01,
+                                1.0,
                                 0.0,
-                                0.001,
-                                new TrapezoidProfile.Constraints(1000.0, 750.0)
+                                0.4,
+                                new TrapezoidProfile.Constraints(3.0, 4.0)
                         );
-
-                        controller.setTolerance(5.0, 100.0);
+                        controller.setTolerance(0.01, 0.1);
                         controller.disableContinuousInput();
                         return controller;
                     }
@@ -169,7 +168,8 @@ public interface ShinDestroyer {
 
     private static Encoder encoder(int channelA, int channelB) {
         final Encoder encoder = new Encoder(channelA, channelB);
-        encoder.setDistancePerPulse(0.390625); // 800 pulses = 5 ft,
+//        encoder.setDistancePerPulse(0.390625); // 800 pulses = 5 ft,
+        encoder.setDistancePerPulse(0.0018868); // 530 pulses = 1 m
         return encoder;
     }
 }

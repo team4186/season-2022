@@ -23,6 +23,6 @@ public final class Autonomous {
 
     public static Command shootAndLeave(@NotNull Definition definition) {
         return shoot(definition, () -> 3100.0)
-                .andThen(move(8.0, definition));
+                .andThen(move(3.0, definition));
     }
 }

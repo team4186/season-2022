@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     @NotNull
     private final SendableChooser<Color> colorChooser = new SendableChooser<>();
 
-    private final boolean sendDebug = false;
+    private final boolean sendDebug = true;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         definition.subsystems.driveTrain.initialize();
-        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(320, definition));
+        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(2.0, definition));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
 
@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         Commands
                 .TeleopCommands
-                .encodedAssisted(definition)
+                .raw(definition)
                 .schedule();
 
         //Commands.IntakeCommands.retrieve(definition).schedule();
