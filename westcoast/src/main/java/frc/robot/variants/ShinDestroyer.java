@@ -91,13 +91,12 @@ public interface ShinDestroyer {
                     @Override
                     public ProfiledPIDController leaveLine() {
                         final ProfiledPIDController controller = new ProfiledPIDController(
-                                0.01,
+                                1.0,
                                 0.0,
-                                0.001,
-                                new TrapezoidProfile.Constraints(1000.0, 750.0)
+                                0.4,
+                                new TrapezoidProfile.Constraints(3.0, 4.0)
                         );
-
-                        controller.setTolerance(5.0, 100.0);
+                        controller.setTolerance(0.01, 0.1);
                         controller.disableContinuousInput();
                         return controller;
                     }
@@ -137,11 +136,11 @@ public interface ShinDestroyer {
 
                     @Override
                     public void shooterConfig(@NotNull SparkMaxPIDController controller) {
-                        controller.setP(0.00015);
+                        controller.setP(0.000175);
                         controller.setI(0.0);
                         controller.setIZone(0.0);
                         controller.setD(0.0007);
-                        controller.setFF(0.0002);
+                        controller.setFF(0.000215);
                         controller.setOutputRange(0.0, 1.0);
                     }
                 }
@@ -180,7 +179,7 @@ public interface ShinDestroyer {
 
     private static Encoder encoder(int channelA, int channelB) {
         final Encoder encoder = new Encoder(channelA, channelB);
-        encoder.setDistancePerPulse(0.390625); // 800 pulses = 5 ft,
+        encoder.setDistancePerPulse(0.0018868); // 530 pulses = 1 m
         return encoder;
     }
 }

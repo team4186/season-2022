@@ -55,7 +55,7 @@ public class TeleopDrive extends CommandBase {
             forward = full(this.forward * joystick.getY());
             zRotation = full(-joystick.getX());
         }
-        drive.arcade(forward, zRotation, false);
+        drive.arcade(-forward, -zRotation, false);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class TeleopDrive extends CommandBase {
     }
 
     private double full(double value) {
-        return copySign(Math.pow(value, 1.3), value);
+        return copySign(Math.pow(Math.abs(value), 1.6), value);
     }
 
     private double attenuated(double value) {

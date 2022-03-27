@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static edu.wpi.first.math.MathUtil.clamp;
 
 public class LeaveLine extends CommandBase {
-    private final double encoderTicks;
+    private final double distance;
     @NotNull
     private final ProfiledPIDController left;
     @NotNull
@@ -24,7 +24,7 @@ public class LeaveLine extends CommandBase {
             @NotNull ProfiledPIDController right,
             @NotNull DriveTrainSubsystem drive
     ) {
-        this.encoderTicks = distance * 64.0;
+        this.distance = distance;
         this.left = left;
         this.right = right;
         this.drive = drive;
@@ -41,8 +41,8 @@ public class LeaveLine extends CommandBase {
 
     @Override
     public void execute() {
-        double rightOut = clamp(right.calculate(drive.rightEncoder.getDistance(), encoderTicks), -0.4, 0.4);
-        double leftOut = clamp(left.calculate(drive.leftEncoder.getDistance(), encoderTicks), -0.4, 0.4);
+        double rightOut = clamp(right.calculate(drive.rightEncoder.getDistance(), distance), -0.4, 0.4);
+        double leftOut = clamp(left.calculate(drive.leftEncoder.getDistance(), distance), -0.4, 0.4);
         drive.setMotorOutput(leftOut, rightOut);
         wait = (right.atGoal() && left.atGoal()) ? wait + 1 : 0;
     }

@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
     private final SendableChooser<Command> autonomousChooser = new SendableChooser<>();
     private Color chosenColor = MagazineSubsystem.RedTarget;
 
-    private final boolean sendDebug = false;
+    private final boolean sendDebug = true;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -36,8 +36,9 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         definition.subsystems.driveTrain.initialize();
 
-        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(320, definition));
+        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(2.0, definition));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
+        autonomousChooser.addOption("Full Auto", Autonomous.fullAuto(definition, () -> chosenColor));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
     }
 
@@ -52,6 +53,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
+            chosenColor = MagazineSubsystem.BlueTarget;
+        } else {
+            chosenColor = MagazineSubsystem.RedTarget;
+        }
+
         Command autonomous = autonomousChooser.getSelected();
         if (autonomous != null) {
             autonomous.schedule();
@@ -67,7 +74,7 @@ public class Robot extends TimedRobot {
     public void teleopInit() {
         Commands
                 .TeleopCommands
-                .encodedAssisted(definition)
+                .raw(definition)
                 .schedule();
 
 //        Commands.IntakeCommands.deploy(definition).schedule();
