@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -34,6 +35,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
+
+        CameraServer.startAutomaticCapture();
+
         definition.subsystems.driveTrain.initialize();
 
         autonomousChooser.addOption("LeaveTarmac", Autonomous.move(2.0, definition));

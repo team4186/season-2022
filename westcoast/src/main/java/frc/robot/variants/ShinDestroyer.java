@@ -96,7 +96,7 @@ public interface ShinDestroyer {
                                 0.4,
                                 new TrapezoidProfile.Constraints(3.0, 4.0)
                         );
-                        controller.setTolerance(0.01, 0.1);
+                        controller.setTolerance(0.05, 0.1);
                         controller.disableContinuousInput();
                         return controller;
                     }

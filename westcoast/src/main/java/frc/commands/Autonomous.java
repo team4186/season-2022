@@ -31,14 +31,14 @@ public final class Autonomous {
         return shoot(definition, () -> 3100.0)
                 .alongWith(deploy(definition))
                 .andThen(
-                        move(3.0, definition)
+                        move(2.0, definition)
                                 .alongWith(
                                         collect(definition, color)
-                                                .until(definition.subsystems.magazine::hasFeederSensorBreak)
                                 )
+                                .until(definition.subsystems.magazine::hasFeederSensorBreak)
                 )
-                .andThen(move(-3.0, definition))
+                .andThen(move(-2.0, definition))
                 .andThen(shoot(definition, () -> 3100.0))
-                .andThen(move(3.0, definition));
+                .andThen(move(2.0, definition));
     }
 }
