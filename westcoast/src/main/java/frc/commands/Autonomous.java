@@ -13,7 +13,7 @@ import static frc.commands.Commands.ShooterCommands.shoot;
 
 public final class Autonomous {
     @NotNull
-    public static Command move(double distance, @NotNull Definition definition) {
+    public static Command move(@NotNull Definition definition, double distance) {
         return new LeaveLine(
                 distance,
                 definition.controllers.leaveLine(),
@@ -24,21 +24,21 @@ public final class Autonomous {
 
     public static Command shootAndLeave(@NotNull Definition definition) {
         return shoot(definition, () -> 3100.0)
-                .andThen(move(3.0, definition));
+                .andThen(move(definition, 3.0));
     }
 
     public static Command fullAuto(@NotNull Definition definition, IntakeCollect.ColorSupplier color) {
         return shoot(definition, () -> 3100.0)
                 .alongWith(deploy(definition))
                 .andThen(
-                        move(2.0, definition)
+                        move(definition, 2.0)
                                 .alongWith(
                                         collect(definition, color)
                                 )
                                 .until(definition.subsystems.magazine::hasFeederSensorBreak)
                 )
-                .andThen(move(-2.0, definition))
+                .andThen(move(definition, -2.0))
                 .andThen(shoot(definition, () -> 3100.0))
-                .andThen(move(2.0, definition));
+                .andThen(move(definition, 2.0));
     }
 }

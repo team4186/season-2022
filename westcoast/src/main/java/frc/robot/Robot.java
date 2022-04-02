@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 
         definition.subsystems.driveTrain.initialize();
 
-        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(2.0, definition));
+        autonomousChooser.addOption("LeaveTarmac", Autonomous.move(definition, 2.0));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
         autonomousChooser.addOption("Full Auto", Autonomous.fullAuto(definition, () -> chosenColor));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
@@ -52,6 +52,8 @@ public class Robot extends TimedRobot {
         if (sendDebug) {
             SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.get());
             SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.get());
+
+            definition.subsystems.shooter.periodic();
         }
     }
 
@@ -62,6 +64,7 @@ public class Robot extends TimedRobot {
         } else {
             chosenColor = MagazineSubsystem.RedTarget;
         }
+
 
         Command autonomous = autonomousChooser.getSelected();
         if (autonomous != null) {

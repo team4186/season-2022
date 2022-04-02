@@ -27,7 +27,8 @@ public interface Commands {
         static TeleopDrive raw(@NotNull Definition definition) {
             Input input = definition.input;
             return new TeleopDrive(
-                    input.joystick,
+                    input.joystick::getX,
+                    input.joystick::getY,
                     input.attenuate,
                     input.invert,
                     definition.subsystems.driveTrain

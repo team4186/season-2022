@@ -136,11 +136,11 @@ public interface ShinDestroyer {
 
                     @Override
                     public void shooterConfig(@NotNull SparkMaxPIDController controller) {
-                        controller.setP(0.000175);
-                        controller.setI(0.0);
+                        controller.setP(0.0);
+                        controller.setI(0.00000033);
                         controller.setIZone(0.0);
-                        controller.setD(0.0007);
-                        controller.setFF(0.000215);
+                        controller.setD(0.0);
+                        controller.setFF(0.0);
                         controller.setOutputRange(0.0, 1.0);
                     }
                 }

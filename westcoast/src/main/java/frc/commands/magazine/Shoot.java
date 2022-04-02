@@ -27,6 +27,8 @@ public final class Shoot extends CommandBase {
     private final int maxReloadTicks;
     private final int maxShooterDelay;
 
+    private static final int SPEED_TOLERANCE = 10;
+
     private State state = State.Reloading;
 
     public Shoot(
@@ -51,14 +53,8 @@ public final class Shoot extends CommandBase {
         reloadTimeout = maxReloadTicks;
     }
 
-    double maxSpeed = 0;
-
     @Override
     public void execute() {
-        SmartDashboard.putNumber("Shooter Speed", shooter.getSpeed());
-        if (maxSpeed < shooter.getSpeed()) maxSpeed = shooter.getSpeed();
-        SmartDashboard.putNumber("Max Shooter Speed", maxSpeed);
-
         switch (state) {
             case End:
                 shooter.stop();
@@ -108,9 +104,14 @@ public final class Shoot extends CommandBase {
     private void accelerating() {
         if (!magazine.hasFeederSensorBreak()) {
             state = State.Reloading;
-        } else if (shooter.getSpeed() >= targetVelocity.getAsDouble()) {
+        } else if (isSpeedWithinTolerance()) {
             state = State.Shooting;
         }
+    }
+
+    private boolean isSpeedWithinTolerance() {
+        return shooter.getSpeed() >= targetVelocity.getAsDouble() - SPEED_TOLERANCE &&
+                shooter.getSpeed() <= targetVelocity.getAsDouble() + SPEED_TOLERANCE;
     }
 
     private int shooterDelay = 0;
@@ -118,7 +119,7 @@ public final class Shoot extends CommandBase {
     private void shooting() {
         if (!magazine.hasFeederSensorBreak()) {
             state = State.Reloading;
-        } else if (shooter.getSpeed() < targetVelocity.getAsDouble()) {
+        } else if (!isSpeedWithinTolerance()) {
             state = State.Accelerating;
         } else if (shooterDelay >= maxShooterDelay) {
             magazine.startIndexMotor();

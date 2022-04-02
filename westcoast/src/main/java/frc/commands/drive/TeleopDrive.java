@@ -6,11 +6,15 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.subsystems.DriveTrainSubsystem;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.DoubleSupplier;
+
 import static java.lang.Math.copySign;
 
 public class TeleopDrive extends CommandBase {
     @NotNull
-    private final Joystick joystick;
+    private final DoubleSupplier xAxis;
+    @NotNull
+    private final DoubleSupplier yAxis;
     @NotNull
     private final Button attenuate;
     @NotNull
@@ -23,12 +27,14 @@ public class TeleopDrive extends CommandBase {
     private boolean shouldAttenuate;
 
     public TeleopDrive(
-            @NotNull Joystick joystick,
+            @NotNull DoubleSupplier xAxis,
+            @NotNull DoubleSupplier yAxis,
             @NotNull Button attenuate,
             @NotNull Button invert,
             @NotNull DriveTrainSubsystem drive
     ) {
-        this.joystick = joystick;
+        this.xAxis = xAxis;
+        this.yAxis = yAxis;
         this.attenuate = attenuate;
         this.invert = invert;
         this.drive = drive;
@@ -49,11 +55,11 @@ public class TeleopDrive extends CommandBase {
         final double forward;
         final double zRotation;
         if (shouldAttenuate) {
-            forward = attenuated(this.forward * joystick.getY());
-            zRotation = attenuated(-joystick.getX());
+            forward = attenuated(this.forward * yAxis.getAsDouble());
+            zRotation = attenuated(-yAxis.getAsDouble());
         } else {
-            forward = full(this.forward * joystick.getY());
-            zRotation = full(-joystick.getX());
+            forward = full(this.forward * yAxis.getAsDouble());
+            zRotation = full(-xAxis.getAsDouble());
         }
         drive.arcade(-forward, -zRotation, false);
     }
