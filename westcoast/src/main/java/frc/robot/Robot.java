@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
     private final SendableChooser<Command> autonomousChooser = new SendableChooser<>();
     private Color chosenColor = MagazineSubsystem.RedTarget;
 
-    private final boolean sendDebug = true;
+    private final boolean sendDebug = false;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -112,7 +112,7 @@ public class Robot extends TimedRobot {
                 .shoot
                 .whileActiveOnce(shoot(
                         definition,
-                        () -> 3100.0
+                        () -> 3500.0
                 ));
 
         definition

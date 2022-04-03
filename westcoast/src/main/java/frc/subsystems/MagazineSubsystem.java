@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class MagazineSubsystem extends SubsystemBase {
     public static final Color BlueTarget = new Color(0.143, 0.427, 0.429);
-    public static final Color RedTarget = new Color(0.561, 0.232, 0.114);
+    public static final Color RedTarget = new Color(0.406, 0.406, 0.188);
     @NotNull
     private static final ColorMatch colorMatcher = new ColorMatch();
 

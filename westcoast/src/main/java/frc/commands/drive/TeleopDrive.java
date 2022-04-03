@@ -1,6 +1,6 @@
 package frc.commands.drive;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import frc.subsystems.DriveTrainSubsystem;
@@ -56,10 +56,10 @@ public class TeleopDrive extends CommandBase {
         final double zRotation;
         if (shouldAttenuate) {
             forward = attenuated(this.forward * yAxis.getAsDouble());
-            zRotation = attenuated(-yAxis.getAsDouble());
+            zRotation = attenuated(-xAxis.getAsDouble());
         } else {
             forward = full(this.forward * yAxis.getAsDouble());
-            zRotation = full(-xAxis.getAsDouble());
+            zRotation = MathUtil.clamp(full(-xAxis.getAsDouble()), -0.5, 0.5);
         }
         drive.arcade(-forward, -zRotation, false);
     }
