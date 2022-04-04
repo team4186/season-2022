@@ -8,18 +8,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.commands.Autonomous;
 import frc.commands.Commands;
+import frc.commands.magazine.Shoot;
 import frc.robot.definition.Definition;
 import frc.subsystems.MagazineSubsystem;
-import frc.subsystems.ShooterSubsystem;
 import org.jetbrains.annotations.NotNull;
 
 import static frc.commands.Commands.IntakeCommands.*;
 import static frc.commands.Commands.ShooterCommands.shoot;
 
 public class Robot extends TimedRobot {
+
+    private static final double SHOOTER_SPEED_SLOW = 3500;
+    private static final double SHOOTER_SPEED_FAST = 3800;
+    private double shooterSpeed = SHOOTER_SPEED_SLOW;
+    private Shoot.Mode shooterMode = Shoot.Mode.Single;
 
     @NotNull
     private final Definition definition;
@@ -42,8 +46,8 @@ public class Robot extends TimedRobot {
 
         autonomousChooser.addOption("LeaveTarmac", Autonomous.move(definition, 2.0));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
-        autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.outPickInShootTwice(definition, () -> chosenColor));
-        autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> chosenColor));
+        autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
+        autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
     }
 
@@ -85,8 +89,6 @@ public class Robot extends TimedRobot {
                 .raw(definition)
                 .schedule();
 
-//        Commands.IntakeCommands.deploy(definition).schedule();
-
         definition
                 .input
                 .deployIntake
@@ -97,42 +99,74 @@ public class Robot extends TimedRobot {
                 .retrieveIntake
                 .whenPressed(retrieve(definition));
 
+
+        final Color teleopChosenColor;
         if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
-            chosenColor = MagazineSubsystem.BlueTarget;
+            teleopChosenColor = MagazineSubsystem.BlueTarget;
         } else {
-            chosenColor = MagazineSubsystem.RedTarget;
+            teleopChosenColor = MagazineSubsystem.RedTarget;
         }
 
         definition
                 .input
                 .collect
-                .whileActiveOnce(collect(definition, () -> chosenColor));
+                .whileActiveOnce(collect(
+                        definition,
+                        () -> definition.subsystems.magazine.isMatchingColor(teleopChosenColor)
+                ));
+
+
+        definition
+                .input
+                .shooterSpeedSlow
+                .whenPressed(() -> shooterSpeed = SHOOTER_SPEED_SLOW);
+
+        definition
+                .input
+                .shooterSpeedFast
+                .whenPressed(() -> shooterSpeed = SHOOTER_SPEED_FAST);
+
+        definition
+                .input
+                .shooterMode
+                .whenPressed(() -> {
+                    switch (shooterMode) {
+                        case Single:
+                            shooterMode = Shoot.Mode.Full;
+                            break;
+                        case Full:
+                            shooterMode = Shoot.Mode.Single;
+                            break;
+                    }
+                });
 
         definition
                 .input
                 .shoot
                 .whileActiveOnce(shoot(
                         definition,
-                        () -> 3500.0
+                        () -> shooterSpeed,
+                        () -> shooterMode
+                ));
+
+
+        definition
+                .input
+                .collectIgnoreColor
+                .whileActiveOnce(collect(
+                        definition,
+                        () -> true
                 ));
 
         definition
                 .input
-                .runIndexMotor
-                .whileActiveOnce(Commands.TestCommands.runMotor(
-                        definition.motors.shooter.lead,
-                        () -> 3093 / ShooterSubsystem.MAX_SPEED
-                ));
+                .rejectAll
+                .whileActiveOnce(Commands.MagazineCommands.ejectAll(definition));
 
         definition
                 .input
-                .runRejectMotor
-                .whileActiveOnce(
-                        new StartEndCommand(
-                                () -> definition.subsystems.shooter.setSpeed(definition.input.joystick.getZ() * ShooterSubsystem.MAX_SPEED),
-                                definition.subsystems.shooter::stop
-                        )
-                );
+                .rejectIndex
+                .whileActiveOnce(Commands.MagazineCommands.ejectIndex(definition));
     }
 
     @Override

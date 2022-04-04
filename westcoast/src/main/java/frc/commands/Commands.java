@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import frc.commands.drive.*;
+import frc.commands.drive.GyroDrive;
+import frc.commands.drive.PerfectTurn;
+import frc.commands.drive.TeleopDrive;
 import frc.commands.intake.IntakeCollect;
 import frc.commands.magazine.Shoot;
 import frc.commands.targeting.AlignToTarget;
@@ -19,6 +21,7 @@ import frc.subsystems.MagazineSubsystem;
 import frc.subsystems.ShooterSubsystem;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 public interface Commands {
@@ -45,17 +48,17 @@ public interface Commands {
             );
         }
 
-        @NotNull
-        static EncoderDrive encodedAssisted(@NotNull Definition definition) {
-            Input input = definition.input;
-            return new EncoderDrive(
-                    input.joystick,
-                    input.invert,
-                    input.turnInPlace,
-                    definition.subsystems.driveTrain,
-                    false
-            );
-        }
+//        @NotNull
+//        static EncoderDrive encodedAssisted(@NotNull Definition definition) {
+//            Input input = definition.input;
+//            return new EncoderDrive(
+//                    input.joystick,
+//                    input.invert,
+//                    input.turnInPlace,
+//                    definition.subsystems.driveTrain,
+//                    false
+//            );
+//        }
     }
 
     interface DriveCommands {
@@ -98,11 +101,14 @@ public interface Commands {
 
     interface IntakeCommands {
         @NotNull
-        static IntakeCollect collect(@NotNull Definition definition, @NotNull IntakeCollect.ColorSupplier color) {
+        static IntakeCollect collect(
+                @NotNull Definition definition,
+                @NotNull BooleanSupplier ballAcceptanceStrategy
+        ) {
             return new IntakeCollect(
                     definition.subsystems.intake,
                     definition.subsystems.magazine,
-                    color,
+                    ballAcceptanceStrategy,
                     50,
                     50,
                     true
@@ -234,11 +240,16 @@ public interface Commands {
 
     interface ShooterCommands {
         @NotNull
-        static Shoot shoot(@NotNull Definition definition, @NotNull DoubleSupplier velocity) {
+        static Shoot shoot(
+                @NotNull Definition definition,
+                @NotNull DoubleSupplier velocity,
+                @NotNull Shoot.ModeProvider mode
+        ) {
             return new Shoot(
                     definition.subsystems.shooter,
                     definition.subsystems.magazine,
                     velocity,
+                    mode,
                     50,
                     18
             );

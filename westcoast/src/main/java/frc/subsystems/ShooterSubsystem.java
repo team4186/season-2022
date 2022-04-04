@@ -8,7 +8,6 @@ import frc.robot.definition.Controllers.ControllerConfigurator;
 import org.jetbrains.annotations.NotNull;
 
 public class ShooterSubsystem extends SubsystemBase {
-    public static double MAX_SPEED = 5350.0;
     @NotNull
     private final CANSparkMax shooterMotor;
     private final SparkMaxPIDController pidController;

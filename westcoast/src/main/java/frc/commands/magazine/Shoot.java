@@ -1,6 +1,5 @@
 package frc.commands.magazine;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.subsystems.MagazineSubsystem;
 import frc.subsystems.ShooterSubsystem;
@@ -17,12 +16,24 @@ public final class Shoot extends CommandBase {
         Shooting
     }
 
+    public enum Mode {
+        Single,
+        Full
+    }
+
+    public interface ModeProvider {
+        Mode getMode();
+    }
+
     @NotNull
     private final ShooterSubsystem shooter;
     @NotNull
     private final MagazineSubsystem magazine;
     @NotNull
     private final DoubleSupplier targetVelocity;
+
+    @NotNull
+    private final ModeProvider mode;
 
     private final int maxReloadTicks;
     private final int maxShooterDelay;
@@ -35,12 +46,14 @@ public final class Shoot extends CommandBase {
             @NotNull ShooterSubsystem shooter,
             @NotNull MagazineSubsystem magazine,
             @NotNull DoubleSupplier targetVelocity,
+            @NotNull ModeProvider mode,
             int maxReloadTicks,
             int maxShooterDelay
     ) {
         this.shooter = shooter;
         this.magazine = magazine;
         this.targetVelocity = targetVelocity;
+        this.mode = mode;
         this.maxReloadTicks = maxReloadTicks;
         this.maxShooterDelay = maxShooterDelay;
 
@@ -118,12 +131,21 @@ public final class Shoot extends CommandBase {
 
     private void shooting() {
         if (!magazine.hasFeederSensorBreak()) {
-            state = State.Reloading;
+            switch (mode.getMode()) {
+                case Single:
+                    state = State.End;
+                    break;
+                case Full:
+                    state = State.Reloading;
+                    break;
+            }
         } else if (!isSpeedWithinTolerance()) {
             state = State.Accelerating;
         } else if (shooterDelay >= maxShooterDelay) {
-            magazine.startIndexMotor();
-            magazine.reverseRejectMotor();
+            if (mode.getMode() == Mode.Full) {
+                magazine.startIndexMotor();
+                magazine.reverseRejectMotor();
+            }
             magazine.startFeederMotor();
         } else {
             shooterDelay++;

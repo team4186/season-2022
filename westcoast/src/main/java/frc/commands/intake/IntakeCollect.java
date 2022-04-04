@@ -1,17 +1,13 @@
 package frc.commands.intake;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.subsystems.IntakeSubsystem;
 import frc.subsystems.MagazineSubsystem;
 import org.jetbrains.annotations.NotNull;
 
-public final class IntakeCollect extends CommandBase {
+import java.util.function.BooleanSupplier;
 
-    public interface ColorSupplier {
-        Color getColor();
-    }
+public final class IntakeCollect extends CommandBase {
 
     private enum State {
         End,
@@ -27,7 +23,7 @@ public final class IntakeCollect extends CommandBase {
     @NotNull
     private final MagazineSubsystem magazine;
     @NotNull
-    private final ColorSupplier color;
+    private final BooleanSupplier ballAcceptanceStrategy;
 
     private final int rejectTickCount;
     private final int reverseIntakeTickCount;
@@ -38,14 +34,14 @@ public final class IntakeCollect extends CommandBase {
     public IntakeCollect(
             @NotNull IntakeSubsystem intake,
             @NotNull MagazineSubsystem magazine,
-            @NotNull ColorSupplier color,
+            @NotNull BooleanSupplier ballAcceptanceStrategy,
             int rejectTickCount,
             int reverseIntakeTickCount,
             boolean finishWhenFull
     ) {
         this.intake = intake;
         this.magazine = magazine;
-        this.color = color;
+        this.ballAcceptanceStrategy = ballAcceptanceStrategy;
         this.rejectTickCount = rejectTickCount;
         this.reverseIntakeTickCount = reverseIntakeTickCount;
         this.finishWhenFull = finishWhenFull;
@@ -59,7 +55,6 @@ public final class IntakeCollect extends CommandBase {
 
     @Override
     public void execute() {
-        SmartDashboard.putString("State", state.toString());
         switch (state) {
             case Full:
                 full();
@@ -100,7 +95,7 @@ public final class IntakeCollect extends CommandBase {
         } else {
             intake.stop();
             magazine.stopIndexMotor();
-            if (magazine.isMatchingColor(color.getColor())) {
+            if (ballAcceptanceStrategy.getAsBoolean()) {
                 if (!magazine.hasFeederSensorBreak()) {
                     state = State.AcceptingToFeeder;
                 } else {
