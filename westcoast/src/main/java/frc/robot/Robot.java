@@ -20,6 +20,11 @@ import static frc.commands.Commands.ShooterCommands.shoot;
 
 public class Robot extends TimedRobot {
 
+    private enum DriveMode {
+        Raw,
+        Cheesy
+    }
+
     private static final double SHOOTER_SPEED_SLOW = 3500;
     private static final double SHOOTER_SPEED_FAST = 3800;
     private double shooterSpeed = SHOOTER_SPEED_SLOW;
@@ -29,6 +34,9 @@ public class Robot extends TimedRobot {
     private final Definition definition;
     @NotNull
     private final SendableChooser<Command> autonomousChooser = new SendableChooser<>();
+    @NotNull
+    private final SendableChooser<DriveMode> driveModeChooser = new SendableChooser<>();
+
     private Color chosenColor = MagazineSubsystem.RedTarget;
 
     private final boolean sendDebug = false;
@@ -49,6 +57,10 @@ public class Robot extends TimedRobot {
         autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
         autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
+
+        driveModeChooser.setDefaultOption("Raw", DriveMode.Raw);
+        driveModeChooser.addOption("Cheesy", DriveMode.Cheesy);
+        SmartDashboard.putData("Drive Mode", driveModeChooser);
     }
 
     @Override
@@ -84,10 +96,22 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        Commands
-                .TeleopCommands
-                .raw(definition)
-                .schedule();
+        switch (driveModeChooser.getSelected()) {
+            case Cheesy:
+                Commands
+                        .TeleopCommands
+                        .cheesy(definition)
+                        .schedule();
+                break;
+
+            default:
+            case Raw:
+                Commands
+                        .TeleopCommands
+                        .raw(definition)
+                        .schedule();
+                break;
+        }
 
         definition
                 .input
