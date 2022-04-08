@@ -33,7 +33,13 @@ public final class Climb extends CommandBase {
 
     @Override
     public void initialize() {
-        state = State.Deploying;
+        if (climber.getPosition() < deployGoal) {
+            state = State.Deploying;
+        } else if (climber.getPosition() < finalGoal) {
+            state = State.Climbing;
+        } else {
+            state = State.End;
+        }
     }
 
     @Override
@@ -53,18 +59,20 @@ public final class Climb extends CommandBase {
 
     private void deploy() {
         if (climber.getPosition() >= deployGoal) {
-            state = State.Climbing;
+            state = State.End;
+        } else {
+            climber.setClimberConfigDeploy();
+            climber.setPosition(deployGoal);
         }
-        climber.setClimberConfigDeploy();
-        climber.setPosition(deployGoal);
     }
 
     private void climb() {
         if (climber.getPosition() >= finalGoal) {
             state = State.End;
+        } else {
+            climber.setClimberConfigClimb();
+            climber.setPosition(finalGoal);
         }
-        climber.setClimberConfigClimb();
-        climber.setPosition(finalGoal);
     }
 
     @Override
