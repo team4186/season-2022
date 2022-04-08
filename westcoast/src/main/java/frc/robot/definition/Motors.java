@@ -20,18 +20,23 @@ public class Motors {
     public final MagazineMotors magazine;
     @NotNull
     public final ShooterMotors shooter;
+    @NotNull
+    public final ClimberMotors climber;
 
     public Motors(
             @NotNull DriveMotors driveLeft,
             @NotNull DriveMotors driveRight,
-            @NotNull IntakeMotors intake, @NotNull MagazineMotors magazine,
-            @NotNull ShooterMotors shooter
+            @NotNull IntakeMotors intake,
+            @NotNull MagazineMotors magazine,
+            @NotNull ShooterMotors shooter,
+            @NotNull ClimberMotors climber
     ) {
         this.driveLeft = driveLeft;
         this.driveRight = driveRight;
         this.intake = intake;
         this.magazine = magazine;
         this.shooter = shooter;
+        this.climber = climber;
     }
 
     public static final class DriveMotors {
@@ -94,6 +99,22 @@ public class Motors {
 
             follower.follow(lead, true);
             follower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+        }
+    }
+
+    public static final class ClimberMotors {
+        @NotNull
+        public final CANSparkMax lead;
+
+        public ClimberMotors(
+                @NotNull CANSparkMax lead,
+                @NotNull CANSparkMax follower
+        ) {
+            this.lead = lead;
+            lead.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+            follower.follow(lead, true);                    // might need to be changed
+            follower.setIdleMode(CANSparkMax.IdleMode.kBrake);
         }
     }
 

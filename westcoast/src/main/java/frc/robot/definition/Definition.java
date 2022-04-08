@@ -1,9 +1,7 @@
 package frc.robot.definition;
 
-import frc.subsystems.DriveTrainSubsystem;
-import frc.subsystems.IntakeSubsystem;
-import frc.subsystems.MagazineSubsystem;
-import frc.subsystems.ShooterSubsystem;
+import com.revrobotics.CANSparkMax;
+import frc.subsystems.*;
 import org.jetbrains.annotations.NotNull;
 
 public class Definition {
@@ -97,6 +95,10 @@ public class Definition {
                         sensors.magazine.feeder,
                         sensors.magazine.reject,
                         sensors.magazine.colorSensor
+                ),
+                new ClimberSubsystem(
+                        motors.climber.lead,
+                        controllers::climberConfig
                 )
         );
     }

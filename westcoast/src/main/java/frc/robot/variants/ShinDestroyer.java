@@ -15,6 +15,7 @@ import frc.robot.definition.*;
 import frc.robot.definition.Motors.IntakeMotors;
 import frc.robot.definition.Motors.MagazineMotors;
 import frc.robot.definition.Motors.ShooterMotors;
+import frc.robot.definition.Motors.ClimberMotors;
 import frc.robot.definition.Sensors.DriveSensors;
 import frc.robot.definition.Sensors.MagazineSensors;
 import frc.vision.LimelightRunner;
@@ -55,6 +56,10 @@ public interface ShinDestroyer {
                         new ShooterMotors(
                                 new CANSparkMax(8, CANSparkMaxLowLevel.MotorType.kBrushless),
                                 new CANSparkMax(9, CANSparkMaxLowLevel.MotorType.kBrushless)
+                        ),
+                        new ClimberMotors(
+                                new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless),
+                                new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless)
                         )
                 ),
                 new Pneumatics(
@@ -136,6 +141,16 @@ public interface ShinDestroyer {
 
                     @Override
                     public void shooterConfig(@NotNull SparkMaxPIDController controller) {
+                        controller.setP(0.0);
+                        controller.setI(0.00000033);
+                        controller.setIZone(0.0);
+                        controller.setD(0.0);
+                        controller.setFF(0.0);
+                        controller.setOutputRange(0.0, 1.0);
+                    }
+
+                    @Override
+                    public void climberConfig(@NotNull SparkMaxPIDController controller) {
                         controller.setP(0.0);
                         controller.setI(0.00000033);
                         controller.setIZone(0.0);
