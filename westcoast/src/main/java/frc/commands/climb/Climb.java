@@ -19,8 +19,8 @@ public final class Climb extends CommandBase {
 
     @NotNull
     private final ClimberSubsystem climber;
-    private final double deployGoal = 3; //Make this value line up to motors
-    private final double finalGoal = 6; //and this one
+    private static final double deployGoal = 50; //Make this value line up to motors
+    private static final double finalGoal = 145; //and this one (both are in terms of motor rotations)
     private State state = State.Deploying;
 
     public Climb(
@@ -33,7 +33,6 @@ public final class Climb extends CommandBase {
 
     @Override
     public void initialize() {
-        climber.resetEncoder();
         state = State.Deploying;
     }
 
@@ -47,7 +46,7 @@ public final class Climb extends CommandBase {
                 deploy();
                 break;
             case Climbing:
-
+                climb();
                 break;
         }
     }
@@ -56,6 +55,7 @@ public final class Climb extends CommandBase {
         if (climber.getPosition() >= deployGoal) {
             state = State.Climbing;
         }
+        climber.setClimberConfigDeploy();
         climber.setPosition(deployGoal);
     }
 
@@ -63,6 +63,7 @@ public final class Climb extends CommandBase {
         if (climber.getPosition() >= finalGoal) {
             state = State.End;
         }
+        climber.setClimberConfigClimb();
         climber.setPosition(finalGoal);
     }
 

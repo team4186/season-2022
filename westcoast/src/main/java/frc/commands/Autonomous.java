@@ -25,7 +25,7 @@ public final class Autonomous {
     }
 
     public static Command shootAndLeave(@NotNull Definition definition) {
-        return shoot(definition, () -> 3500.0, () -> Shoot.Mode.Full)
+        return shoot(definition, () -> 3700.0, () -> Shoot.Mode.Full)
                 .andThen(move(definition, 1.5));
     }
 

@@ -23,7 +23,9 @@ public interface Controllers {
 
     void shooterConfig(@NotNull SparkMaxPIDController controller);
 
-    void climberConfig(@NotNull SparkMaxPIDController controller);
+    void climberConfigDeploy(@NotNull SparkMaxPIDController controller);
+
+    void climberConfigClimb(@NotNull SparkMaxPIDController controller);
 
     interface ControllerConfigurator {
         void configure(@NotNull SparkMaxPIDController controller);

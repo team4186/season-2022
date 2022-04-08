@@ -98,7 +98,9 @@ public class Definition {
                 ),
                 new ClimberSubsystem(
                         motors.climber.lead,
-                        controllers::climberConfig
+                        controllers::climberConfigDeploy,
+                        controllers::climberConfigClimb
+
                 )
         );
     }

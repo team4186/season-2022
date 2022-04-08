@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 
     private Color chosenColor = MagazineSubsystem.RedTarget;
 
-    private final boolean sendDebug = false;
+    private final boolean sendDebug = true;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -98,6 +98,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        definition.subsystems.climber.resetEncoder();
         switch (driveModeChooser.getSelected()) {
             case Cheesy:
                 Commands
@@ -187,7 +188,7 @@ public class Robot extends TimedRobot {
         definition
                 .input
                 .climb
-                .whenPressed(climb(
+                .whileActiveOnce(climb(
                         definition
                 ));
 

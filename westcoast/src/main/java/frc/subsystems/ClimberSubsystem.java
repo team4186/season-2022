@@ -10,12 +10,22 @@ public class ClimberSubsystem extends SubsystemBase {
     @NotNull
     private final CANSparkMax climberMotor;
     private final SparkMaxPIDController pidController;
+    @NotNull
+    private final Controllers.ControllerConfigurator climberConfigDeploy;
+    @NotNull
+    private final Controllers.ControllerConfigurator climberConfigClimb;
 
+    private boolean isClimbing = false;
 
-    public ClimberSubsystem(@NotNull CANSparkMax climberMotor, @NotNull Controllers.ControllerConfigurator configurator) {
+    public ClimberSubsystem(
+            @NotNull CANSparkMax climberMotor,
+            @NotNull Controllers.ControllerConfigurator climberConfigDeploy,
+            @NotNull Controllers.ControllerConfigurator climberConfigClimb) {
         this.climberMotor = climberMotor;
         pidController = climberMotor.getPIDController();
-        configurator.configure(pidController);
+        this.climberConfigDeploy = climberConfigDeploy;
+        this.climberConfigClimb = climberConfigClimb;
+        climberConfigDeploy.configure(pidController);
     }
 
     public double getPosition() {
@@ -28,6 +38,20 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void setPosition(double position) {
         pidController.setReference(position, CANSparkMax.ControlType.kPosition);
+    }
+
+    public void setClimberConfigDeploy() {
+        if (isClimbing) {
+            climberConfigDeploy.configure(pidController);
+            isClimbing = false;
+        }
+    }
+
+    public void setClimberConfigClimb() {
+        if (!isClimbing) {
+            climberConfigClimb.configure(pidController);
+            isClimbing = true;
+        }
     }
 
     public void stop() {
