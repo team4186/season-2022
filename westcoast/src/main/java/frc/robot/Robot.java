@@ -15,9 +15,9 @@ import frc.robot.definition.Definition;
 import frc.subsystems.MagazineSubsystem;
 import org.jetbrains.annotations.NotNull;
 
+import static frc.commands.Commands.ClimberCommands.climb;
 import static frc.commands.Commands.IntakeCommands.*;
 import static frc.commands.Commands.ShooterCommands.shoot;
-import static frc.commands.Commands.ClimberCommands.climb;
 
 public class Robot extends TimedRobot {
 
@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 
     private Color chosenColor = MagazineSubsystem.RedTarget;
 
-    private final boolean sendDebug = true;
+    private final boolean sendDebug = false;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -89,6 +89,11 @@ public class Robot extends TimedRobot {
         if (autonomous != null) {
             autonomous.schedule();
         }
+    }
+
+    @Override
+    public void autonomousPeriodic() {
+        accelerateShooter();
     }
 
     @Override
@@ -214,6 +219,7 @@ public class Robot extends TimedRobot {
             Color color = definition.sensors.magazine.colorSensor.getColor();
             SmartDashboard.putString("Color", String.format("Color(%f, %f, %f)", color.red, color.green, color.blue));
         }
+        accelerateShooter();
     }
 
     @Override
@@ -225,5 +231,23 @@ public class Robot extends TimedRobot {
     public void testInit() {
         definition.subsystems.driveTrain.rightEncoder.reset();
         definition.subsystems.driveTrain.leftEncoder.reset();
+    }
+
+    int shootFinished = 0;
+
+    private void accelerateShooter() {
+        double speed = (definition.input.joystick.getZ() - 1.0) * 0.5 * -1.0 * 250.0 + 3500.0;
+        MagazineSubsystem magazine = definition.subsystems.magazine;
+        if (magazine.hasFeederSensorBreak() || magazine.hasIndexSensorBreak()) {
+            definition.subsystems.shooter.setSpeed(speed);
+            shootFinished = 0;
+        } else {
+            definition.subsystems.shooter.setSpeed(speed);
+            shootFinished++;
+        }
+
+        if (shootFinished > 50) {
+            definition.subsystems.shooter.stop();
+        }
     }
 }

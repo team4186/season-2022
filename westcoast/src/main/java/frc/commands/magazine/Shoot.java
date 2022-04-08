@@ -70,24 +70,24 @@ public final class Shoot extends CommandBase {
     public void execute() {
         switch (state) {
             case End:
-                shooter.stop();
+//                shooter.stop();
                 break;
             case Reloading:
                 shooterDelay = 0;
                 reloading();
                 // Early evaluation just in case the magazine is empty right at the first frame
-                if (state != State.End) {
-                    shooter.setSpeed(targetVelocity.getAsDouble());
-                }
+//                if (state != State.End) {
+//                    shooter.setSpeed(targetVelocity.getAsDouble());
+//                }
                 break;
             case Accelerating:
                 shooterDelay = 0;
                 accelerating();
-                shooter.setSpeed(targetVelocity.getAsDouble());
+//                shooter.setSpeed(targetVelocity.getAsDouble());
                 break;
             case Shooting:
                 shooting();
-                shooter.setSpeed(targetVelocity.getAsDouble());
+//                shooter.setSpeed(targetVelocity.getAsDouble());
                 break;
         }
     }
@@ -133,6 +133,7 @@ public final class Shoot extends CommandBase {
         if (!magazine.hasFeederSensorBreak()) {
             switch (mode.getMode()) {
                 case Single:
+                    magazine.stopFeederMotor();
                     state = State.End;
                     break;
                 case Full:
@@ -154,7 +155,7 @@ public final class Shoot extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        shooter.stop();
+        //shooter.stop();
         magazine.stopIndexMotor();
         magazine.stopFeederMotor();
         magazine.stopRejectMotor();
