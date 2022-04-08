@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 
     private Color chosenColor = MagazineSubsystem.RedTarget;
 
-    private final boolean sendDebug = true;
+    private final boolean sendDebug = false;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
