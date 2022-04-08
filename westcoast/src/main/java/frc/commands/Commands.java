@@ -46,7 +46,7 @@ public interface Commands {
                     input.joystick::getX,
                     input.joystick::getY,
                     () -> !input.attenuate.get(),
-                    input.turnInPlace,
+                    () -> !input.turnInPlace.get(),
                     input.invert,
                     definition.subsystems.driveTrain,
                     0.5,

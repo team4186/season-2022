@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 
     private Color chosenColor = MagazineSubsystem.RedTarget;
 
-    private final boolean sendDebug = false;
+    private final boolean sendDebug = true;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
 
         autonomousChooser.addOption("LeaveTarmac", Autonomous.move(definition, 2.0));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
-        autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
+        autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.shootOutPickInShootOut(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
         autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
 

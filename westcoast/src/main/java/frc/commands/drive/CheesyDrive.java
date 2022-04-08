@@ -54,7 +54,7 @@ public class CheesyDrive extends CommandBase {
         double wheelNonLinearity;
         // NOTE do we need a deadband?
 //        double wheel = handleDeadband(getWheel(stick), C.Drive.wheelDeadband);
-        double wheel = yaw.getAsDouble();
+        double wheel = -yaw.getAsDouble();
 
         // NOTE do we need a deadband?
 //        double throttle = -handleDeadband(getThrottle(stick), C.Drive.throttleDeadband);
