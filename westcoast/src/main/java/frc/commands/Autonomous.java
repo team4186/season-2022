@@ -23,22 +23,22 @@ public final class Autonomous {
     }
 
     public static Command shootAndLeave(@NotNull Definition definition) {
-        return shoot(definition, () -> 3100.0)
-                .andThen(move(definition, 3.0));
+        return shoot(definition, () -> 3500.0)
+                .andThen(move(definition, 1.5));
     }
 
     public static Command fullAuto(@NotNull Definition definition, IntakeCollect.ColorSupplier color) {
-        return shoot(definition, () -> 3100.0)
-                .alongWith(deploy(definition))
+        return deploy(definition)
                 .andThen(
-                        move(definition, 2.0)
+                        move(definition, 1.0)
                                 .alongWith(
                                         collect(definition, color)
                                 )
-                                .until(definition.subsystems.magazine::hasFeederSensorBreak)
+                                .withTimeout(2.5)
+                                .until(definition.subsystems.magazine::hasIndexSensorBreak)
                 )
-                .andThen(move(definition, -2.0))
-                .andThen(shoot(definition, () -> 3100.0))
-                .andThen(move(definition, 2.0));
+                .andThen(move(definition, -1.0))
+                .andThen(shoot(definition, () -> 3500.0))
+                .andThen(move(definition, 1.5));
     }
 }
