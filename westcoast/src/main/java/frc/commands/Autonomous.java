@@ -27,7 +27,22 @@ public final class Autonomous {
                 .andThen(move(definition, 1.5));
     }
 
-    public static Command fullAuto(@NotNull Definition definition, IntakeCollect.ColorSupplier color) {
+    public static Command shootOutPickInShootOut(@NotNull Definition definition, IntakeCollect.ColorSupplier color) {
+        return shoot(definition, () -> 3500.0)
+                .alongWith(deploy(definition))
+                .andThen(
+                        move(definition, 1.0)
+                                .alongWith(
+                                        collect(definition, color)
+                                )
+                                .until(definition.subsystems.magazine::hasFeederSensorBreak)
+                )
+                .andThen(move(definition, -1.0))
+                .andThen(shoot(definition, () -> 3500.0))
+                .andThen(move(definition, 1.5));
+    }
+
+    public static Command outPickInShootTwice(@NotNull Definition definition, IntakeCollect.ColorSupplier color) {
         return deploy(definition)
                 .andThen(
                         move(definition, 1.0)

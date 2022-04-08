@@ -42,7 +42,8 @@ public class Robot extends TimedRobot {
 
         autonomousChooser.addOption("LeaveTarmac", Autonomous.move(definition, 2.0));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
-        autonomousChooser.addOption("Full Auto", Autonomous.fullAuto(definition, () -> chosenColor));
+        autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.outPickInShootTwice(definition, () -> chosenColor));
+        autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> chosenColor));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
     }
 
