@@ -22,6 +22,10 @@ public class ClimberSubsystem extends SubsystemBase {
         return climberMotor.getEncoder().getPosition();
     }
 
+    public void resetEncoder() {
+        climberMotor.getEncoder().setPosition(0);
+    }
+
     public void setPosition(double position) {
         pidController.setReference(position, CANSparkMax.ControlType.kPosition);
     }

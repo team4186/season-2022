@@ -23,6 +23,8 @@ public final class Input {
     public final Button invert;
     @NotNull
     public final Button turnInPlace;
+    @NotNull
+    public final Button climb;
 
     // Extra
     @NotNull
@@ -50,6 +52,7 @@ public final class Input {
             @NotNull Button invert,
             @NotNull Button turnInPlace,
 
+            @NotNull Button climb,
             @NotNull Button shooterMode,
             @NotNull Button shooterSpeedSlow,
             @NotNull Button shooterSpeedFast,
@@ -66,6 +69,7 @@ public final class Input {
         this.attenuate = attenuate;
         this.invert = invert;
         this.turnInPlace = turnInPlace;
+        this.climb = climb;
 
         this.shooterMode = shooterMode;
         this.shooterSpeedSlow = shooterSpeedSlow;
@@ -86,6 +90,7 @@ public final class Input {
                 new JoystickButton(joystick, SaitekX52.Buttons.SECOND_TRIGGER + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.PINKIE + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.FIRE_D + 1),
+                new JoystickButton(joystick, SaitekX52.Buttons.LAUNCH + 1),
 
                 new JoystickButton(joystick, SaitekX52.Buttons.LAUNCH + 1),
                 new JoystickButton(joystick, SaitekX52.Buttons.TOGGLE_1 + 1),

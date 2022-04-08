@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static frc.commands.Commands.IntakeCommands.*;
 import static frc.commands.Commands.ShooterCommands.shoot;
+import static frc.commands.Commands.ClimberCommands.climb;
 
 public class Robot extends TimedRobot {
 
@@ -67,8 +68,9 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         if (sendDebug) {
-            SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.get());
-            SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.get());
+            SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.getDistance());
+            SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.getDistance());
+            SmartDashboard.putNumber("Climber Encoder", definition.subsystems.climber.getPosition());
 
             definition.subsystems.shooter.periodic();
         }
@@ -182,6 +184,14 @@ public class Robot extends TimedRobot {
                         () -> true
                 ));
 
+        definition
+                .input
+                .climb
+                .whenPressed(climb(
+                        definition
+                ));
+
+        // DEBUG BUTTONS
         definition
                 .input
                 .rejectAll

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import frc.commands.climb.Climb;
 import frc.commands.drive.CheesyDrive;
 import frc.commands.drive.GyroDrive;
 import frc.commands.drive.PerfectTurn;
@@ -270,7 +271,15 @@ public interface Commands {
                     18
             );
         }
+    }
 
+    interface ClimberCommands {
+        @NotNull
+        static Climb climb(@NotNull Definition definition) {
+            return new Climb(
+                    definition.subsystems.climber
+            );
+        }
     }
 
     interface TestCommands {
