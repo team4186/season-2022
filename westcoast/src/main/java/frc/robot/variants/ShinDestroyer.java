@@ -152,10 +152,10 @@ public interface ShinDestroyer {
 
                     @Override
                     public void climberConfigDeploy(@NotNull SparkMaxPIDController controller) {
-                        controller.setP(0.004);
+                        controller.setP(0.01);
                         controller.setI(0.0000013);
                         controller.setIZone(0.0);
-                        controller.setD(0.0);
+                        controller.setD(0.006);
                         controller.setFF(0.0);
                         controller.setOutputRange(0.0, 1.0);
                     }

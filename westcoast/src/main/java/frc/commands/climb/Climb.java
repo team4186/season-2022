@@ -20,7 +20,7 @@ public final class Climb extends CommandBase {
     @NotNull
     private final ClimberSubsystem climber;
     private static final double deployGoal = 50; //Make this value line up to motors
-    private static final double finalGoal = 145; //and this one (both are in terms of motor rotations)
+    private static final double finalGoal = 130; //and this one (both are in terms of motor rotations)
     private State state = State.Deploying;
 
     public Climb(
@@ -33,7 +33,7 @@ public final class Climb extends CommandBase {
 
     @Override
     public void initialize() {
-        if (climber.getPosition() < deployGoal) {
+        if (climber.getPosition() < deployGoal - 2) { //tolerance for climber
             state = State.Deploying;
         } else if (climber.getPosition() < finalGoal) {
             state = State.Climbing;
