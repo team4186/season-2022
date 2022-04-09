@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -26,9 +27,7 @@ public class Robot extends TimedRobot {
         Cheesy
     }
 
-    private static final double SHOOTER_SPEED_SLOW = 3500;
-    private static final double SHOOTER_SPEED_FAST = 3800;
-    private double shooterSpeed = SHOOTER_SPEED_SLOW;
+    private static final double AUTONOMOUS_SHOOT_SPEED = 3500;
     private Shoot.Mode shooterMode = Shoot.Mode.Single;
 
     @NotNull
@@ -48,15 +47,14 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-
         CameraServer.startAutomaticCapture();
 
         definition.subsystems.driveTrain.initialize();
 
         autonomousChooser.addOption("LeaveTarmac", Autonomous.move(definition, 2.0));
-        autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition));
-        autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.shootOutPickInShootOut(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
-        autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor)));
+        autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition, AUTONOMOUS_SHOOT_SPEED));
+        autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.shootOutPickInShootOut(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
+        autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
 
         driveModeChooser.setDefaultOption("Raw", DriveMode.Raw);
@@ -93,7 +91,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        accelerateShooter();
+        accelerateShooter(AUTONOMOUS_SHOOT_SPEED);
     }
 
     @Override
@@ -146,17 +144,6 @@ public class Robot extends TimedRobot {
                         definition,
                         () -> definition.subsystems.magazine.isMatchingColor(teleopChosenColor)
                 ));
-
-
-        definition
-                .input
-                .shooterSpeedSlow
-                .whenPressed(() -> shooterSpeed = SHOOTER_SPEED_SLOW);
-
-        definition
-                .input
-                .shooterSpeedFast
-                .whenPressed(() -> shooterSpeed = SHOOTER_SPEED_FAST);
 
         definition
                 .input
@@ -222,7 +209,7 @@ public class Robot extends TimedRobot {
             Color color = definition.sensors.magazine.colorSensor.getColor();
             SmartDashboard.putString("Color", String.format("Color(%f, %f, %f)", color.red, color.green, color.blue));
         }
-        accelerateShooter();
+        accelerateShooter(getShooterSpeed());
     }
 
     @Override
@@ -238,13 +225,13 @@ public class Robot extends TimedRobot {
 
     int shootFinished = 0;
 
-    private void accelerateShooter() {
+    private void accelerateShooter(double speed) {
         MagazineSubsystem magazine = definition.subsystems.magazine;
         if (magazine.hasFeederSensorBreak() || magazine.hasIndexSensorBreak()) {
-            definition.subsystems.shooter.setSpeed(getShooterSpeed());
+            definition.subsystems.shooter.setSpeed(speed);
             shootFinished = 0;
         } else {
-            definition.subsystems.shooter.setSpeed(getShooterSpeed());
+            definition.subsystems.shooter.setSpeed(speed);
             shootFinished++;
         }
 

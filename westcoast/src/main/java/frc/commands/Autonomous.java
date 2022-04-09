@@ -24,16 +24,17 @@ public final class Autonomous {
         );
     }
 
-    public static Command shootAndLeave(@NotNull Definition definition) {
-        return shoot(definition, () -> 3700.0, () -> Shoot.Mode.Full)
+    public static Command shootAndLeave(@NotNull Definition definition, double speed) {
+        return shoot(definition, () -> speed, () -> Shoot.Mode.Full)
                 .andThen(move(definition, 1.5));
     }
 
     public static Command shootOutPickInShootOut(
             @NotNull Definition definition,
-            @NotNull BooleanSupplier ballAcceptanceStrategy
+            @NotNull BooleanSupplier ballAcceptanceStrategy,
+            double speed
     ) {
-        return shoot(definition, () -> 3500.0, () -> Shoot.Mode.Full)
+        return shoot(definition, () -> speed, () -> Shoot.Mode.Full)
                 .alongWith(deploy(definition))
                 .andThen(
                         move(definition, 1.0)
@@ -41,13 +42,14 @@ public final class Autonomous {
                                 .until(definition.subsystems.magazine::hasFeederSensorBreak)
                 )
                 .andThen(move(definition, -1.0))
-                .andThen(shoot(definition, () -> 3500.0, () -> Shoot.Mode.Full))
+                .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full))
                 .andThen(move(definition, 1.5));
     }
 
     public static Command outPickInShootTwice(
             @NotNull Definition definition,
-            @NotNull BooleanSupplier ballAcceptanceStrategy
+            @NotNull BooleanSupplier ballAcceptanceStrategy,
+            double speed
     ) {
         return deploy(definition)
                 .andThen(
@@ -59,7 +61,7 @@ public final class Autonomous {
                                 .until(definition.subsystems.magazine::hasIndexSensorBreak)
                 )
                 .andThen(move(definition, -1.0))
-                .andThen(shoot(definition, () -> 3500.0, () -> Shoot.Mode.Full))
+                .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full))
                 .andThen(move(definition, 1.5));
     }
 }
