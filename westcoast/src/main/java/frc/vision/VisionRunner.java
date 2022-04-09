@@ -10,8 +10,6 @@ public interface VisionRunner {
 
     double getXOffset();
 
-    double getAlignX();
-
     double getYOffset();
 
     double getheight();

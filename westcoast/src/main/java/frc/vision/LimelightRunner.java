@@ -13,7 +13,7 @@ public class LimelightRunner implements VisionRunner {
     @Override
     public void periodic() {
         SmartDashboard.putBoolean("Has Target?", hasTarget());
-        SmartDashboard.putNumber("Alignment Offset", getAlignX());
+        SmartDashboard.putNumber("Angle Offset", getXOffset());
         SmartDashboard.putNumber("Distance", getDistance());
     }
 
@@ -26,11 +26,6 @@ public class LimelightRunner implements VisionRunner {
     @Override
     public double getXOffset() {
         return hasTarget() ? table.getEntry("tx").getDouble(0.0) : 0.0;
-    }
-
-    @Override
-    public double getAlignX() {
-        return scaler(getXOffset());
     }
 
     @Override
@@ -61,9 +56,5 @@ public class LimelightRunner implements VisionRunner {
         double ledMode;
         ledMode = mode ? 3.0 : 1.0;
         table.getEntry("ledMode").setValue(ledMode);
-    }
-
-    private double scaler(double value) {
-        return value * 0.0335570469798658;
     }
 }

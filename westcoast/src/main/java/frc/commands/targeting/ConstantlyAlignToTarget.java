@@ -35,7 +35,7 @@ public final class ConstantlyAlignToTarget extends CommandBase {
     public void execute() {
         drive.arcade(
                 clamp(-forward.calculate(drive.vision.getDistance(), 5.0), 0.4),
-                clamp(turn.calculate(drive.vision.getAlignX(), 0.0), 0.4),
+                clamp(turn.calculate(drive.vision.getXOffset(), 0.0), 0.4),
                 false
         );
     }

@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.commands.Autonomous;
 import frc.commands.Commands;
 import frc.commands.magazine.Shoot;
+import frc.commands.targeting.AlignToTarget;
 import frc.robot.definition.Definition;
 import frc.subsystems.MagazineSubsystem;
 import frc.vision.LimelightRunner;
@@ -53,7 +55,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         CameraServer.startAutomaticCapture();
 
-        limelight = new LimelightRunner();
+        limelight = definition.subsystems.driveTrain.vision;
 
         definition.subsystems.driveTrain.initialize();
 
@@ -73,12 +75,12 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         if (sendDebug) {
-            SmartDashboard.putNumber("Limelight Distance", limelight.getDistance());
             SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.getDistance());
             SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.getDistance());
             SmartDashboard.putNumber("Climber Encoder", definition.subsystems.climber.getPosition());
 
             definition.subsystems.shooter.periodic();
+            limelight.periodic();
         }
     }
 
@@ -234,13 +236,21 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         limelight.setLight(true);
-        definition.subsystems.driveTrain.rightEncoder.reset();
-        definition.subsystems.driveTrain.leftEncoder.reset();
+
+        definition
+                .input
+                .collect
+                .whenPressed(
+                        Commands.DriveCommands.setupShot(
+                                definition,
+                                Units.inchesToMeters(32))
+                );
     }
 
     @Override
     public void testExit() {
         limelight.setLight(false);
+        CommandScheduler.getInstance().cancelAll();
     }
 
     int shootFinished = 0;
