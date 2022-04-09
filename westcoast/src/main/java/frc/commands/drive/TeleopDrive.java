@@ -59,7 +59,7 @@ public class TeleopDrive extends CommandBase {
             zRotation = attenuated(-xAxis.getAsDouble());
         } else {
             forward = full(this.forward * yAxis.getAsDouble());
-            zRotation = MathUtil.clamp(full(-xAxis.getAsDouble()), -0.5, 0.5);
+            zRotation = MathUtil.clamp(full(-xAxis.getAsDouble()), -0.6, 0.6);
         }
         drive.arcade(-forward, -zRotation, false);
     }

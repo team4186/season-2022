@@ -177,7 +177,7 @@ public class Robot extends TimedRobot {
                 .shoot
                 .whileActiveOnce(shoot(
                         definition,
-                        () -> shooterSpeed,
+                        this::getShooterSpeed,
                         () -> shooterMode
                 ));
 
@@ -239,18 +239,21 @@ public class Robot extends TimedRobot {
     int shootFinished = 0;
 
     private void accelerateShooter() {
-        double speed = (definition.input.joystick.getZ() - 1.0) * 0.5 * -1.0 * 250.0 + 3500.0;
         MagazineSubsystem magazine = definition.subsystems.magazine;
         if (magazine.hasFeederSensorBreak() || magazine.hasIndexSensorBreak()) {
-            definition.subsystems.shooter.setSpeed(speed);
+            definition.subsystems.shooter.setSpeed(getShooterSpeed());
             shootFinished = 0;
         } else {
-            definition.subsystems.shooter.setSpeed(speed);
+            definition.subsystems.shooter.setSpeed(getShooterSpeed());
             shootFinished++;
         }
 
         if (shootFinished > 50) {
             definition.subsystems.shooter.stop();
         }
+    }
+
+    private double getShooterSpeed() {
+        return (definition.input.joystick.getZ() - 1.0) * 0.5 * -1.0 * 1500.0 + 3500.0;
     }
 }
