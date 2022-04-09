@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.commands.Autonomous;
 import frc.commands.Commands;
 import frc.commands.magazine.Shoot;
+import frc.commands.targeting.AlignToTarget;
 import frc.robot.definition.Definition;
 import frc.subsystems.MagazineSubsystem;
 import frc.vision.LimelightRunner;
@@ -53,7 +54,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         CameraServer.startAutomaticCapture();
 
-        limelight = new LimelightRunner();
+        limelight = definition.subsystems.driveTrain.vision;
 
         definition.subsystems.driveTrain.initialize();
 
@@ -234,13 +235,19 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         limelight.setLight(true);
-        definition.subsystems.driveTrain.rightEncoder.reset();
-        definition.subsystems.driveTrain.leftEncoder.reset();
+
+        definition
+                .input
+                .collect
+                .whenPressed(
+                        Commands.DriveCommands.alignToTarget(definition)
+                );
     }
 
     @Override
     public void testExit() {
         limelight.setLight(false);
+        CommandScheduler.getInstance().cancelAll();
     }
 
     int shootFinished = 0;
