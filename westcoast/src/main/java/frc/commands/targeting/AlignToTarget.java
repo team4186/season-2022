@@ -19,7 +19,7 @@ public final class AlignToTarget extends PIDCommand {
     ) {
         super(
                 controller,
-                drive.vision::getAlignX,
+                drive.vision::getXOffset,
                 0.0,
                 (value) -> drive.arcade(
                         0.0,

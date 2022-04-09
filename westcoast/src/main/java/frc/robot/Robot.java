@@ -73,12 +73,12 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         if (sendDebug) {
-            SmartDashboard.putNumber("Limelight Distance", limelight.getDistance());
             SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.getDistance());
             SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.getDistance());
             SmartDashboard.putNumber("Climber Encoder", definition.subsystems.climber.getPosition());
 
             definition.subsystems.shooter.periodic();
+            limelight.periodic();
         }
     }
 
