@@ -46,14 +46,21 @@ public class LimelightRunner implements VisionRunner {
 
     @Override
     public double getDistance() {
-        double targetHeight = 98.125;
-        double cameraHeight = 14.0; //Subject to change
-        double cameraAngle = 12.632155; //Subject to change (ish)
+        double targetHeight = 2.6416;
+        double cameraHeight = 0.81; //Subject to change
+        double cameraAngle = 45.0; //Subject to change (ish)
         double targetAngle = getYOffset();
         double totalAngleRad = Units.degreesToRadians(cameraAngle + targetAngle);
         double distance = (targetHeight - cameraHeight) / tan(totalAngleRad);
 
-        return hasTarget() ? distance / 12 : Double.NaN;
+        return hasTarget() ? distance : Double.NaN;
+    }
+
+    @Override
+    public void setLight(boolean mode) {
+        double ledMode;
+        ledMode = mode ? 3.0 : 1.0;
+        table.getEntry("ledMode").setValue(ledMode);
     }
 
     private double scaler(double value) {
