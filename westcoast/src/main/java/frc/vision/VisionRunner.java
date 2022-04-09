@@ -17,4 +17,6 @@ public interface VisionRunner {
     double getheight();
 
     double getDistance();
+
+    void setLight(boolean mode);
 }

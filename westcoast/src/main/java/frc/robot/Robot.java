@@ -14,6 +14,8 @@ import frc.commands.Commands;
 import frc.commands.magazine.Shoot;
 import frc.robot.definition.Definition;
 import frc.subsystems.MagazineSubsystem;
+import frc.vision.LimelightRunner;
+import frc.vision.VisionRunner;
 import org.jetbrains.annotations.NotNull;
 
 import static frc.commands.Commands.ClimberCommands.climb;
@@ -41,6 +43,8 @@ public class Robot extends TimedRobot {
 
     private final boolean sendDebug = true;
 
+    private VisionRunner limelight;
+
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
     }
@@ -48,6 +52,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         CameraServer.startAutomaticCapture();
+
+        limelight = new LimelightRunner();
 
         definition.subsystems.driveTrain.initialize();
 
@@ -67,6 +73,7 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         if (sendDebug) {
+            SmartDashboard.putNumber("Limelight Distance", limelight.getDistance());
             SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.getDistance());
             SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.getDistance());
             SmartDashboard.putNumber("Climber Encoder", definition.subsystems.climber.getPosition());
@@ -77,6 +84,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        limelight.setLight(true);
+
         if (DriverStation.getAlliance() == DriverStation.Alliance.Blue) {
             chosenColor = MagazineSubsystem.BlueTarget;
         } else {
@@ -98,10 +107,13 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousExit() {
         CommandScheduler.getInstance().cancelAll();
+        limelight.setLight(false);
     }
 
     @Override
     public void teleopInit() {
+        limelight.setLight(true);
+
         definition.subsystems.climber.resetEncoder();
         switch (driveModeChooser.getSelected()) {
             case Cheesy:
@@ -215,13 +227,20 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopExit() {
+        limelight.setLight(false);
         CommandScheduler.getInstance().cancelAll();
     }
 
     @Override
     public void testInit() {
+        limelight.setLight(true);
         definition.subsystems.driveTrain.rightEncoder.reset();
         definition.subsystems.driveTrain.leftEncoder.reset();
+    }
+
+    @Override
+    public void testExit() {
+        limelight.setLight(false);
     }
 
     int shootFinished = 0;
