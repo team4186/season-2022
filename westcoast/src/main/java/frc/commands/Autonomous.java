@@ -64,4 +64,18 @@ public final class Autonomous {
                 .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full))
                 .andThen(move(definition, 1.5));
     }
+
+    public static Command shootLeaveAndCollect(
+            @NotNull Definition definition,
+            @NotNull BooleanSupplier ballAcceptanceStrategy,
+            double speed
+    ) {
+        return shoot(definition, () -> speed, () -> Shoot.Mode.Full)
+                .alongWith(deploy(definition))
+                .andThen(
+                        move(definition, 1.0)
+                                .alongWith(collect(definition, ballAcceptanceStrategy))
+                                .until(definition.subsystems.magazine::hasFeederSensorBreak)
+                );
+    }
 }

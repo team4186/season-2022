@@ -55,6 +55,7 @@ public class Robot extends TimedRobot {
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition, AUTONOMOUS_SHOOT_SPEED));
         autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.shootOutPickInShootOut(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
+        autonomousChooser.addOption("Shoot Leave and Collect", Autonomous.shootLeaveAndCollect(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
 
         driveModeChooser.setDefaultOption("Raw", DriveMode.Raw);
@@ -180,7 +181,7 @@ public class Robot extends TimedRobot {
         definition
                 .input
                 .climb
-                .whileActiveOnce(climb(
+                .whenPressed(climb(
                         definition
                 ));
 
