@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 
     private Color chosenColor = MagazineSubsystem.RedTarget;
 
-    private final boolean sendDebug = false;
+    private final boolean sendDebug = true;
 
     public Robot(@NotNull Definition definition) {
         this.definition = definition;
@@ -212,6 +212,9 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopPeriodic() {
         if (sendDebug) {
+            SmartDashboard.putNumber("Shooter Speed", definition.motors.shooter.lead.getEncoder().getVelocity());
+            SmartDashboard.putNumber("Left Drive Speed", definition.sensors.drive.leftEncoder.getRate());
+            SmartDashboard.putNumber("Right Drive Speed", definition.sensors.drive.rightEncoder.getRate());
             SmartDashboard.putBoolean("Feeder", definition.sensors.magazine.feeder.get());
             SmartDashboard.putBoolean("Index", definition.sensors.magazine.index.get());
             SmartDashboard.putBoolean("Reject", definition.sensors.magazine.reject.get());
