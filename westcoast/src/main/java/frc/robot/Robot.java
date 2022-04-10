@@ -209,12 +209,23 @@ public class Robot extends TimedRobot {
                 .input
                 .rejectIndex
                 .whileActiveOnce(Commands.MagazineCommands.ejectIndex(definition));
+
+        // shooter set speed is 3670 for aimbotted shots (if we want a button that does that)
+        definition
+                .input
+                .shooterSpeedFast
+                .whileHeld(
+                        Commands.DriveCommands.setupShot(
+                                definition,
+                                Units.inchesToMeters(55))
+                );
     }
 
     @Override
     public void teleopPeriodic() {
         if (sendDebug) {
             SmartDashboard.putNumber("Shooter Speed", definition.motors.shooter.lead.getEncoder().getVelocity());
+            SmartDashboard.putNumber("Shooter Set Speed", getShooterSpeed());
             SmartDashboard.putNumber("Left Drive Speed", definition.sensors.drive.leftEncoder.getRate());
             SmartDashboard.putNumber("Right Drive Speed", definition.sensors.drive.rightEncoder.getRate());
             SmartDashboard.putBoolean("Feeder", definition.sensors.magazine.feeder.get());
@@ -236,15 +247,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         limelight.setLight(true);
-
-        definition
-                .input
-                .collect
-                .whenPressed(
-                        Commands.DriveCommands.setupShot(
-                                definition,
-                                Units.inchesToMeters(32))
-                );
     }
 
     @Override
@@ -271,6 +273,7 @@ public class Robot extends TimedRobot {
     }
 
     private double getShooterSpeed() {
-        return (definition.input.joystick.getZ() - 1.0) * 0.5 * -1.0 * 1500.0 + 3500.0;
+//        return (definition.input.joystick.getZ() - 1.0) * 0.5 * -1.0 * 1500.0 + 3500.0;
+        return 3671.259850; // calibrated during testing (may need recal on the field)
     }
 }

@@ -18,6 +18,7 @@ public final class SetupShot extends CommandBase {
     private final double distance;
     private int turnOnTarget;
     private int forwardOnTarget;
+    private int targetLost;
     private boolean hasTarget;
 
     public SetupShot(
@@ -36,18 +37,20 @@ public final class SetupShot extends CommandBase {
         forward.reset();
         turnOnTarget = 0;
         forwardOnTarget = 0;
+        targetLost = 0;
         hasTarget = drive.vision.hasTarget();
     }
 
     @Override
     public void execute() {
         drive.arcade(
-                clamp(-forward.calculate(drive.vision.getDistance(), distance), 0.3), // may need inversion
-                clamp(turn.calculate(drive.vision.getXOffset(), 0.0), 0.3),
+                clamp(forward.calculate(drive.vision.getDistance(), distance), 0.1),
+                clamp(-turn.calculate(drive.vision.getXOffset(), 0.0), 0.2),
                 false
         );
         turnOnTarget = turn.atSetpoint() ? (turnOnTarget + 1) : 0;
         forwardOnTarget = forward.atSetpoint() ? (forwardOnTarget + 1) : 0;
+        targetLost = drive.vision.hasTarget() ? (targetLost + 1) : 0;
     }
 
     @Override
@@ -57,6 +60,6 @@ public final class SetupShot extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return ((turnOnTarget > 10) && (forwardOnTarget > 10)) || (!hasTarget);
+        return ((turnOnTarget > 10) && (forwardOnTarget > 10)) || (!hasTarget) || (targetLost > 5);
     }
 }

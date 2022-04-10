@@ -121,7 +121,7 @@ public interface Commands {
             return new SetupShot(
                     definition,
                     distance
-            )
+            );
         }
     }
 
