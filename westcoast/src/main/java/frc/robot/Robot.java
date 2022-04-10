@@ -152,13 +152,13 @@ public class Robot extends TimedRobot {
             teleopChosenColor = MagazineSubsystem.RedTarget;
         }
 
-//        definition
-//                .input
-//                .collect
-//                .whileActiveOnce(collect(
-//                        definition,
-//                        () -> definition.subsystems.magazine.isMatchingColor(teleopChosenColor)
-//                ));
+        definition
+                .input
+                .collect
+                .whileActiveOnce(collect(
+                        definition,
+                        () -> definition.subsystems.magazine.isMatchingColor(teleopChosenColor)
+                ));
 
         definition
                 .input
@@ -212,11 +212,11 @@ public class Robot extends TimedRobot {
 
         definition
                 .input
-                .collect
+                .shooterSpeedFast
                 .whileHeld(
                         Commands.DriveCommands.setupShot(
                                 definition,
-                                2)
+                                Units.inchesToMeters(50))
                 );
     }
 
