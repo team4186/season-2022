@@ -19,7 +19,7 @@ public class LimelightRunner implements VisionRunner {
 
     @Override
     public boolean hasTarget() {
-        double tv = getYOffset() >= 0.0 ? table.getEntry("tv").getDouble(0.0) : 0.0;
+        double tv = table.getEntry("tv").getDouble(0.0);
         return tv == 1.0;
     }
 

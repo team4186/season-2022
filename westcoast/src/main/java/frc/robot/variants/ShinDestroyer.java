@@ -126,9 +126,9 @@ public interface ShinDestroyer {
                     @NotNull
                     @Override
                     public PIDController alignToTarget() {
-                        final PIDController controller = new PIDController(0.7, 0.0, 0.1);
+                        final PIDController controller = new PIDController(0.03, 0.0, 0.0);
                         controller.disableContinuousInput();
-                        controller.setTolerance(1);
+                        controller.setTolerance(5);
                         return controller;
                     }
 
@@ -146,9 +146,9 @@ public interface ShinDestroyer {
                     @NotNull
                     @Override
                     public PIDController forwardAlignToTarget() {
-                        final PIDController controller = new PIDController(0.7, 0.0, 0.1);
+                        final PIDController controller = new PIDController(0.05, 0.0, 0.1);
                         controller.disableContinuousInput();
-                        controller.setTolerance(0.1);
+                        controller.setTolerance(0.3);
                         return controller;
                     }
 

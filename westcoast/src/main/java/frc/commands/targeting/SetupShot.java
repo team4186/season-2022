@@ -41,9 +41,13 @@ public final class SetupShot extends CommandBase {
 
     @Override
     public void execute() {
+        System.out.println("Goal: " + distance + " Current: " + drive.vision.getDistance());
+        double forwardOut = clamp(forward.calculate(drive.vision.getDistance(), distance), 0.2);
+        System.out.println("Pid Output: " + forwardOut);
         drive.arcade(
-                clamp(-forward.calculate(drive.vision.getDistance(), distance), 0.3), // may need inversion
-                clamp(turn.calculate(drive.vision.getXOffset(), 0.0), 0.3),
+                forwardOut,
+//                clamp(-turn.calculate(drive.vision.getXOffset(), 0.0), 0.2),
+                0,
                 false
         );
         turnOnTarget = turn.atSetpoint() ? (turnOnTarget + 1) : 0;

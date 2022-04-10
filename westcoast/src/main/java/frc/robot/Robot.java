@@ -152,13 +152,13 @@ public class Robot extends TimedRobot {
             teleopChosenColor = MagazineSubsystem.RedTarget;
         }
 
-        definition
-                .input
-                .collect
-                .whileActiveOnce(collect(
-                        definition,
-                        () -> definition.subsystems.magazine.isMatchingColor(teleopChosenColor)
-                ));
+//        definition
+//                .input
+//                .collect
+//                .whileActiveOnce(collect(
+//                        definition,
+//                        () -> definition.subsystems.magazine.isMatchingColor(teleopChosenColor)
+//                ));
 
         definition
                 .input
@@ -209,6 +209,15 @@ public class Robot extends TimedRobot {
                 .input
                 .rejectIndex
                 .whileActiveOnce(Commands.MagazineCommands.ejectIndex(definition));
+
+        definition
+                .input
+                .collect
+                .whileHeld(
+                        Commands.DriveCommands.setupShot(
+                                definition,
+                                2)
+                );
     }
 
     @Override
@@ -236,15 +245,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         limelight.setLight(true);
-
-        definition
-                .input
-                .collect
-                .whenPressed(
-                        Commands.DriveCommands.setupShot(
-                                definition,
-                                Units.inchesToMeters(32))
-                );
     }
 
     @Override
