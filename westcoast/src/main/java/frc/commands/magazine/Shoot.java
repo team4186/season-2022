@@ -142,7 +142,7 @@ public final class Shoot extends CommandBase {
             }
         } else if (!isSpeedWithinTolerance()) {
             state = State.Accelerating;
-        } else if (shooterDelay >= maxShooterDelay) {
+        } else if (mode.getMode() == Mode.Single || shooterDelay >= maxShooterDelay) {
             if (mode.getMode() == Mode.Full) {
                 magazine.startIndexMotor();
                 magazine.reverseRejectMotor();

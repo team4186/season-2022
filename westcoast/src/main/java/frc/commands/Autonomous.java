@@ -73,7 +73,7 @@ public final class Autonomous {
         return shoot(definition, () -> speed, () -> Shoot.Mode.Full)
                 .alongWith(deploy(definition))
                 .andThen(
-                        move(definition, 1.0)
+                        move(definition, 1.5)
                                 .alongWith(collect(definition, ballAcceptanceStrategy))
                                 .until(definition.subsystems.magazine::hasFeederSensorBreak)
                 );
