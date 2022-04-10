@@ -106,6 +106,7 @@ public interface ShinDestroyer {
                         return controller;
                     }
 
+                    // untuned
                     @NotNull
                     @Override
                     public ProfiledPIDController perfectTurn() {
@@ -121,21 +122,33 @@ public interface ShinDestroyer {
                         return controller;
                     }
 
+                    // untuned
                     @NotNull
                     @Override
                     public PIDController alignToTarget() {
-                        final PIDController controller = new PIDController(0.7, 0.1, 0.07);
+                        final PIDController controller = new PIDController(0.7, 0.0, 0.1);
                         controller.disableContinuousInput();
-                        controller.setTolerance(0.1);
+                        controller.setTolerance(1);
                         return controller;
                     }
 
+                    // untuned
                     @NotNull
                     @Override
                     public PIDController stayOnTarget() {
                         final PIDController controller = new PIDController(0.1, 0.0, 0.0);
                         controller.disableContinuousInput();
                         controller.setTolerance(0.2);
+                        return controller;
+                    }
+
+                    // untuned
+                    @NotNull
+                    @Override
+                    public PIDController forwardAlignToTarget() {
+                        final PIDController controller = new PIDController(0.7, 0.0, 0.1);
+                        controller.disableContinuousInput();
+                        controller.setTolerance(0.1);
                         return controller;
                     }
 
@@ -159,6 +172,7 @@ public interface ShinDestroyer {
                         controller.setFF(0.0);
                         controller.setOutputRange(0.0, 1.0);
                     }
+
                     @Override
                     public void climberConfigClimb(@NotNull SparkMaxPIDController controller) {
                         controller.setP(0.06);

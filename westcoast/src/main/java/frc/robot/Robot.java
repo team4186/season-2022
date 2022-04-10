@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -240,7 +241,9 @@ public class Robot extends TimedRobot {
                 .input
                 .collect
                 .whenPressed(
-                        Commands.DriveCommands.alignToTarget(definition)
+                        Commands.DriveCommands.setupShot(
+                                definition,
+                                Units.inchesToMeters(32))
                 );
     }
 

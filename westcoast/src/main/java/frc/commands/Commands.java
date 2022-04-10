@@ -13,6 +13,7 @@ import frc.commands.intake.IntakeCollect;
 import frc.commands.magazine.Shoot;
 import frc.commands.targeting.AlignToTarget;
 import frc.commands.targeting.FindTarget;
+import frc.commands.targeting.SetupShot;
 import frc.commands.targeting.StayOnTarget;
 import frc.robot.definition.Controllers;
 import frc.robot.definition.Definition;
@@ -113,6 +114,14 @@ public interface Commands {
             return new FindTarget(
                     definition.subsystems.driveTrain
             );
+        }
+
+        @NotNull
+        static SetupShot setupShot(@NotNull Definition definition, double distance) {
+            return new SetupShot(
+                    definition,
+                    distance
+            )
         }
     }
 

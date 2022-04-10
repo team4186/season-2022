@@ -20,6 +20,9 @@ public interface Controllers {
 
     @NotNull
     PIDController stayOnTarget();
+    
+    @NotNull
+    PIDController forwardAlignToTarget();
 
     void shooterConfig(@NotNull SparkMaxPIDController controller);
 
