@@ -15,6 +15,8 @@ public class ClimberSubsystem extends SubsystemBase {
     @NotNull
     private final Controllers.ControllerConfigurator climberConfigClimb;
 
+    // final private members
+
     private boolean isClimbing = false;
 
     public ClimberSubsystem(

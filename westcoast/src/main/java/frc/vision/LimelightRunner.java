@@ -14,7 +14,7 @@ public class LimelightRunner implements VisionRunner {
     public void periodic() {
         SmartDashboard.putBoolean("Has Target?", hasTarget());
         SmartDashboard.putNumber("Angle Offset", getXOffset());
-        SmartDashboard.putNumber("Distance", getDistance());
+        SmartDashboard.putNumber("Distance", Units.metersToInches(getDistance()));
     }
 
     @Override
@@ -34,16 +34,10 @@ public class LimelightRunner implements VisionRunner {
     }
 
     @Override
-    public double getheight() {
-
-        return table.getEntry("tvert").getDouble(0.0);
-    }
-
-    @Override
     public double getDistance() {
         double targetHeight = 2.6416;
         double cameraHeight = 0.81; //Subject to change
-        double cameraAngle = 45.0; //Subject to change (ish)
+        double cameraAngle = 50.0; //Subject to change (ish)
         double targetAngle = getYOffset();
         double totalAngleRad = Units.degreesToRadians(cameraAngle + targetAngle);
         double distance = (targetHeight - cameraHeight) / tan(totalAngleRad);

@@ -216,7 +216,7 @@ public class Robot extends TimedRobot {
                 .whileHeld(
                         Commands.DriveCommands.setupShot(
                                 definition,
-                                Units.inchesToMeters(50))
+                                Units.inchesToMeters(55))
                 );
     }
 

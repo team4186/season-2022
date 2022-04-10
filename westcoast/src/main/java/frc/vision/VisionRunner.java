@@ -12,8 +12,6 @@ public interface VisionRunner {
 
     double getYOffset();
 
-    double getheight();
-
     double getDistance();
 
     void setLight(boolean mode);
