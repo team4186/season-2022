@@ -33,7 +33,7 @@ public final class Climb extends CommandBase {
 
     @Override
     public void initialize() {
-        if (climber.getPosition() < deployGoal - 2) { //tolerance for climber
+        if (climber.getPosition() < deployGoal - 8) { //tolerance for climber (5 revolutions is 1/2 a shaft rotation)
             state = State.Deploying;
         } else if (climber.getPosition() < finalGoal) {
             state = State.Climbing;

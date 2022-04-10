@@ -111,10 +111,10 @@ public class Motors {
                 @NotNull CANSparkMax follower
         ) {
             this.lead = lead;
-            lead.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            lead.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
             follower.follow(lead, true);
-            follower.setIdleMode(CANSparkMax.IdleMode.kCoast);
+            follower.setIdleMode(CANSparkMax.IdleMode.kBrake);
         }
     }
 
