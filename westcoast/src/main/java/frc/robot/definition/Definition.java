@@ -101,6 +101,10 @@ public class Definition {
                         controllers::climberConfigDeploy,
                         controllers::climberConfigClimb
 
+                ),
+                new SwerveDriveSubsystem(
+                        motors.swerve.drive,
+                        motors.swerve.turn
                 )
         );
     }

@@ -21,6 +21,7 @@ import frc.robot.definition.Sensors.MagazineSensors;
 import frc.vision.LimelightRunner;
 import org.jetbrains.annotations.NotNull;
 
+import static frc.robot.definition.Motors.SwerveCTRMotors;
 import static frc.robot.definition.Motors.driveCTRMotors;
 import static frc.robot.definition.Ownership.parameter;
 
@@ -60,7 +61,8 @@ public interface ShinDestroyer {
                         new ClimberMotors(
                                 new CANSparkMax(14, CANSparkMaxLowLevel.MotorType.kBrushless),
                                 new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless)
-                        )
+                        ),
+                        null
                 ),
                 new Pneumatics(
                         new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 1)

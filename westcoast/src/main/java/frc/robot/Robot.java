@@ -24,7 +24,8 @@ public class Robot extends TimedRobot {
 
     private enum DriveMode {
         Raw,
-        Cheesy
+        Cheesy,
+        Swerve
     }
 
     private static final double AUTONOMOUS_SHOOT_SPEED = 3500;
@@ -58,8 +59,9 @@ public class Robot extends TimedRobot {
         autonomousChooser.addOption("Shoot Leave and Collect", Autonomous.shootLeaveAndCollect(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
 
-        driveModeChooser.setDefaultOption("Raw", DriveMode.Raw);
+        driveModeChooser.setDefaultOption("Swerve", DriveMode.Swerve); //Swerve Drive
         driveModeChooser.addOption("Cheesy", DriveMode.Cheesy);
+        driveModeChooser.addOption("Raw", DriveMode.Raw);
         SmartDashboard.putData("Drive Mode", driveModeChooser);
     }
 
@@ -111,10 +113,17 @@ public class Robot extends TimedRobot {
                         .schedule();
                 break;
 
-            default:
             case Raw:
                 Commands
                         .TeleopCommands
+                        .raw(definition)
+                        .schedule();
+                break;
+
+            default:
+            case Swerve:
+                Commands
+                        .TeleopSwerveCommands
                         .raw(definition)
                         .schedule();
                 break;

@@ -5,10 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import frc.commands.climb.Climb;
-import frc.commands.drive.CheesyDrive;
-import frc.commands.drive.GyroDrive;
-import frc.commands.drive.PerfectTurn;
-import frc.commands.drive.TeleopDrive;
+import frc.commands.drive.*;
 import frc.commands.intake.IntakeCollect;
 import frc.commands.magazine.Shoot;
 import frc.commands.targeting.AlignToTarget;
@@ -76,6 +73,19 @@ public interface Commands {
 //                    false
 //            );
 //        }
+    }
+
+    interface TeleopSwerveCommands {
+        @NotNull
+        static TeleopSwerveDrive raw(@NotNull Definition definition) {
+            Input input = definition.input;
+            return new TeleopSwerveDrive(
+                    input.joystick::getX,
+                    input.joystick::getY,
+                    input.attenuate,
+                    definition.subsystems.swerveDrive
+            );
+        }
     }
 
     interface DriveCommands {

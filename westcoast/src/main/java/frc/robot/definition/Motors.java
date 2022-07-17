@@ -22,6 +22,8 @@ public class Motors {
     public final ShooterMotors shooter;
     @NotNull
     public final ClimberMotors climber;
+    @NotNull
+    public final SwerveMotors swerve;
 
     public Motors(
             @NotNull DriveMotors driveLeft,
@@ -29,14 +31,16 @@ public class Motors {
             @NotNull IntakeMotors intake,
             @NotNull MagazineMotors magazine,
             @NotNull ShooterMotors shooter,
-            @NotNull ClimberMotors climber
-    ) {
+            @NotNull ClimberMotors climber,
+            @NotNull SwerveMotors swerve
+            ) {
         this.driveLeft = driveLeft;
         this.driveRight = driveRight;
         this.intake = intake;
         this.magazine = magazine;
         this.shooter = shooter;
         this.climber = climber;
+        this.swerve = swerve;
     }
 
     public static final class DriveMotors {
@@ -170,5 +174,51 @@ public class Motors {
         // endregion
 
         return new DriveMotors(lead, follower0, follower1);
+    }
+
+    public static final class SwerveMotors {
+        @NotNull
+        public final MotorController drive;
+        public final MotorController turn;
+
+        public SwerveMotors(
+                @NotNull MotorController drive,
+                @NotNull MotorController turn
+        ) {
+            this.drive = drive;
+            this.turn = turn;
+        }
+    }
+
+    public static SwerveMotors SwerveCTRMotors(
+            @NotNull WPI_TalonSRX drive,
+            @NotNull WPI_TalonSRX turn
+    ) {
+        drive.configSupplyCurrentLimit(
+                new SupplyCurrentLimitConfiguration(
+                        true,
+                        10,
+                        20,
+                        0.02
+                )
+        );
+        turn.configSupplyCurrentLimit(
+                new SupplyCurrentLimitConfiguration(
+                        true,
+                        10,
+                        20,
+                        0.02
+                )
+        );
+
+        drive.setNeutralMode(NeutralMode.Brake);
+        drive.configVoltageCompSaturation(11);
+        drive.enableVoltageCompensation(true);
+
+        turn.setNeutralMode(NeutralMode.Brake);
+        turn.configVoltageCompSaturation(11);
+        turn.enableVoltageCompensation(true);
+
+        return new SwerveMotors(drive, turn);
     }
 }
