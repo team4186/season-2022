@@ -6,8 +6,6 @@ import frc.robot.definition.Definition;
 import frc.subsystems.DriveTrainSubsystem;
 import org.jetbrains.annotations.NotNull;
 
-import static frc.utils.Maths.clamp;
-
 public final class SetupShot extends CommandBase {
     @NotNull
     private final PIDController turn;
@@ -19,7 +17,7 @@ public final class SetupShot extends CommandBase {
     private int turnOnTarget;
     private int forwardOnTarget;
     private int targetLost;
-    private boolean hasTarget;
+    private boolean hasInitialTarget;
 
     public SetupShot(
             @NotNull Definition definition,
@@ -38,19 +36,21 @@ public final class SetupShot extends CommandBase {
         turnOnTarget = 0;
         forwardOnTarget = 0;
         targetLost = 0;
-        hasTarget = drive.vision.hasTarget();
+        hasInitialTarget = true;//drive.vision.hasTarget();
     }
 
     @Override
     public void execute() {
+        double forwardValue = forward.calculate(drive.vision.getDistance(), distance);
+        double turnValue = -turn.calculate(drive.vision.getXOffset(), 0.0);
         drive.arcade(
-                clamp(forward.calculate(drive.vision.getDistance(), distance), 0.1),
-                clamp(-turn.calculate(drive.vision.getXOffset(), 0.0), 0.2),
+                forwardValue,
+                turnValue,
                 false
         );
         turnOnTarget = turn.atSetpoint() ? (turnOnTarget + 1) : 0;
         forwardOnTarget = forward.atSetpoint() ? (forwardOnTarget + 1) : 0;
-        targetLost = drive.vision.hasTarget() ? (targetLost + 1) : 0;
+        targetLost = !drive.vision.hasTarget() ? (targetLost + 1) : 0;
     }
 
     @Override
@@ -60,6 +60,6 @@ public final class SetupShot extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return ((turnOnTarget > 10) && (forwardOnTarget > 10)) || (!hasTarget) || (targetLost > 5);
+        return ((turnOnTarget > 10) && (forwardOnTarget > 10)) || (!hasInitialTarget) || (targetLost > 5);
     }
 }

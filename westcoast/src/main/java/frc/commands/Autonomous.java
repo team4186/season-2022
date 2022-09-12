@@ -1,9 +1,11 @@
 package frc.commands;
 
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.commands.drive.LeaveLine;
 import frc.commands.magazine.Shoot;
+import frc.commands.targeting.SetupShot;
 import frc.robot.definition.Definition;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +29,12 @@ public final class Autonomous {
     public static Command shootAndLeave(@NotNull Definition definition, double speed) {
         return shoot(definition, () -> speed, () -> Shoot.Mode.Full)
                 .andThen(move(definition, 1.5));
+    }
+
+    public static Command shootAndLeaveVision(@NotNull Definition definition, double speed) {
+        return new SetupShot(definition, Units.inchesToMeters(55))
+                .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full));
+        //.andThen(move(definition, 1.5));
     }
 
     public static Command shootOutPickInShootOut(

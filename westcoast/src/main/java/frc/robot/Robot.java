@@ -1,7 +1,6 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -13,10 +12,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.commands.Autonomous;
 import frc.commands.Commands;
 import frc.commands.magazine.Shoot;
-import frc.commands.targeting.AlignToTarget;
 import frc.robot.definition.Definition;
 import frc.subsystems.MagazineSubsystem;
-import frc.vision.LimelightRunner;
 import frc.vision.VisionRunner;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,6 +58,7 @@ public class Robot extends TimedRobot {
 
         autonomousChooser.addOption("LeaveTarmac", Autonomous.move(definition, 2.0));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition, AUTONOMOUS_SHOOT_SPEED));
+        autonomousChooser.addOption("Shoots and Leaves Vision", Autonomous.shootAndLeaveVision(definition, AUTONOMOUS_SHOOT_SPEED));
         autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.shootOutPickInShootOut(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         autonomousChooser.addOption("Shoot Leave and Collect", Autonomous.shootLeaveAndCollect(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));

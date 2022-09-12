@@ -12,10 +12,10 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.definition.*;
+import frc.robot.definition.Motors.ClimberMotors;
 import frc.robot.definition.Motors.IntakeMotors;
 import frc.robot.definition.Motors.MagazineMotors;
 import frc.robot.definition.Motors.ShooterMotors;
-import frc.robot.definition.Motors.ClimberMotors;
 import frc.robot.definition.Sensors.DriveSensors;
 import frc.robot.definition.Sensors.MagazineSensors;
 import frc.vision.LimelightRunner;
@@ -125,7 +125,7 @@ public interface ShinDestroyer {
                     @NotNull
                     @Override
                     public PIDController alignToTarget() {
-                        final PIDController controller = new PIDController(0.01, 0.12, 0.0);
+                        final PIDController controller = new PIDController(0.075, 0.0, 0.0);
                         controller.disableContinuousInput();
                         controller.setTolerance(1.0);
                         return controller;
@@ -145,7 +145,7 @@ public interface ShinDestroyer {
                     @NotNull
                     @Override
                     public PIDController forwardAlignToTarget() {
-                        final PIDController controller = new PIDController(0.55, 0.01, 0.1);
+                        final PIDController controller = new PIDController(0.45, 0.0, 0.01);
                         controller.disableContinuousInput();
                         controller.setTolerance(0.1);
                         return controller;
