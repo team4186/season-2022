@@ -58,12 +58,11 @@ public class Robot extends TimedRobot {
 
         autonomousChooser.addOption("LeaveTarmac", Autonomous.move(definition, 2.0));
         autonomousChooser.addOption("Shoots and Leaves", Autonomous.shootAndLeave(definition, AUTONOMOUS_SHOOT_SPEED));
-        autonomousChooser.addOption("Shoots and Leaves Vision", Autonomous.shootAndLeaveVision(definition, AUTONOMOUS_SHOOT_SPEED));
+        autonomousChooser.addOption("Vision Auton", Autonomous.visionAuton(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         autonomousChooser.addOption("Shoot Pick Shoot Leaves", Autonomous.shootOutPickInShootOut(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         autonomousChooser.addOption("Pick Shoot 2x Leaves", Autonomous.outPickInShootTwice(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         autonomousChooser.addOption("Shoot Leave and Collect", Autonomous.shootLeaveAndCollect(definition, () -> definition.subsystems.magazine.isMatchingColor(chosenColor), AUTONOMOUS_SHOOT_SPEED));
         SmartDashboard.putData("Autonomous Mode", autonomousChooser);
-
         driveModeChooser.setDefaultOption("Raw", DriveMode.Raw);
         driveModeChooser.addOption("Cheesy", DriveMode.Cheesy);
         SmartDashboard.putData("Drive Mode", driveModeChooser);
@@ -101,6 +100,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
+        SmartDashboard.putNumber("Shooter Speed", definition.motors.shooter.lead.getEncoder().getVelocity());
         accelerateShooter(AUTONOMOUS_SHOOT_SPEED);
     }
 
