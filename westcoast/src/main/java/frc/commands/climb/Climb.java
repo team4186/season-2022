@@ -46,7 +46,12 @@ public final class Climb extends CommandBase {
     public void execute() {
         switch (state) {
             case End:
-                climber.stop();
+                if (climber.getLeftLimit()){
+                    climber.stopLeft();
+                }
+                if (climber.getRightLimit()){
+                    climber.stopRight();
+                }
                 break;
             case Deploying:
                 deploy();

@@ -17,14 +17,11 @@ public class ClimberSubsystem extends SubsystemBase {
     @NotNull
     private final Controllers.ControllerConfigurator climberConfigClimb;
 
+    // final private members
+    private boolean isClimbing = false;
 
     DigitalInput limitSwitchRight = new DigitalInput(3);
     DigitalInput limitSwitchLeft = new DigitalInput(5);
-    // don't think I have to put this in ShinDestroyer but maybe
-    // also this might be the issue someone check this plz
-
-    // final private members
-    private boolean isClimbing = false;
 
     public ClimberSubsystem(
             @NotNull CANSparkMax climberMotor1,
@@ -83,11 +80,11 @@ public class ClimberSubsystem extends SubsystemBase {
         climberMotor2.stopMotor();
     }
 
-    public void stopOne() {
+    public void stopLeft() {
         climberMotor1.stopMotor();
     }
 
-    public void stopTwo() {
+    public void stopRight() {
         climberMotor2.stopMotor();
     }
 
