@@ -9,7 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClimberSubsystem extends SubsystemBase {
     @NotNull
-    private final CANSparkMax climberMotor;
+    private final CANSparkMax climberMotor1;
+    private final CANSparkMax climberMotor2;
     private final SparkMaxPIDController pidController;
     @NotNull
     private final Controllers.ControllerConfigurator climberConfigDeploy;
@@ -26,36 +27,37 @@ public class ClimberSubsystem extends SubsystemBase {
     private boolean isClimbing = false;
 
     public ClimberSubsystem(
-            @NotNull CANSparkMax climberMotor,
+            @NotNull CANSparkMax climberMotor1,
+            @NotNull CANSparkMax climberMotor2,
             @NotNull Controllers.ControllerConfigurator climberConfigDeploy,
             @NotNull Controllers.ControllerConfigurator climberConfigClimb) {
-        this.climberMotor = climberMotor;
-        pidController = climberMotor.getPIDController();
+        this.climberMotor1 = climberMotor1;
+        this.climberMotor2 = climberMotor2;
+        pidController = climberMotor1.getPIDController();
         this.climberConfigDeploy = climberConfigDeploy;
         this.climberConfigClimb = climberConfigClimb;
         climberConfigDeploy.configure(pidController);
     }
 
     public double getPosition() {
-        return climberMotor.getEncoder().getPosition();
+        return climberMotor1.getEncoder().getPosition();
     }
 
     public void resetEncoder() {
-        climberMotor.getEncoder().setPosition(0);
+        climberMotor1.getEncoder().setPosition(0);
+        climberMotor2.getEncoder().setPosition(0);
     }
 
     public boolean isLimit() {
-        return (limitSwitchLeft.get() || limitSwitchRight.get());
+        return (!limitSwitchLeft.get() || !limitSwitchRight.get());
     }
 
     public boolean getRightLimit(){
-        //System.out.println("RIGHT:" + limitSwitchRight.get());
-        return limitSwitchRight.get();
+        return !limitSwitchRight.get();
     }
 
     public boolean getLeftLimit(){
-        //System.out.println("LEFT:" + limitSwitchLeft.get());
-        return limitSwitchLeft.get();
+        return !limitSwitchLeft.get();
     }
 
     public void setPosition(double position) {
@@ -77,7 +79,16 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-        climberMotor.stopMotor();
+        climberMotor1.stopMotor();
+        climberMotor2.stopMotor();
+    }
+
+    public void stopOne() {
+        climberMotor1.stopMotor();
+    }
+
+    public void stopTwo() {
+        climberMotor2.stopMotor();
     }
 
     @Override

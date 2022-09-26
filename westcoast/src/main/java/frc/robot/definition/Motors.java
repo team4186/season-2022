@@ -104,17 +104,18 @@ public class Motors {
 
     public static final class ClimberMotors {
         @NotNull
-        public final CANSparkMax lead;
+        public final CANSparkMax motor1;
+        public final CANSparkMax motor2;
 
         public ClimberMotors(
-                @NotNull CANSparkMax lead,
-                @NotNull CANSparkMax follower
+                @NotNull CANSparkMax motor1,
+                @NotNull CANSparkMax motor2
         ) {
-            this.lead = lead;
-            lead.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            this.motor1 = motor1;
+            motor1.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-            follower.follow(lead, true);
-            follower.setIdleMode(CANSparkMax.IdleMode.kBrake);
+            this.motor2 = motor2;
+            motor2.setIdleMode(CANSparkMax.IdleMode.kBrake);
         }
     }
 
