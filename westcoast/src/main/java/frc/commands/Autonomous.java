@@ -76,7 +76,7 @@ public final class Autonomous {
                 )
                 .andThen(move(definition, -1.0))
                 .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full))
-                //currently shoot never stops so might have ot fix that
+                //shoot never stops so might have to fix that
                 .andThen(move(definition, 1.5));
     }
 

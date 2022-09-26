@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -11,8 +12,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.commands.Autonomous;
 import frc.commands.Commands;
+import frc.commands.climb.Climb;
 import frc.commands.magazine.Shoot;
 import frc.robot.definition.Definition;
+import frc.subsystems.ClimberSubsystem;
 import frc.subsystems.MagazineSubsystem;
 import frc.vision.VisionRunner;
 import org.jetbrains.annotations.NotNull;
@@ -75,6 +78,15 @@ public class Robot extends TimedRobot {
             SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.getDistance());
             SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.getDistance());
             SmartDashboard.putNumber("Climber Encoder", definition.subsystems.climber.getPosition());
+
+            SmartDashboard.setDefaultBoolean("Limit Switch State", false);
+            SmartDashboard.putBoolean("Limit Switch State", definition.subsystems.climber.isLimit());
+
+            SmartDashboard.setDefaultBoolean("Right Limit Switch", false);
+            SmartDashboard.putBoolean("Right Limit Switch", definition.subsystems.climber.getRightLimit());
+
+            SmartDashboard.setDefaultBoolean("Left Limit Switch", false);
+            SmartDashboard.putBoolean("Left Limit Switch", definition.subsystems.climber.getLeftLimit());
 
             definition.subsystems.shooter.periodic();
             limelight.periodic();
