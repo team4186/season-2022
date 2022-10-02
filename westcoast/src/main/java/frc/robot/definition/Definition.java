@@ -100,7 +100,9 @@ public class Definition {
                         motors.climber.motor1,
                         motors.climber.motor2,
                         controllers::climberConfigDeploy,
-                        controllers::climberConfigClimb
+                        controllers::climberConfigDeploy,
+                        controllers::climberConfigClimb,
+                        controllers::climberConfigDeploy
 
                 )
         );

@@ -12,10 +12,16 @@ public class ClimberSubsystem extends SubsystemBase {
     private final CANSparkMax climberMotor1;
     private final CANSparkMax climberMotor2;
     private final SparkMaxPIDController pidController;
+    private final SparkMaxPIDController pidController2;
     @NotNull
     private final Controllers.ControllerConfigurator climberConfigDeploy;
     @NotNull
     private final Controllers.ControllerConfigurator climberConfigClimb;
+    @NotNull
+    private final Controllers.ControllerConfigurator climberConfigDeploy2;
+    @NotNull
+    private final Controllers.ControllerConfigurator climberConfigClimb2;
+
 
     // final private members
     private boolean isClimbing = false;
@@ -27,18 +33,25 @@ public class ClimberSubsystem extends SubsystemBase {
             @NotNull CANSparkMax climberMotor1,
             @NotNull CANSparkMax climberMotor2,
             @NotNull Controllers.ControllerConfigurator climberConfigDeploy,
-            @NotNull Controllers.ControllerConfigurator climberConfigClimb) {
+            @NotNull Controllers.ControllerConfigurator climberConfigDeploy2,
+            @NotNull Controllers.ControllerConfigurator climberConfigClimb,
+            @NotNull Controllers.ControllerConfigurator climberConfigClimb2) {
         this.climberMotor1 = climberMotor1;
         this.climberMotor2 = climberMotor2;
         pidController = climberMotor1.getPIDController();
+        pidController2 = climberMotor2.getPIDController();
         this.climberConfigDeploy = climberConfigDeploy;
+        this.climberConfigDeploy2 = climberConfigDeploy2;
         this.climberConfigClimb = climberConfigClimb;
+        this.climberConfigClimb2 = climberConfigClimb2;
         climberConfigDeploy.configure(pidController);
     }
 
-    public double getPosition() {
+    public double getLeftPos() {
         return climberMotor1.getEncoder().getPosition();
     }
+
+    public double getRightPos() { return climberMotor2.getEncoder().getPosition(); }
 
     public void resetEncoder() {
         climberMotor1.getEncoder().setPosition(0);
@@ -59,11 +72,13 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public void setPosition(double position) {
         pidController.setReference(position, CANSparkMax.ControlType.kPosition);
+        pidController2.setReference(position, CANSparkMax.ControlType.kPosition);
     }
 
     public void setClimberConfigDeploy() {
         if (isClimbing) {
             climberConfigDeploy.configure(pidController);
+            climberConfigDeploy2.configure(pidController2);
             isClimbing = false;
         }
     }
@@ -71,6 +86,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public void setClimberConfigClimb() {
         if (!isClimbing) {
             climberConfigClimb.configure(pidController);
+            climberConfigClimb2.configure(pidController2);
             isClimbing = true;
         }
     }

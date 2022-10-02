@@ -57,9 +57,9 @@ public final class Autonomous {
                                 .until(definition.subsystems.magazine::hasIndexSensorBreak)
                 )
                 .andThen(setupShot(definition, Units.inchesToMeters(55)))
-                .andThen(move(definition, -1.0))
-                .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full))
-                .andThen(move(definition, 1.5));
+                    .withTimeout(3)
+                .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full));
+                //.andThen(move(definition, 1.5));
     }
 
     public static Command shootOutPickInShootOut(

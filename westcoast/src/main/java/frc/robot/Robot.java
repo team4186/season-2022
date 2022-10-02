@@ -17,6 +17,7 @@ import frc.commands.magazine.Shoot;
 import frc.robot.definition.Definition;
 import frc.subsystems.ClimberSubsystem;
 import frc.subsystems.MagazineSubsystem;
+import frc.vision.LimelightRunner;
 import frc.vision.VisionRunner;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,7 +78,8 @@ public class Robot extends TimedRobot {
         if (sendDebug) {
             SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.getDistance());
             SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.getDistance());
-            SmartDashboard.putNumber("Climber Encoder", definition.subsystems.climber.getPosition());
+            SmartDashboard.putNumber("Climber Left Encoder", definition.subsystems.climber.getLeftPos());
+            SmartDashboard.putNumber("Climber Right Encoder", definition.subsystems.climber.getRightPos());
 
             SmartDashboard.setDefaultBoolean("Limit Switch State", false);
             SmartDashboard.putBoolean("Limit Switch State", definition.subsystems.climber.isLimit());
@@ -283,7 +285,9 @@ public class Robot extends TimedRobot {
     }
 
     private double getShooterSpeed() {
-//        return (definition.input.joystick.getZ() - 1.0) * 0.5 * -1.0 * 1500.0 + 3500.0;
-        return 3671.259850; // calibrated during testing (may need recal on the field)
+        //return (definition.input.joystick.getZ() - 1.0) * 0.5 * -1.0 * 1500.0 + 3500.0;
+        //return 3671.259850;
+        return 3450; // calibrated during testing (may need recal on the field)
+
     }
 }
