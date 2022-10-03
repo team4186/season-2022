@@ -100,7 +100,6 @@ public class Definition {
                         motors.climber.lead,
                         controllers::climberConfigDeploy,
                         controllers::climberConfigClimb
-
                 )
         );
     }

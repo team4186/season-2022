@@ -33,7 +33,8 @@ public final class Climb extends CommandBase {
 
     @Override
     public void initialize() {
-        if (climber.getPosition() < deployGoal - 8) { //tolerance for climber (5 revolutions is 1/2 a shaft rotation)
+        if (climber.getPosition() < deployGoal - 8) {
+            //  ^^  tolerance for climber (5 revolutions is 1/2 a shaft rotation)
             state = State.Deploying;
         } else if (climber.getPosition() < finalGoal) {
             state = State.Climbing;
@@ -60,6 +61,9 @@ public final class Climb extends CommandBase {
     private void deploy() {
         if (climber.getPosition() >= deployGoal) {
             state = State.End;
+        } else if (climber.isLimit()){
+            state = State.End;
+            //this should end deploy if either of the limit switches are hit
         } else {
             climber.setClimberConfigDeploy();
             climber.setPosition(deployGoal);
@@ -69,6 +73,9 @@ public final class Climb extends CommandBase {
     private void climb() {
         if (climber.getPosition() >= finalGoal) {
             state = State.End;
+        } else if (climber.isLimit()){
+             state = State.End;
+             //this should end the climb if either of the limit switches are hit
         } else {
             climber.setClimberConfigClimb();
             climber.setPosition(finalGoal);
