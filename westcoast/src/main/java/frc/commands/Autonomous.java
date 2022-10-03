@@ -58,8 +58,8 @@ public final class Autonomous {
                 )
                 .andThen(setupShot(definition, Units.inchesToMeters(55)))
                     .withTimeout(3)
-                .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full));
-                //.andThen(move(definition, 1.5));
+                .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full))
+                .andThen(move(definition, 1.5));
     }
 
     public static Command shootOutPickInShootOut(
@@ -74,7 +74,6 @@ public final class Autonomous {
                                 .alongWith(collect(definition, ballAcceptanceStrategy))
                                 .until(definition.subsystems.magazine::hasFeederSensorBreak)
                 )
-                .andThen(move(definition, -1.0))
                 .andThen(shoot(definition, () -> speed, () -> Shoot.Mode.Full))
                 //shoot never stops so might have to fix that
                 .andThen(move(definition, 1.5));

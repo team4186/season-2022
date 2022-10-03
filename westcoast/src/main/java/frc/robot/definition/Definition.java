@@ -97,13 +97,9 @@ public class Definition {
                         sensors.magazine.colorSensor
                 ),
                 new ClimberSubsystem(
-                        motors.climber.motor1,
-                        motors.climber.motor2,
+                        motors.climber.lead,
                         controllers::climberConfigDeploy,
-                        controllers::climberConfigDeploy,
-                        controllers::climberConfigClimb,
-                        controllers::climberConfigDeploy
-
+                        controllers::climberConfigClimb
                 )
         );
     }

@@ -1,13 +1,10 @@
 package frc.commands.targeting;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.definition.Definition;
 import frc.subsystems.DriveTrainSubsystem;
 import org.jetbrains.annotations.NotNull;
-
-import static frc.utils.Maths.clamp;
 
 public final class SetupShot extends CommandBase {
     @NotNull

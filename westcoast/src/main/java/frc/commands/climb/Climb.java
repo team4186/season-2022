@@ -33,10 +33,10 @@ public final class Climb extends CommandBase {
 
     @Override
     public void initialize() {
-        if (climber.getLeftPos() < deployGoal - 8 && climber.getRightPos() < deployGoal - 8) {
+        if (climber.getPosition() < deployGoal - 8) {
             //  ^^  tolerance for climber (5 revolutions is 1/2 a shaft rotation)
             state = State.Deploying;
-        } else if (climber.getLeftPos() < finalGoal && climber.getRightPos() < finalGoal) {
+        } else if (climber.getPosition() < finalGoal) {
             state = State.Climbing;
         } else {
             state = State.End;
@@ -47,12 +47,7 @@ public final class Climb extends CommandBase {
     public void execute() {
         switch (state) {
             case End:
-                if (climber.getLeftLimit()){
-                    climber.stopLeft();
-                }
-                if (climber.getRightLimit()){
-                    climber.stopRight();
-                }
+                climber.stop();
                 break;
             case Deploying:
                 deploy();
@@ -64,7 +59,7 @@ public final class Climb extends CommandBase {
     }
 
     private void deploy() {
-        if (climber.getLeftPos() >= deployGoal && climber.getRightPos() >= deployGoal) {
+        if (climber.getPosition() >= deployGoal) {
             state = State.End;
         } else if (climber.isLimit()){
             state = State.End;
@@ -76,7 +71,7 @@ public final class Climb extends CommandBase {
     }
 
     private void climb() {
-        if (climber.getLeftPos() >= finalGoal && climber.getRightPos() >= finalGoal) {
+        if (climber.getPosition() >= finalGoal) {
             state = State.End;
         } else if (climber.isLimit()){
              state = State.End;

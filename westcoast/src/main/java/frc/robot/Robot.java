@@ -78,8 +78,7 @@ public class Robot extends TimedRobot {
         if (sendDebug) {
             SmartDashboard.putNumber("Left Encoder", definition.subsystems.driveTrain.leftEncoder.getDistance());
             SmartDashboard.putNumber("Right Encoder", definition.subsystems.driveTrain.rightEncoder.getDistance());
-            SmartDashboard.putNumber("Climber Left Encoder", definition.subsystems.climber.getLeftPos());
-            SmartDashboard.putNumber("Climber Right Encoder", definition.subsystems.climber.getRightPos());
+            SmartDashboard.putNumber("Climber Left Encoder", definition.subsystems.climber.getPosition());
 
             SmartDashboard.setDefaultBoolean("Limit Switch State", false);
             SmartDashboard.putBoolean("Limit Switch State", definition.subsystems.climber.isLimit());
